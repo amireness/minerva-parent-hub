@@ -1,4 +1,16 @@
-# [APP NAME]: Cross-Platform Feature Parity
+# Minerva Parent Hub: Cross-Platform Feature Parity
+
+## Hub prototype status — 2026-11-04
+
+The owner authorized a local web prototype only. It is not deployed.
+Later platform adoption is undecided; the inherited template tables below
+describe template capabilities, not verified Hub features.
+
+| Capability | Web | iOS/iPadOS | macOS | tvOS | Android | Notes |
+|---|---|---|---|---|---|---|
+| Choose age group and read relevant admissions guidance | Local prototype | Deferred | Deferred | Deferred | Deferred | Other platforms await owner scope decision; browser checks in docs/STAGE-01.md. |
+| Distinguish published facts from open parent-role questions | Local prototype | Deferred | Deferred | Deferred | Deferred | Same web-only scope. |
+| Open official sources and contact Admissions | Local prototype | Deferred | Deferred | Deferred | Deferred | Email is optional and never sent automatically. |
 
 > **Single source of truth** for what's shipping where. Updated in
 > the SAME change set as any user-facing feature.

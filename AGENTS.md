@@ -1,14 +1,15 @@
-# [APP NAME]: Agent Project Context
+# Minerva Parent Hub: Agent Project Context
 
 ## Why we build
 
-Every feature in this app is built in service of human learning and
-growth, not to replace thinking, but to deepen it. At each decision
-point, ask: does this design invite the user to engage more fully,
-think more critically, or connect more meaningfully? If a feature
-makes a person more passive, reconsider it. If it opens a door to
-curiosity or collaboration, prioritize it. The goal is never a slick
-product. It is a tool that makes someone more human.
+Minerva Parent Hub helps parents of prospective Minerva students,
+especially applicants who are 16 or 17, understand the admissions
+process, relevant deadlines, and their own role in admissions.
+Parents should be able to support their child without needing access
+to the applicant's account. The app should help families understand
+and discuss the process while leaving the student's decisions theirs.
+Existing parent resources are acknowledged; missing participation routes
+are questions to confirm with Admissions, not established facts.
 
 **Before implementing any feature**, invoke the
 `learning-orientation-design` skill: the four-question test that
@@ -198,7 +199,10 @@ real-device check before "done."
 
 ## What this app does
 
-<!-- FILL IN: One paragraph on what your app does and who it's for -->
+Stage 01 has a local web prototype; see `docs/STAGE-01.md` for scope and
+checks. Stage 00's conversations remain unvalidated (`docs/STAGE-00.md`).
+Week 1 concerns public parent information on the web. The platform
+scaffolds below are template capabilities, not shipped Hub apps.
 
 Available as a **web app**, a **native iOS/iPadOS app**, a **native
 macOS app**, a **native Apple TV (tvOS) app**, and a **native Android
@@ -369,6 +373,11 @@ State section first, then work.
 
 ## Standing instructions
 
+- **Parent privacy (owner, 2026-11-04):** "support their child without
+  needing access to the applicant's account." Week 1 uses public
+  information only; no applicant credentials or private financial data.
+  Separate parent financial aid submission is outside Week 1.
+  *No check yet; documentation only.*
 - **Read the relevant skill before re-deriving a pattern.** Invoke by
   name; don't paraphrase.
 - **Commit messages quote the user's request verbatim** when applicable

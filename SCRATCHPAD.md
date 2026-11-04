@@ -1,4 +1,4 @@
-# Project Scratchpad: [APP NAME]
+# Project Scratchpad: Minerva Parent Hub
 
 > Active working notes, loaded into every session, so keep it small.
 > Keep only the two most recent session-log entries; roll older ones
@@ -16,25 +16,27 @@
 
 ## Current state
 
-- **Status**: NOT STARTED
-- **Active milestone**: M0
-- **Last session**: none yet
-- **Next actions**:
-  1. Read `docs/path/00-why-we-build.md` and
-     `docs/path/01-first-prototype.md`
-  2. Decide the platform set (all five? skip tvOS? add Windows?)
-     → DECISIONS.md
-  3. Fill in AGENTS.md project identity sections (CLAUDE.md imports it)
-  4. Rename the app in `project.yml`, then the agent runs
-     `xcodegen generate` and builds iOS, tvOS, and macOS unsigned,
-     per apple/README.md
-  5. Open `android/` in Android Studio, rename `com.example.appname`
-  6. Enable GitHub Pages on main branch (+ `.nojekyll` if serving
-     `/.well-known/`)
-  7. Drop verification files in `/.well-known/` once the
-     `appID` / `package_name` / fingerprints are known
-- **Open questions**: none yet
-
+- **Status**: Owner authorized Pages release 1.0.1; deployment in progress.
+- **Active milestone**: M1, parent admissions guide. Stage 00 validation remains open.
+- **Last session**: 2026-11-04.
+- **Owner's aim**: Help parents, especially of applicants aged 16 or 17,
+  participate appropriately in admissions without the applicant account.
+- **Owner clarification (2026-11-04)**: Do not suggest Minerva lacks parent
+  resources. **Why:** Its Parents & Families page already covers general
+  information and links to admissions; the question is participation in
+  admissions itself, including the parent's own steps.
+- **Evidence**: Owner framing and official public sources; no supplied log,
+  critique, named interviewees, conversations, or user testing.
+- **Notes**: `docs/STAGE-00.md`, `docs/STAGE-01.md`, and `docs/MINERVA-SOURCES.md`.
+- **Next actions**: Owner reviews the why and boundary; completes the log,
+  candidate tests, critique and two conversations; revises and posts the
+  problem; confirms deadline and parent-role questions with Admissions.
+  Publish the reviewed prototype to Pages, then verify the live project URL.
+- **Platform scope**: Week 1 web only; later platform choices undecided.
+  Native scaffolds stay untouched. The inherited setup checklist below
+  is not authorization to build native apps now.
+- **Verification**: Official sources rechecked; headless Edge branches, widths, offline and no-JavaScript checked.
+  See docs/STAGE-01.md for evidence and the CRLF-only token-check failure.
 ---
 
 ## Milestones
@@ -123,9 +125,16 @@ never steals focus) are stated explicitly so they don't get
 
 ## Open questions
 
-<!-- Add questions as they arise; remove when resolved. Don't
-     accumulate. Every question should have a path to resolution. -->
-
+- Which two people will the owner talk to, and what do their stories show?
+- Does the owner's noticing log support the leading candidate?
+- Do existing official resources already solve the information problem?
+- Which parent participation routes exist beyond the public page, and
+  what does providing under-18 parent contact details trigger?
+- Which cycle years, cutoff times, and binding aid rules apply?
+- What parent actions and communications are required for minors?
+- Would a real parent find the proposed activity useful?
+- Who will review source wording and keep it current? See the source note
+  for unsent Admissions and Financial Aid questions.
 ---
 
 ## Out of scope (intentionally)
@@ -140,7 +149,7 @@ the entry retire when circumstances change).
 
 | Idea | Why declined | Revisit when |
 |---|---|---|
-| <!-- e.g. Web push notifications | Too-inconsistent UX across browsers; APNs/FCM cover the need on mobile | iOS + Android push ship and a real cross-platform request appears --> | | |
+| Separate parent financial aid submission | Owner excluded it from Week 1; confidentiality unconfirmed | Owner authorizes later exploration and Minerva confirms the workflow |
 
 ---
 
@@ -149,39 +158,42 @@ the entry retire when circumstances change).
 <!-- Append-only. Format: state found → work done → state left.
      Keep entries short: one paragraph per session. -->
 
-**2026-08-24: Windows scaffold + Tidbits lessons ported.** Found: sixth-gen
-template with docs/windows/ present but no `windows/` source scaffold, a
-WINDOWS-STORE-SUBMISSION.md that was an unadapted Tidbits copy (real Store
-IDs), a playbook describing a pre-ship layout, and no vendored Windows skill.
-Done: committed the `windows/` scaffold (AppName.Core / .App / .HeadlessTests /
-.Windows: the as-shipped Tidbits architecture with every version gotcha
-pre-solved; builds clean, 11 headless tests pass, shell PNGs verified light +
-dark at 1180×760 and the 900×680 floor, versions stamped from
-AppVersion.xcconfig); generalized WINDOWS-STORE-SUBMISSION.md (placeholders +
-§0 checklist, all 12 gotchas + IAP §7 kept); rewrote WINDOWS-PLAYBOOK.md to the
-as-built flat layout (.NET 10, TFM-isolation, DPAPI, narrow-width shell
-renders, network-race flag); added the `windows-production-gotchas` skill;
-added a `## Windows app` CLAUDE.md section + Windows columns in both design
-tables; appended DECISIONS 035–039 (anonymous-account deletion, query-not-load,
-generator merge guards, randomness-outside-selection, per-store billing
-shapes); README tree/step-12 + CONTRIBUTING now name the scaffold. Left: green;
-Store assets (7 PNGs) intentionally not generated (per-app branding);
-first-Windows-run baselines armed via `-f update_baselines=true` as documented.
+**2026-11-04: Minerva Parent Hub Stage 00.** Found: uncustomized template
+without project-specific problem evidence. Done: documented the owner's
+person, problem, wish, privacy boundary, five provisional framings and ten
+tests; official source findings and unsent Admissions questions; the three
+idea questions, case against the idea, and one proposed activity. Updated
+AGENTS.md and Decision 054. Archived the oldest template session word for
+word in docs/SESSION-LOG.md. Left: Stage 00 not yet complete; owner review,
+log, critique, two conversations, revised statement and cohort post remain.
+No website code, builds, tests, installs, deployment, or messages to
+Admissions. Public research is not user validation.
 
-**2026-08-24 (second pass): parity + store-approval hardening.** Found: the
-scaffold wave left three lesson families unported: multi-store IAP release
-choreography, Play pre-launch/publish traps, and the parity-audit method
-lessons. Done: new `docs/store/IAP-RELEASE-CHOREOGRAPHY.md` (financial
-paperwork as owner-only critical path, one-review-submission-per-IAP-product /
-ship serially, the Ready-to-Submit trap, per-platform License Agreement,
-empty-success vs thrown-error, per-store query shapes, real-provisioning-only
-purchase verification, the launch-order checklist); store-submission-playbook
-gained the IAP section + the internal-track-has-no-pre-launch-report /
-Test-Lab-yourself / refused-to-auto-submit / all-or-nothing-submit bullets;
-play-cli-submission gained Rules 7–8 (Console stalls, testlab-android.sh);
-cross-platform-parity-discipline gained the degenerate-outcome audit pass
-(tie/zero/empty/cold-quit), the both-directions stale-⏳ check (false docs vs
-false cells), and the failure-class organization for whole-platform-port
-audits; tvos-platform-patterns gained the SignInWithAppleButton-in-Form
-swallowed-click gotcha; CLAUDE.md table + README tree point at the new doc.
-Left: green.
+**Same-day clarification:** Found: the initial framing emphasized access
+to information. Reviewed the official Parents & Families page in detail
+and compared its coverage with the proposal. Updated the Stage 00 note,
+source note, AGENTS.md, and Decision 054 to focus on parent participation
+in admissions. Saved the owner's correction and why above. Left: existing
+parent workflows, minor-specific steps, and confidential submission remain
+unconfirmed; no website changes or messages to Admissions.
+
+**2026-11-04: Stage 01 local prototype.** Found: documented parent
+participation problem with Stage 00 validation still open. Done: built
+the owner-authorized age-group guide, source-derived admissions and aid
+steps, explicit confirmation questions, official links and optional
+Admissions email action. Added a loopback-only Node preview server.
+Updated README, AGENTS, parity and stage/source notes and Decision 055.
+Checked the actual page in headless Edge and inspected screenshots.
+Left: local review at http://127.0.0.1:8080; no commit, deployment, private
+data, uploads or submissions. Interviews, phone feedback and Admissions
+confirmation remain. Standard token drift check finds only line endings;
+no token values changed and unrelated native files were left untouched.
+
+**Pages release follow-up:** The owner authorized commit, main push and
+Pages main/root publication. Reviewed all project changes; temporary browser
+artifacts and credential tooling remain outside the repository. Verified
+the guide under /minerva-parent-hub/ with Edge, added explicit manifest
+scope and a path regression check, and set version 1.0.1/build 2. Six web
+suites passed; the full token test passed in an LF-normalized temporary
+copy. GitHub admin credentials are available; Pages was initially absent.
+Left: commit/push and live verification pending, no new product scope.

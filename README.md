@@ -1,3 +1,35 @@
+# Minerva Parent Hub
+
+A web prototype for parent participation in Minerva admissions.
+It uses official public information and does not access applicant accounts.
+
+From this repository in PowerShell, run:
+
+```powershell
+node tools/serve.mjs
+```
+
+Open http://127.0.0.1:8080. Stop the server with Ctrl+C.
+No dependency installation or build is needed. If the review server is
+already running, open the address directly.
+
+Choose under 18 or 18 and older, read the published steps and confirmation
+questions, then use an official resource or the optional Admissions email
+link. No information is saved or submitted by this prototype.
+See [review instructions and limitations](docs/STAGE-01.md).
+
+The original template documentation follows; its platform claims are not
+claims that Minerva Parent Hub has shipped on those platforms.
+
+## GitHub Pages
+
+Release 1.0.1 targets https://amireness.github.io/minerva-parent-hub/.
+Pages serves the `main` branch, root directory, without a build step.
+Assets are relative to the project path; manifest start URL and scope are
+`./`. `.nojekyll` keeps this a plain static site.
+Run `node tools/test_parent_guide.mjs` to check project-path resolution.
+See `docs/STAGE-01.md` for deployment verification status.
+
 # Universal App Template
 
 Archive Watch started on April 17, 2026, as an Apple TV app for

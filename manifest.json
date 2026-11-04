@@ -1,7 +1,8 @@
 {
-  "name": "App Name",
-  "short_name": "AppName",
-  "start_url": "/",
+  "name": "Minerva Parent Hub",
+  "short_name": "Parent Hub",
+  "start_url": "./",
+  "scope": "./",
   "display": "standalone",
   "background_color": "#FFFFFF",
   "theme_color": "#FFFFFF",

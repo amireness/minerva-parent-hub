@@ -1,4 +1,4 @@
-# [APP NAME] — Architecture & Technology Decisions
+# Minerva Parent Hub — Architecture & Technology Decisions
 
 Entries capture the *why* behind choices — not the *what* (the code
 already shows that). Each entry should answer: **"what would the next
@@ -1262,3 +1262,77 @@ platform still maps tokens into its own idiom by hand (Android's
 `Theme.kt` slots, Windows control styles, Apple views), and Apple keeps
 system text styles for Dynamic Type. A deleted platform folder is
 skipped, not recreated.
+
+---
+
+## 054 — Keep Week 1 separate from private application and financial aid records
+
+*2026-11-04*
+
+Minerva Parent Hub's Week 1 scope is public parent information on the web.
+Parents should be able to support their child without the applicant's
+account. Separate parent financial aid submission is outside Week 1.
+No website implementation or later platform commitment is authorized by
+this Stage 00 documentation task.
+
+**Why:** The owner wants parents, especially those of 16- or 17-year-old
+applicants, to understand the process without needing account access.
+Turning this into application tracking or financial uploads would cross
+that boundary before Minerva's access and confidentiality rules are known.
+The owner's future financial privacy interest is not evidence that Minerva
+currently offers separate confidential submission.
+
+**How to apply:** Use official public sources for Week 1. Do not collect
+credentials, private application status, or financial documents. Keep
+unconfirmed policy questions in `docs/MINERVA-SOURCES.md`. Require owner
+review of `docs/STAGE-00.md` and real conversations before declaring
+Stage 00 complete. Keep later financial aid work in the scratchpad's
+Out of scope section until separately authorized and confirmed.
+
+**Who was in the room, who gains, who pays:** The owner supplied the
+scope; the agent documented it. Parents may gain easier access to
+information; applicants retain control over their accounts. Parents,
+applicants, and Admissions have not yet reviewed the proposal. A public
+information hub still carries a cost of keeping its sources current.
+
+**Clarified 2026-11-04:** Minerva has an existing Parents & Families page.
+The question is how parents can participate in admissions, particularly
+for applicants aged 16 or 17, not whether parent resources exist.
+**Why:** Duplicating general guidance would miss the owner's aim and
+could misrepresent existing support. **How to apply:** Confirm parent
+participation routes with Admissions before claiming a gap or assigning
+parent tasks. Financial aid submission remains outside Week 1.
+See `docs/MINERVA-SOURCES.md` for the comparison and open questions.
+
+---
+
+## 055 — Keep the first guide local and separate published facts from parent permissions
+
+*2026-11-04*
+
+Build the owner-requested web prototype using public source facts and
+explicit confirmation questions. Keep age-group selection in page memory,
+without storage or URL parameters. Do not add a backend or runtime scraping.
+
+**Why:** A public requirement to provide parent contact details does not
+establish parent account access or consent duties. Unclear cycle years
+make copied dates unsuitable for this prototype. A second source of
+admissions advice could mislead families if it looks authoritative.
+
+**How to apply:** Label source-backed steps, link to official deadlines,
+and label unresolved questions. Email links only open the user's mail
+application. The guide makes no background requests or submissions. Its
+static source-derived content needs manual review before publication;
+there is no automatic freshness pipeline. The personal age-group choice
+is intentionally not included in shareable URLs. No version bump, commit,
+or deployment occurs until the owner authorizes the next shipping step.
+
+**Who was in the room, who gains, who pays:** The owner authorized this
+local activity; the agent implemented it. Parents and students have not
+validated it. The owner must review the wording, and someone must maintain
+the source facts before this can serve families beyond the local review.
+
+**Release authorization, 2026-11-04:** The owner subsequently asked to
+commit, push main, and deploy the current prototype using GitHub Pages
+from main, root. This lifts the local-only release restriction, without
+changing privacy boundaries, parent permissions, or feature scope.

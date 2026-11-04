@@ -2,15 +2,15 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>App Name</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Minerva Parent Hub</title>
   <!-- PWA / iOS Safari standalone support.
        NO viewport-fit=cover — Safari auto-clips to safe area without it.
        NO position:fixed overlays — they break Safari's compositor at the
        Dynamic Island. See css/styles.css comment on body flex-column. -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="App Name">
+  <meta name="apple-mobile-web-app-title" content="Minerva Parent Hub">
   <!-- BEGIN design-tokens. Generated from design-tokens.json by tools/design_tokens.mjs. Do not edit by hand. -->
   <meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#141619" media="(prefers-color-scheme: dark)">
@@ -19,8 +19,8 @@
   <!-- Open Graph — read by Discord / iMessage / Slack / Bluesky / Mastodon
        / Threads (and every other major link-preview consumer). Mirror in
        per-view <title> updates from js/app.js. -->
-  <meta property="og:title" content="App Name">
-  <meta property="og:description" content="Your tagline here">
+  <meta property="og:title" content="Minerva Parent Hub">
+  <meta property="og:description" content="Parent participation in admissions">
   <meta property="og:type" content="website">
   <!-- <meta property="og:image" content="https://example.com/og-image.png"> -->
 
@@ -31,68 +31,78 @@
 
   <link rel="manifest" href="manifest.json">
   <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/parent-guide.css">
 </head>
 <body>
-
-  <!-- Skip link for keyboard navigation (WCAG AA) -->
   <a href="#main-content" class="skip-link">Skip to content</a>
-
-  <!-- AUTH SCREEN — shown when no session -->
-  <div id="auth-screen" class="screen" aria-label="Sign in">
-    <div class="auth-card">
-      <h1 class="auth-title">App Name</h1>
-      <p class="auth-subtitle">Your tagline here</p>
-      <form id="auth-form" novalidate>
-        <div class="field-group">
-          <label for="auth-handle" class="field-label">Handle</label>
-          <input type="text" id="auth-handle" class="field-input" placeholder="you@example.com" required>
-        </div>
-        <div class="field-group">
-          <label for="auth-password" class="field-label">Password</label>
-          <input type="password" id="auth-password" class="field-input" required>
-        </div>
-        <div id="auth-error" class="error-banner" hidden role="alert"></div>
-        <button type="submit" class="btn btn-primary btn-full" id="auth-submit">Sign in</button>
-      </form>
-    </div>
-  </div>
-
-  <!-- MAIN APP — shown when authenticated -->
-  <div id="app-screen" class="screen" hidden>
-
-    <!-- SIDEBAR -->
-    <aside id="channels-sidebar" class="channels-sidebar" aria-label="Navigation">
-      <div class="sidebar-header">
-        <h2 class="sidebar-title">App Name</h2>
+  <main id="main-content" class="parent-guide" tabindex="-1">
+    <header class="guide-header">
+      <p class="caption">Prototype · Not an official Minerva service</p>
+      <h1 class="view-heading">Minerva Parent Hub</h1>
+      <p>Parent participation in admissions</p>
+      <p class="caption">Public sources checked November 4, 2026. No applicant account access.</p>
+    </header>
+    <p id="offline-notice" class="guide-warning" role="status" hidden>You appear to be offline. This open guide remains readable; official links and email need a connection. Offline reopening is not supported.</p>
+    <section class="guide-section" aria-labelledby="age-heading">
+      <h2 id="age-heading" class="section-header">Your child's age group</h2>
+      <div id="age-control" hidden>
+        <label for="age-choice">Is your child under 18?</label>
+        <select id="age-choice">
+          <option value="">Choose an option</option>
+          <option value="under18">Yes, under 18</option>
+          <option value="adult">No, 18 or older</option>
+        </select>
+        <p id="selection-status" class="caption" role="status">Choose an age group to see the relevant guidance.</p>
       </div>
-      <nav class="sidebar-nav" aria-label="Main navigation">
-        <!-- Add nav items here. Pattern: -->
-        <!-- <button class="sidebar-nav-item active" id="nav-home-btn" data-view="home">
-          <svg>...</svg><span>Home</span>
-        </button> -->
-      </nav>
-    </aside>
-
-    <!-- VIEWS — one section per view, toggled by showView() -->
-    <main id="main-content">
-      <section id="view-home" class="view" aria-label="Home">
-        <div class="view-inner">
-          <h2 class="view-heading">Home</h2>
-          <p>Your first view goes here.</p>
-        </div>
-      </section>
-    </main>
-
-  </div>
-
+      <p id="no-js-guidance">Age selection needs JavaScript. The public guidance and official links below remain available.</p>
+      <div id="under18-guidance" class="age-guidance" hidden>
+        <h3 class="body-strong">Under 18 · Published requirement</h3>
+        <p>Minerva requires applicants under 18 to provide a parent or guardian's contact details in Part 1.</p>
+        <a href="https://www.minerva.edu/undergraduate/admissions/">Source: Starting Your Application</a>
+        <p class="guide-question">Confirm with Admissions: What happens after those details are provided? Are any parent consent or application steps required?</p>
+      </div>
+      <div id="adult-guidance" class="age-guidance" hidden>
+        <h3 class="body-strong">18 or older · Confirm with Admissions</h3>
+        <p>What role can a parent have, and what permission would the applicant need to give? This guide has not verified parent access rights.</p>
+      </div>
+    </section>
+    <section class="guide-section" aria-labelledby="steps-heading">
+      <h2 id="steps-heading" class="section-header">Application steps</h2>
+      <p class="caption">Published process · These are applicant steps, not permission for a parent to complete them.</p>
+      <ol class="guide-list">
+        <li>Provide background and academic information.</li>
+        <li>Complete Minerva's online challenges.</li>
+        <li>Share accomplishments and academic records.</li>
+      </ol>
+      <a href="https://www.minerva.edu/undergraduate/admissions/">Official application process and deadlines</a>
+      <p class="guide-question">Confirm with Admissions: Which steps, if any, require a parent? Which cycle year and cutoff time apply to the published dates?</p>
+    </section>
+    <section class="guide-section" aria-labelledby="aid-heading">
+      <h2 id="aid-heading" class="section-header">Financial aid</h2>
+      <p class="caption">Published process · For applicants seeking financial aid</p>
+      <ol class="guide-list">
+        <li>Complete the CSS Profile.</li>
+        <li>Complete Minerva's Financial Aid Questionnaire.</li>
+        <li>Submit supporting income and parent or guardian bank documents through Minerva's process.</li>
+      </ol>
+      <a href="https://www.minerva.edu/undergraduate/financial-aid/">Official financial aid steps and deadlines</a>
+      <p class="guide-question">Confirm with Financial Aid: Can each parent submit separately? Who can see the information? Separate confidential submission has not been verified.</p>
+      <a href="mailto:newstudentaid@minerva.edu">newstudentaid@minerva.edu</a>
+      <p class="caption">No financial documents or submissions are accepted here.</p>
+    </section>
+    <section class="guide-section guide-next" aria-labelledby="next-heading">
+      <h2 id="next-heading" class="section-header">One next action</h2>
+      <p>Ask Admissions what you need to do as a parent, without accessing your child's account.</p>
+      <a class="guide-action" href="mailto:admissions@minerva.edu">Contact Admissions</a>
+      <p class="caption">Opens your email app. Nothing is sent automatically.</p>
+      <a href="https://www.minerva.edu/faqs/">Official contact and application FAQs</a>
+    </section>
+    <footer class="guide-section">
+      <a href="https://www.minerva.edu/parents-families/">Minerva's Parents &amp; Families resources</a>
+      <p class="caption">Your age-group choice stays in this page. This guide does not store it or send it to Minerva.</p>
+    </footer>
+  </main>
   <script src="js/compat.js"></script>
-  <script src="js/api.js"></script>
   <script src="js/app.js"></script>
-  <!-- Additive smart-TV layer + Cast sender: both self-disable off-TV
-       (tv.js adds html.tv only on a TV runtime; cast-sender no-ops when the
-       Cast framework never loads). See docs/TV-PLATFORMS.md. -->
-  <link rel="stylesheet" href="tv.css">
-  <script src="tv.js"></script>
-  <script src="js/cast-sender.js"></script>
 </body>
 </html>
