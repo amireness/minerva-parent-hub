@@ -199,7 +199,7 @@ real-device check before "done."
 
 ## What this app does
 
-Stage 01 has a local web prototype; see `docs/STAGE-01.md` for scope and
+Stage 01 has a published web prototype; see `docs/STAGE-01.md` for scope and
 checks. Stage 00's conversations remain unvalidated (`docs/STAGE-00.md`).
 Week 1 concerns public parent information on the web. The platform
 scaffolds below are template capabilities, not shipped Hub apps.

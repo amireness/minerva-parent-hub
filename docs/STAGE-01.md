@@ -130,5 +130,13 @@ Native build toolchains were not run for this web release; native apps
 remain unadopted scaffolds and their runtime behavior is not verified.
 
 GitHub authentication and repository admin permission were confirmed.
-Pages was initially absent. Publication and live verification are pending
-the release push; they are not implied by the local browser results.
+Pages was initially absent and was enabled through the GitHub API for
+`main`, root `/`. GitHub reports build status `built` for release commit
+`1dfa31ea4b9de348d17c1a50574e7f4820a9afab`.
+
+**Published and verified:** https://amireness.github.io/minerva-parent-hub/.
+The HTML, both CSS files, both scripts and manifest returned HTTP 200 and
+matched the release content after line-ending normalization. Headless Edge
+repeated both age branches, reset, responsive widths, dark appearance,
+offline/online notices and no-JavaScript fallback against this public URL.
+These are deployment and engineering checks, not parent-use validation.

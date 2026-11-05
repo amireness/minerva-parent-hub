@@ -16,7 +16,7 @@
 
 ## Current state
 
-- **Status**: Owner authorized Pages release 1.0.1; deployment in progress.
+- **Status**: Pages release 1.0.1 published and browser-verified.
 - **Active milestone**: M1, parent admissions guide. Stage 00 validation remains open.
 - **Last session**: 2026-11-04.
 - **Owner's aim**: Help parents, especially of applicants aged 16 or 17,
@@ -31,7 +31,7 @@
 - **Next actions**: Owner reviews the why and boundary; completes the log,
   candidate tests, critique and two conversations; revises and posts the
   problem; confirms deadline and parent-role questions with Admissions.
-  Publish the reviewed prototype to Pages, then verify the live project URL.
+  Gather phone and parent feedback at https://amireness.github.io/minerva-parent-hub/.
 - **Platform scope**: Week 1 web only; later platform choices undecided.
   Native scaffolds stay untouched. The inherited setup checklist below
   is not authorization to build native apps now.
@@ -197,3 +197,12 @@ scope and a path regression check, and set version 1.0.1/build 2. Six web
 suites passed; the full token test passed in an LF-normalized temporary
 copy. GitHub admin credentials are available; Pages was initially absent.
 Left: commit/push and live verification pending, no new product scope.
+
+**Deployment result:** Commit 1dfa31e pushed to main. Pages configured via
+GitHub API for main/root, build status built for that commit. Public HTML,
+both stylesheets, both scripts and manifest returned HTTP 200 and matched
+release content. Headless Edge repeated all interaction, responsive,
+offline and no-JavaScript checks against the public URL successfully.
+Published: https://amireness.github.io/minerva-parent-hub/.
+No private applicant information or temporary browser files were committed.
+Real-parent validation and policy confirmation still remain open.

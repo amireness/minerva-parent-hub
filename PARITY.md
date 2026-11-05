@@ -2,15 +2,17 @@
 
 ## Hub prototype status — 2026-11-04
 
-The owner authorized a local web prototype only. It is not deployed.
+The owner authorized web-only publication. The prototype is published at
+https://amireness.github.io/minerva-parent-hub/ and browser-verified on
+2026-11-04. Parent-use validation remains open.
 Later platform adoption is undecided; the inherited template tables below
 describe template capabilities, not verified Hub features.
 
 | Capability | Web | iOS/iPadOS | macOS | tvOS | Android | Notes |
 |---|---|---|---|---|---|---|
-| Choose age group and read relevant admissions guidance | Local prototype | Deferred | Deferred | Deferred | Deferred | Other platforms await owner scope decision; browser checks in docs/STAGE-01.md. |
-| Distinguish published facts from open parent-role questions | Local prototype | Deferred | Deferred | Deferred | Deferred | Same web-only scope. |
-| Open official sources and contact Admissions | Local prototype | Deferred | Deferred | Deferred | Deferred | Email is optional and never sent automatically. |
+| Choose age group and read relevant admissions guidance | Published prototype | Deferred | Deferred | Deferred | Deferred | Other platforms await owner scope decision; browser checks in docs/STAGE-01.md. |
+| Distinguish published facts from open parent-role questions | Published prototype | Deferred | Deferred | Deferred | Deferred | Same web-only scope. |
+| Open official sources and contact Admissions | Published prototype | Deferred | Deferred | Deferred | Deferred | Email is optional and never sent automatically. |
 
 > **Single source of truth** for what's shipping where. Updated in
 > the SAME change set as any user-facing feature.
