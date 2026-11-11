@@ -37,5 +37,24 @@
     { "id": "tabular",       "level": "L6", "size": 14, "weight": 400, "web": "tabular",        "apple": "body",       "tvos": "body",     "android": "bodySmall",     "windows": "tabular", "mono": true }
   ],
   "space": { "1": 4, "2": 8, "3": 12, "4": 16, "6": 24, "8": 32 },
-  "radius": { "control": 8, "card": 12 }
+  "radius": { "control": 8, "card": 12 },
+  "flask": {
+    "about": "Owner-requested web-only identity; inherited platform tokens stay unchanged.",
+    "brand": {
+      "primary": { "light": "#193D50", "dark": "#ACCBDD" },
+      "onPrimary": { "light": "#FFFFFF", "dark": "#10232E" },
+      "background": { "light": "#F6F4EE", "dark": "#111E27" },
+      "surface": { "light": "#FFFFFF", "dark": "#192A35" },
+      "surfaceAlt": { "light": "#ECE9E0", "dark": "#223743" },
+      "text": { "light": "#1D303B", "dark": "#F0EFE9" },
+      "textMuted": { "light": "#53636A", "dark": "#B6C4CA" },
+      "border": { "light": "#C6CBC8", "dark": "#4A606B" },
+      "controlBorder": { "light": "#6F7F82", "dark": "#8299A5" },
+      "gold": { "light": "#805D1C", "dark": "#DDBB76" },
+      "goldSurface": { "light": "#F1E7D0", "dark": "#383425" }
+    },
+    "displayFont": "Georgia, 'Times New Roman', serif",
+    "pageTitleSize": "clamp(2rem, 4vw, 3.25rem)",
+    "sectionHeaderSize": "1.25rem"
+  }
 }

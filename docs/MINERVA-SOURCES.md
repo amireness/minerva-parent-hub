@@ -1,5 +1,44 @@
 # Minerva public information: research note
 
+## Resource integration review — 2026-11-11
+
+For the requested redesign, inspected both primary official pages and
+followed their links rather than using search snippets as source facts:
+
+| Parent need | Linked official destination | How the Hub uses it |
+|---|---|---|
+| Understand admissions | https://www.minerva.edu/undergraduate/admissions/ | Existing process summary, responsibility distinction, date caveat |
+| Find family information | https://www.minerva.edu/parents-families/ | Overview and route to existing support |
+| Prepare aid questions | https://www.minerva.edu/undergraduate/financial-aid/ | Preserved source steps, no financial data collection |
+| Clarify admissions questions | https://www.minerva.edu/faqs/ | Existing FAQ/contact resource |
+| Understand the academic model | https://www.minerva.edu/academics/ | New summary of active, discussion-based learning |
+| Look ahead to academic events | https://www.minerva.edu/academic-calendar/ | Academic calendar, explicitly distinct from admissions deadlines |
+
+All six destinations were opened. The family page also links handbooks,
+emergency resources, and a request-information form. Those links were
+identified but are not summarized as verified new resources in this change.
+No handbook policy or private portal content is inferred. No pages are
+copied wholesale, embedded, or fetched at runtime. Summaries are explicitly
+owner-requested and source-based; they establish no new parent permissions.
+Intake years, cutoff times, minor consent duties, and separate financial
+submission privacy remain questions for Minerva and owner review. The
+academic calendar does not resolve them.
+
+## Local Flask application recheck — 2026-11-11
+
+Reopened the official admissions, financial aid, Parents & Families, and
+FAQ pages for the owner's requested database-backed prototype. The
+under-18 contact-details requirement and existing application/aid guidance
+remain supported. Admissions and aid tables still show the same month/day
+deadlines without calendar years. The local app displays those published
+values with a warning; it does not infer a year, cutoff, or personalized
+deadline. `parenthub/content.json` contains the reviewed public seed data.
+Original prototype wording is reused; parent preparation items are personal
+planning suggestions, not new claims about required parent duties.
+No private portal was accessed and no staff were contacted. Existing
+questions about parent access and separate financial submission remain open.
+The historical findings below retain their original check date.
+
 Checked 2026-11-04 against official public Minerva pages. This is research
 for Stage 00, not product copy or a personalized admissions timeline.
 No applicant account was accessed. No Admissions staff were contacted.

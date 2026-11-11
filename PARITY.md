@@ -1,5 +1,35 @@
 # Minerva Parent Hub: Cross-Platform Feature Parity
 
+## Local Flask application — 2026-11-11
+
+UI review follow-up: the local Flask web app now has a public landing page,
+wider planning dashboard, five-section guidance, and a six-resource library.
+It retains every existing route and private planning operation. Keyboard,
+light/dark, and phone/desktop evidence is in docs/FLASK-VERIFICATION.md.
+This is an explicit web-only redesign; native templates and the published
+static prototype are unchanged. Flask-specific palette overrides do not
+alter inherited native/static outputs.
+
+Owner explicitly limited this task to the existing web application; native
+scaffolds are excluded. No deployed feature claims change. Local engineering
+verification is recorded in docs/FLASK-VERIFICATION.md; real-parent review
+remains open. Decision 056 governs this expansion beyond the static guide.
+
+| Capability | Web | iOS/iPadOS | macOS | tvOS | Android | Notes |
+|---|---|---|---|---|---|---|
+| Register, log in, log out | Local Flask | Out of scope | Out of scope | Out of scope | Out of scope | CSRF, hashing, protected routes; tests/test_auth.py |
+| Understand the product from the public homepage | Local Flask | Out of scope | Out of scope | Out of scope | Out of scope | Owner-requested web-only redesign; tests/test_workspace.py |
+| Save age group and view dashboard | Local Flask | Out of scope | Out of scope | Out of scope | Out of scope | tests/test_planning.py; docs/WEB-DESIGN.md |
+| Save private checklist progress | Local Flask | Out of scope | Out of scope | Out of scope | Out of scope | Applicant responsibilities remain separate; tests/test_planning.py |
+| Create/edit/delete/complete reminders | Local Flask | Out of scope | Out of scope | Out of scope | Out of scope | Personal dates only; tests/test_planning.py |
+| Save/edit/delete/resolve private questions | Local Flask | Out of scope | Out of scope | Out of scope | Out of scope | Never sent automatically; isolation tested |
+| Search/filter source-linked resources | Local Flask | Out of scope | Out of scope | Out of scope | Out of scope | tests/test_content_database.py |
+| Read official deadlines and aid guidance | Local Flask and preserved static links | Out of scope | Out of scope | Out of scope | Out of scope | Missing year warned; no invented date/status |
+
+Audit: all requested local web verbs above have routes and tests; Pages
+still serves the original static guide. The inherited tables below remain
+template documentation, not claims about implemented native Hub apps.
+
 ## Hub prototype status — 2026-11-04
 
 The owner authorized web-only publication. The prototype is published at

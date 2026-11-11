@@ -1336,3 +1336,63 @@ the source facts before this can serve families beyond the local review.
 commit, push main, and deploy the current prototype using GitHub Pages
 from main, root. This lifts the local-only release restriction, without
 changing privacy boundaries, parent permissions, or feature scope.
+
+---
+
+## 056 — Keep saved parent planning separate from official application records
+
+*2026-11-11*
+
+The owner's database-backed interview application supersedes Decision 055's
+no-backend/no-storage rule for the local Flask web app only. Parent accounts
+own age-group preferences, checklist marks, reminders, and questions.
+Official resources and deadline text remain shared, reviewed public content.
+The static Pages prototype and native scaffolds remain unchanged.
+
+**Why:** The requested demonstration needs authentication, relational data,
+and persistent CRUD operations. Storing personal planning meets that need
+without accessing the student's application or collecting financial records.
+The strongest risk is parents mistaking their checklist for an application
+status; explicit responsibility labels and a planning-only warning preserve
+the student's agency. Existing Minerva resources remain authoritative.
+
+**How to apply:** Use the requested Flask/SQLite/Jinja stack with an app
+factory, blueprints, forms, and SQLAlchemy models. Require CSRF for writes
+and scope every private record lookup by current user. Source checklist
+definitions from the prototype's reviewed wording and upsert stable slugs.
+Preserve official month/day values without inventing years or countdowns.
+No automatic messages, reminders delivery, private portal integration,
+financial collection, native work, push, or deployment is authorized.
+The owner explicitly requested automated pytest verification; this is
+engineering evidence, not replacement for parent usability validation.
+See docs/FLASK-ARCHITECTURE.md for the learning review and tradeoffs.
+
+---
+
+## 057 — Make official guidance a route into personal planning, not another portal
+
+*2026-11-11*
+
+The owner requested a polished web-only parent workspace. The public home
+explains its purpose; signed-in Home shows saved planning. Official facts
+stay attributed to Minerva, while questions, reminder dates, and checklist
+marks remain personal. The dashboard's suggestion uses incomplete parent
+preparation tasks, never an applicant responsibility or inferred status.
+
+**Why:** The owner found the original UI too plain, text-heavy, narrow,
+and difficult to navigate. Wider sections, concise summaries, and fewer
+repeated warnings help families find the next meaningful action. The risk
+is that a polished dashboard looks like an official admissions portal;
+source attribution, an independent-prototype footer, and the planning-only
+progress label preserve the boundary. Real-parent validation is still open.
+
+**How to apply:** Preserve Flask/Jinja, CSRF, ownership checks, schema, and
+existing route URLs. Use native HTML controls, source-linked summaries,
+and a clear split between applicant responsibilities and parent planning.
+The owner explicitly requested a checklist progress indicator and concise
+homepage/resource copy, superseding the inherited no-progress/no-new-copy
+preferences only for those requested surfaces. Apply the navy/neutral/gold
+identity through Flask overrides in design-tokens.json and the Flask-only
+generator. Do not recolor or rebuild unused native scaffolds. Check text
+and control contrast, both themes, keyboard navigation, and responsive
+screenshots. The academic calendar is never an admissions deadline source.

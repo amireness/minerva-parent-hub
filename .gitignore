@@ -48,6 +48,14 @@ node_modules/
 # Environment / secrets
 .env
 .env.local
+.venv/
+.pytest_cache/
+instance/
+*.sqlite
+*.sqlite3
+*.db
+*.sqlite-wal
+*.sqlite-shm
 *.key
 credentials.json
 

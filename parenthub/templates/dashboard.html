@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+{% block page_heading %}
+<div class="page-heading welcome">
+  <div>
+    <p class="eyebrow">YOUR FAMILY'S NEXT CHAPTER</p>
+    <h1 class="view-heading">Welcome to your planning space.</h1>
+    <p class="account-label">{{ current_user.email }}</p>
+  </div>
+  <a class="button" href="{{ url_for('tracking.edit_reminder') }}">Create a reminder</a>
+</div>
+{% endblock %}
+{% block content %}
+<div class="dashboard-grid">
+  <section class="panel progress-panel" aria-labelledby="progress-heading">
+    <p class="eyebrow">A PLAN AT YOUR PACE</p>
+    <h2 id="progress-heading" class="section-header">Your checklist</h2>
+    <p class="progress-number">{{ completed }} <span>of {{ total }}</span>
+    </p>
+    <label class="caption" for="checklist-progress">{{ completed }} of {{ total }} planning items marked complete.</label>
+    <progress id="checklist-progress" value="{{ completed }}" max="{{ total or 1 }}">{{ completed }} of {{ total }}</progress>
+    <a class="button button-secondary" href="{{ url_for('tracking.checklist') }}">Update checklist</a>
+    <p class="caption">Personal planning only. This does not update or reflect a Minerva application.</p>
+  </section>
+  <section class="panel next-panel" aria-labelledby="suggestion-heading">
+    <p class="eyebrow">ONE NEXT STEP</p>
+    <h2 id="suggestion-heading" class="section-header">Suggested next action</h2>
+    {% if not current_user.age_group %}
+    <p>Choose your child's age group to see the relevant parent guidance.</p>
+    <a href="#family-context" class="text-link">Set your family context <span aria-hidden="true">→</span>
+    </a>
+    {% elif next_item %}
+    <p>{{ next_item.title }}</p>
+    <a href="{{ url_for('tracking.checklist') }}#item-{{ next_item.id }}" class="text-link">Review parent preparation <span aria-hidden="true">→</span>
+    </a>
+    {% else %}
+    <p>Your parent preparation items are marked complete. Keep any remaining questions in one place.</p>
+    <a href="{{ url_for('tracking.questions') }}" class="text-link">Review your questions <span aria-hidden="true">→</span>
+    </a>
+    {% endif %}
+  </section>
+  <section class="panel reminders-panel" aria-labelledby="next-heading">
+    <div class="section-heading">
+      <h2 id="next-heading" class="section-header">Upcoming saved reminders</h2>
+      <a href="{{ url_for('tracking.reminders') }}">View all</a>
+    </div>
+    {% for reminder in reminders %}
+    <article class="reminder-row">
+      <div class="date-block">
+        <span>{{ reminder.due_date.strftime('%b') }}</span>
+        <strong>{{ reminder.due_date.day }}</strong>
+      </div>
+      <div>
+        <a class="record-title" href="{{ url_for('tracking.edit_reminder', record_id=reminder.id) }}">{{ reminder.title }}</a>
+        <p class="caption">
+          <time datetime="{{ reminder.due_date }}">{{ reminder.due_date }}</time>
+          {% if reminder.due_date < today %} · Overdue{% endif %}
+        </p>
+      </div>
+    </article>
+    {% else %}
+    <div class="empty-state">
+      <p>No pending reminders.</p>
+      <a href="{{ url_for('tracking.edit_reminder') }}">Create a reminder</a>
+    </div>
+    {% endfor %}
+    <p class="caption">Your personal dates. No email or notifications are sent.</p>
+  </section>
+  <section class="panel questions-panel" aria-labelledby="questions-heading">
+    <div class="section-heading">
+      <h2 id="questions-heading" class="section-header">Questions on your mind</h2>
+      <a href="{{ url_for('tracking.questions') }}">View all</a>
+    </div>
+    {% for question in questions %}
+    <p class="question-preview">
+      <a href="{{ url_for('tracking.edit_question', record_id=question.id) }}">{{ question.body }}</a>
+    </p>
+    {% else %}
+    <div class="empty-state">
+      <p>No open questions.</p>
+      <a href="{{ url_for('tracking.edit_question') }}">Save a question</a>
+    </div>
+    {% endfor %}
+    <p class="caption">Private notes. Nothing is sent to Minerva automatically.</p>
+  </section>
+</div>
+<div class="context-grid">
+  <section id="family-context" class="panel" aria-labelledby="family-heading">
+    <p class="eyebrow">MAKE THE GUIDANCE RELEVANT</p>
+    <h2 id="family-heading" class="section-header">Your family context</h2>
+    <form method="post">{{ form.hidden_tag() }}{{ form.age_group.label }}{{ form.age_group(aria_describedby='age-errors') }}<div id="age-errors">
+        {% for error in form.age_group.errors %}
+        <p class="error" role="alert">{{ error }}</p>
+        {% endfor %}
+      </div>
+      <button type="submit">Save age group</button>
+    </form>
+    {% include 'age_guidance.html' %}
+  </section>
+  <section class="panel" aria-labelledby="official-heading">
+    <p class="eyebrow">DIRECT FROM MINERVA</p>
+    <h2 id="official-heading" class="section-header">Official resources for your next step</h2>
+    {% for resource in featured %}
+    <article class="resource-preview">
+      <a class="record-title" href="{{ resource.url }}">{{ resource.title }} <span aria-hidden="true">↗</span>
+      </a>
+      <p class="caption">Minerva University · Verified {{ resource.last_verified }}</p>
+    </article>
+    {% endfor %}
+    <a href="{{ url_for('main.resources') }}">Explore the resource library</a>
+  </section>
+</div>
+{% endblock %}

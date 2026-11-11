@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="section-heading">
+  <p class="section-intro">Private to your account. Questions are never sent automatically to Minerva.</p>
+  <a class="button" href="{{ url_for('tracking.edit_question') }}">Save a question</a>
+</div>
+<div class="split-layout">
+  {% for resolved, label in [(false, 'Open'), (true, 'Resolved')] %}
+  <section class="panel" aria-labelledby="questions-{{ loop.index }}">
+    <h2 class="section-header" id="questions-{{ loop.index }}">{{ label }}</h2>
+    {% for question in questions if question.resolved == resolved %}
+    <article class="record">
+      <p class="question-text">{{ question.body }}</p>
+      <div class="actions">
+        <a href="{{ url_for('tracking.edit_question', record_id=question.id) }}">Edit question</a>
+        <form action="{{ url_for('tracking.delete_question', record_id=question.id) }}" method="post">{{ delete_form.hidden_tag() }}<button type="submit" class="button-danger">Delete question</button>
+        </form>
+      </div>
+    </article>
+    {% else %}
+    <div class="empty-state">
+      <p>No {{ label|lower }} questions.</p>
+      {% if not resolved %}
+      <a href="{{ url_for('tracking.edit_question') }}">Save a question</a>
+      {% endif %}
+    </div>
+    {% endfor %}
+  </section>
+  {% endfor %}
+</div>
+{% endblock %}

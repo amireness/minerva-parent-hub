@@ -1,0 +1,23 @@
+{
+  "last_verified": "2026-11-11",
+  "resources": [
+    {"slug": "admissions", "title": "Official application process and deadlines", "topic": "Admissions", "description": "Provide background and academic information. Complete Minerva's online challenges. Share accomplishments and academic records.", "url": "https://www.minerva.edu/undergraduate/admissions/"},
+    {"slug": "aid", "title": "Official financial aid steps and deadlines", "topic": "Financial aid", "description": "Complete the CSS Profile. Complete Minerva's Financial Aid Questionnaire. No financial documents or submissions are accepted here.", "url": "https://www.minerva.edu/undergraduate/financial-aid/"},
+    {"slug": "families", "title": "Minerva's Parents & Families resources", "topic": "Parents & Families", "description": "An overview of student support and family information, with links to admissions, financial aid, and resources for understanding Minerva.", "url": "https://www.minerva.edu/parents-families/"},
+    {"slug": "faqs", "title": "Official contact and application FAQs", "topic": "Admissions", "description": "Ask Admissions what you need to do as a parent, without accessing your child's account.", "url": "https://www.minerva.edu/faqs/"},
+    {"slug": "academic-model", "title": "Understanding Minerva's academic model", "topic": "Understanding Minerva", "description": "Minerva explains its active, discussion-based learning model and how students apply concepts across courses and real-world contexts.", "url": "https://www.minerva.edu/academics/"},
+    {"slug": "academic-calendar", "title": "Official academic calendar", "topic": "Planning ahead", "description": "Published academic-year dates for classes, breaks, and student activities. This is an academic calendar, not an admissions deadline schedule.", "url": "https://www.minerva.edu/academic-calendar/"}
+  ],
+  "checklist": [
+    {"slug": "parent-resources", "title": "Minerva's Parents & Families resources", "responsibility": "parent", "resource": "families"},
+    {"slug": "parent-role", "title": "Ask Admissions what you need to do as a parent, without accessing your child's account.", "responsibility": "parent", "resource": "faqs"},
+    {"slug": "background", "title": "Provide background and academic information.", "responsibility": "applicant", "resource": "admissions"},
+    {"slug": "challenges", "title": "Complete Minerva's online challenges.", "responsibility": "applicant", "resource": "admissions"},
+    {"slug": "accomplishments", "title": "Share accomplishments and academic records.", "responsibility": "applicant", "resource": "admissions"}
+  ],
+  "deadlines": [
+    {"slug": "early-action", "round_name": "Early Action (Binding Optional)", "admissions": "November 1", "financial_aid": "November 8", "resource": "admissions"},
+    {"slug": "regular-one", "round_name": "Regular Decision I", "admissions": "January 5", "financial_aid": "January 12", "resource": "admissions"},
+    {"slug": "regular-two", "round_name": "Regular Decision II", "admissions": "March 2", "financial_aid": "March 9", "resource": "admissions"}
+  ]
+}

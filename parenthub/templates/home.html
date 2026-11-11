@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% block page_heading %}{% endblock %}
+{% block content %}
+<section class="hero" aria-labelledby="hero-title">
+  <div class="hero-copy">
+    <p class="eyebrow">A LITTLE CLARITY FOR A BIG NEXT STEP</p>
+    <h1 id="hero-title" class="view-heading">Their next chapter.<br>
+      <em>Your place to plan.</em>
+    </h1>
+    <p class="lead">Organize your family's Minerva admissions journey with verified official resources and a plan of your own.</p>
+    <div class="actions">
+      <a class="button" href="{{ url_for('auth.register') }}">Get started</a>
+      <a class="button button-secondary" href="{{ url_for('main.resources') }}">Explore official resources <span aria-hidden="true">↗</span>
+      </a>
+    </div>
+    <p class="caption">Independent parent-planning prototype. No applicant account needed.</p>
+  </div>
+  <aside class="hero-panel" aria-labelledby="journey-heading">
+    <p class="eyebrow">A THOUGHTFUL WAY FORWARD</p>
+    <h2 id="journey-heading" class="section-header">Support their journey.<br>Keep their choices theirs.</h2>
+    <ol class="journey-list">
+      <li>
+        <span aria-hidden="true">01</span>
+        <div>
+          <strong>Understand the process</strong>
+          <p>Start with official Minerva guidance.</p>
+        </div>
+      </li>
+      <li>
+        <span aria-hidden="true">02</span>
+        <div>
+          <strong>Make room for your part</strong>
+          <p>Organize parent preparation and questions.</p>
+        </div>
+      </li>
+      <li>
+        <span aria-hidden="true">03</span>
+        <div>
+          <strong>Keep the next step in view</strong>
+          <p>Save reminders and return to your plan.</p>
+        </div>
+      </li>
+    </ol>
+    <a href="{{ url_for('main.guide') }}">Find your way through the guidance <span aria-hidden="true">→</span>
+    </a>
+  </aside>
+</section>
+<section aria-labelledby="tools-heading" class="home-tools">
+  <div class="section-heading">
+    <div>
+      <p class="eyebrow">ONE PLACE TO STAY ORGANIZED</p>
+      <h2 id="tools-heading" class="section-header">A clearer view of what comes next</h2>
+    </div>
+  </div>
+  <div class="feature-grid">
+    {% for number, heading, text, endpoint in [('01', 'Your checklist', 'Keep parent preparation separate from applicant responsibilities.', 'tracking.checklist'), ('02', 'Personal reminders', 'Choose your own dates and keep track of follow-ups.', 'tracking.reminders'), ('03', 'Official resources', 'Find source-linked guidance by the questions on your mind.', 'main.resources'), ('04', 'Questions for Admissions', 'Keep your questions together until you are ready to ask.', 'tracking.questions')] %}
+    <article class="feature-card">
+      <span class="feature-number" aria-hidden="true">{{ number }}</span>
+      <h3 class="section-header">
+        <a href="{{ url_for(endpoint) }}">{{ heading }}</a>
+      </h3>
+      <p>{{ text }}</p>
+    </article>
+    {% endfor %}
+  </div>
+</section>
+<section class="complement" aria-labelledby="complement-heading">
+  <div>
+    <p class="eyebrow">OFFICIAL INFORMATION. PERSONAL ORGANIZATION.</p>
+    <h2 id="complement-heading" class="section-header">A companion to Minerva's website</h2>
+    <p>Minerva provides the admissions information. Parent Hub helps you organize it alongside your own checklist, reminders, and questions. Your plan does not update an application.</p>
+  </div>
+  <a class="text-link" href="https://www.minerva.edu/parents-families/">Visit Parents &amp; Families <span aria-hidden="true">↗</span>
+  </a>
+</section>
+{% endblock %}

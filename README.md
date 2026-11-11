@@ -1,34 +1,182 @@
 # Minerva Parent Hub
 
-A web prototype for parent participation in Minerva admissions.
-It uses official public information and does not access applicant accounts.
+A database-backed Flask web application for private parent planning around
+Minerva admissions. It preserves the existing public guide, financial aid
+guidance, official resources, light/dark design tokens, and responsive layout.
+**Independent interview prototype, not an official Minerva admissions portal.**
+It never accesses an applicant account or submits anything to Minerva.
 
-From this repository in PowerShell, run:
+## Run locally on Windows (Git Bash)
 
-```powershell
-node tools/serve.mjs
+Install Python 3.10+ and Git for Windows first. Python 3.14 was used for the
+recorded verification. In Git Bash:
+
+```bash
+git clone https://github.com/amireness/minerva-parent-hub.git
+cd minerva-parent-hub
+python -m venv .venv
+source .venv/Scripts/activate
+python -m pip install -r requirements.txt
+export SECRET_KEY="$(python -c 'import secrets; print(secrets.token_hex(32))')"
+python -m flask --app parenthub init-db
+python -m flask --app parenthub seed-content
+python -m flask --app parenthub run --host 127.0.0.1 --port 5000
 ```
 
-Open http://127.0.0.1:8080. Stop the server with Ctrl+C.
-No dependency installation or build is needed. If the review server is
-already running, open the address directly.
+Open http://127.0.0.1:5000. Stop with Ctrl+C. If `python` is not found, use
+`py -3 -m venv .venv` for the creation command; after activation, use
+`python` as shown. The interpreter must be a real Python installation,
+not a Microsoft Store placeholder. macOS/Linux use
+`source .venv/bin/activate` instead.
 
-Choose under 18 or 18 and older, read the published steps and confirmation
-questions, then use an official resource or the optional Admissions email
-link. No information is saved or submitted by this prototype.
-See [review instructions and limitations](docs/STAGE-01.md).
+The server's database lives at `instance/parenthub.sqlite`. Restarting the
+server preserves accounts and planning. The secret above exists only in
+the shell environment. Keep the same value while demonstrating; changing
+it invalidates sessions but does not delete records. In a new shell,
+activate the venv and export a secret again before starting Flask. Never
+commit a secret or database. `.env.example` documents supported settings;
+a local ignored `.env` is supported by python-dotenv, but exporting secrets
+avoids writing them to disk. Never use the Flask development server as a
+public production service.
 
-The original template documentation follows; its platform claims are not
-claims that Minerva Parent Hub has shipped on those platforms.
+## Local demo account
 
-## GitHub Pages
+In an activated shell with SECRET_KEY set, after init-db:
 
-Release 1.0.1 targets https://amireness.github.io/minerva-parent-hub/.
-Pages serves the `main` branch, root directory, without a build step.
-Assets are relative to the project path; manifest start URL and scope are
-`./`. `.nojekyll` keeps this a plain static site.
-Run `node tools/test_parent_guide.mjs` to check project-path resolution.
-See `docs/STAGE-01.md` for deployment verification status.
+```bash
+python -m flask --app parenthub seed-demo
+```
+
+The command creates `demo@example.com`, generates a random password and
+prints it once, plus one saved checklist item, reminder, and question.
+There are no hardcoded login credentials. This is an explicit local demo
+command; it is never run automatically on startup. Repeating it refuses
+to reset an existing account. To create another local demo account, use
+`seed-demo --email another@example.com`. Do not use real applicant or
+financial data in demonstrations.
+
+## Verify each feature / interview walkthrough
+
+1. Open Guidance and Financial aid while logged out. Read the preserved
+   guidance and follow official links. Deadlines shows verified month/day
+   text and explicitly warns that the official table omits years.
+2. Register a new parent account (password length 12 to 128), then log in.
+   Select Under 18 on the dashboard and save; switch to 18 or older to
+   see the different parent-role guidance.
+3. Open Checklist. Mark a parent preparation item and save; mark or unmark
+   an applicant responsibility. Return Home to see the saved count.
+   Explain that this does not update or reflect a Minerva application.
+4. Create a personal reminder with a date. Edit its text and date; mark
+   Completed in the edit form, then unmark it. Check Upcoming/overdue and
+   Completed sections. Delete a spare reminder.
+5. Save a question for Admissions, edit it, mark Resolved, then reopen it
+   by clearing Resolved in the edit form. Delete a spare question.
+   Nothing is automatically sent to Minerva.
+6. Search Resources for `challenges`, filter Admissions or Financial aid,
+   and try a search with no matches. Check source links and verification dates.
+7. Log out, log in again, and verify age group, checklist, reminders, and
+   questions remain. Restart the server and repeat to demonstrate SQLite
+   persistence. Create a second account in another browser profile; it
+   cannot see the first account's data or edit its record URLs.
+8. Walk through the request flow and schema in
+   [the architecture overview](docs/FLASK-ARCHITECTURE.md). Explain the
+   tradeoffs: SQLite for a small local demo, server-rendered forms for
+   simplicity, ownership checks beyond login, and reviewed content rather
+   than invented admissions dates.
+
+Reminders are in-app planning records, not scheduled notifications. Free
+text must not contain confidential applicant or financial information.
+There is no file upload or financial information form.
+
+## Tests
+
+```bash
+python -m pytest -q
+python -m pip check
+```
+
+Tests use isolated temporary databases; they do not modify your local
+accounts. CSRF remains enabled in tests. They cover registration/login,
+password hashing, protected routes, session handling, checklist progress,
+reminder/question operations and validation, persistence through a new app
+instance, cross-account isolation, safe text rendering, foreign keys,
+constraints, public resource filters, deadlines, and seed commands.
+
+Optional browser verification requires Node 22+ and Chrome (neither is
+needed to run the application):
+
+```bash
+node tools/check_flask_browser.mjs
+```
+
+On Windows it uses Chrome's standard installation location and the local
+venv. Override CHROME and PYTHON environment variables for other locations.
+It starts a temporary loopback server and browser, stores a synthetic
+database and screenshots under ignored `build/qa/`, then stops both.
+See [verification evidence](docs/FLASK-VERIFICATION.md) for actual results.
+
+## Content, schema, and commands
+
+The redesigned homepage explains the product before registration; signed-in
+Home opens the planning dashboard. It shows saved checklist progress,
+personal reminders, open question previews, and a next action derived only
+from your parent preparation items and age-group selection. Guidance has
+five anchored sections. Resources now includes six official destinations,
+including the academic model and academic calendar (not admissions dates).
+
+To refresh an existing local database after content changes:
+
+```bash
+python -m flask --app parenthub seed-content
+```
+
+This preserves account and private planning data. The layout automatically
+follows your device's light/dark preference. Navigation, forms, and native
+disclosure menus are keyboard-accessible and work without JavaScript;
+JavaScript adds offline and submission feedback. No runtime external data
+requests or new dependencies are introduced.
+
+The Flask palette is defined under `flask` in `design-tokens.json`.
+After editing it, regenerate only Flask's tokens and check contrast:
+
+```bash
+node tools/flask_design_tokens.mjs
+node tools/flask_design_tokens.mjs --check
+```
+
+The generated CSS is included, so Node is not required to run Flask.
+Inherited static/native tokens are intentionally unchanged for this web-only
+redesign. See [web design rules](docs/WEB-DESIGN.md).
+
+- `parenthub/content.json`: source-derived resource descriptions, shared
+  checklist items, official deadline text, and last-verified date. Review
+  the actual official pages before changing this date. Run `seed-content`
+  to upsert by stable slug; user records and progress are preserved.
+- `init-db`: creates missing tables without dropping records. It does not
+  migrate existing tables; future schema changes require migrations.
+- `seed-demo`: creates synthetic local data and a generated password.
+- [Architecture and relational schema](docs/FLASK-ARCHITECTURE.md)
+- [Source findings and unresolved policy questions](docs/MINERVA-SOURCES.md)
+
+Known limits: local development hosting; no password recovery, email
+verification, rate limiting, or offline writes. Source freshness requires
+manual review, and intake years/cutoff times require confirmation with
+Minerva. Real-parent usability validation remains open. No production
+hosting or deployment is included.
+
+## Preserved static prototype and platform templates
+
+`index.html`, `js/app.js`, `css/styles.css`, and `css/parent-guide.css`
+remain intact. `node tools/serve.mjs` previews the original static guide
+at http://127.0.0.1:8080. Its Pages release is unchanged at
+https://amireness.github.io/minerva-parent-hub/.
+GitHub Pages cannot run Flask or private database features. This change
+has not been pushed or deployed. Unused native templates are untouched.
+The inherited template documentation below describes template capabilities,
+not additional shipped Parent Hub apps.
+
+<details>
+<summary>Original universal template documentation</summary>
 
 # Universal App Template
 
@@ -210,3 +358,5 @@ describes.
 MIT licensed.
 
 Start with stage 00. It is the part most worth keeping.
+
+</details>

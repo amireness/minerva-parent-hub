@@ -19,11 +19,20 @@ rules that hold on every platform stayed in `AGENTS.md`.
 
 ## Web app
 
-**Stack**: Vanilla HTML/JS. No framework, no build step. Custom
-CSS, mobile-first. <!-- FILL IN: API / auth / hosting choices -->.
-GitHub Pages static hosting, branch `main`, root `/`.
+**Current local app (2026-11-11):** Python Flask, SQLite, SQLAlchemy,
+Flask-Login, Flask-WTF, and server-rendered Jinja forms; no frontend
+framework or build step. See `docs/WEB-DESIGN.md` and
+`docs/FLASK-ARCHITECTURE.md`. Run `python -m flask --app parenthub run`
+after README setup. Authentication and private planning are Flask-only.
+Decision 056 supersedes static-only rules for this owner-requested app.
+
+**Preserved static prototype:** Vanilla HTML/JS and custom mobile-first
+CSS. GitHub Pages hosting, branch `main`, root `/`, remains unchanged.
 
 **Key directories**:
+- `/parenthub/`: Flask factory, blueprints, models, forms, templates, assets,
+  reviewed public seed content, and initialization commands
+- `/tests/`: pytest suite using temporary SQLite databases with CSRF enabled
 - `/`: root; index.html, AGENTS.md (CLAUDE.md imports it), SCRATCHPAD.md, DECISIONS.md, design-tokens.json (the look, for every platform)
 - `/css/styles.css`: single main stylesheet
 - `/js/api.js`, `/js/app.js`: API abstraction + view system

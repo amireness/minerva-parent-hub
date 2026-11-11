@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="form-layout">
+  <aside class="form-aside">
+    <h2 class="section-header">{{ 'Welcome back.' if title == 'Log in' else 'Make space for your next step.' }}</h2>
+    {% if title == 'Log in' %}
+    <p>Your checklist, reminders, and questions are right where you left them.</p>
+    <p class="form-aside-link">New here? <a href="{{ url_for('auth.register') }}">Create an account</a>
+    </p>
+    {% elif title == 'Register' %}
+    <p>A private place for your family's planning. Use your own email, never your child's applicant credentials.</p>
+    <p class="form-aside-link">Already registered? <a href="{{ url_for('auth.login') }}">Log in</a>
+    </p>
+    {% else %}
+    <p>Private to your account. Do not enter confidential applicant or financial information. Nothing is sent to Minerva.</p>
+    {% endif %}
+  </aside>
+  <section class="panel form-panel" aria-label="{{ title }} form">
+    <form method="post">{{ form.hidden_tag() }}
+      {% for field in form if field.type not in ('CSRFTokenField', 'HiddenField') %}
+      <div class="field">
+        {% if field.type == 'BooleanField' %}
+        <label class="checkbox-label" for="{{ field.id }}">{{ field(aria_describedby=field.id ~ '-errors') }}<span>{{ field.label.text }}</span>
+        </label>
+        {% else %}{{ field.label }}{% if field.type == 'PasswordField' %}{{ field(autocomplete='current-password' if title == 'Log in' else 'new-password', aria_describedby=field.id ~ '-errors', aria_invalid='true' if field.errors else 'false') }}{% elif field.name == 'email' %}{{ field(type='email', autocomplete='email', aria_describedby=field.id ~ '-errors', aria_invalid='true' if field.errors else 'false') }}{% else %}{{ field(aria_describedby=field.id ~ '-errors', aria_invalid='true' if field.errors else 'false') }}{% endif %}{% endif %}
+        <div id="{{ field.id }}-errors">
+          {% for error in field.errors %}
+          <p class="error" role="alert">{{ error }}</p>
+          {% endfor %}
+        </div>
+      </div>
+      {% endfor %}
+      <div class="actions">
+        <button type="submit">{{ 'Log in' if title == 'Log in' else 'Register' if title == 'Register' else 'Save' }}</button>
+        {% if back %}
+        <a href="{{ back }}">Cancel</a>
+        {% endif %}
+      </div>
+    </form>
+  </section>
+</div>
+{% endblock %}

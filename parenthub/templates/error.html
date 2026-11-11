@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% set title = 'Request could not be completed' %}
+{% block content %}
+<section class="guide-section">
+  <h2 class="section-header">HTTP {{ code }}</h2>
+  {% if code == 400 %}<p>The form is invalid or expired. Reopen the page and try again.</p>
+  {% elif code == 404 %}<p>This page or record is unavailable.</p>
+  {% elif code == 413 %}<p>The submitted form is too large.</p>
+  {% elif code == 503 %}<p>The database is unavailable. Changes were not saved. Try again when the database is available.</p>
+  {% else %}<p>The request failed. Please try again.</p>{% endif %}
+  <a href="{{ url_for('main.home') }}">Return home</a>
+</section>
+{% endblock %}

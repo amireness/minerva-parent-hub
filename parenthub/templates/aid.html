@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block content %}
+<p class="section-intro">Understand the published steps and clarify your part before sharing family information through the official process.</p>
+<div class="split-layout">
+  <section class="guide-section" aria-labelledby="aid-heading">
+    <p class="eyebrow">MINERVA'S PUBLISHED PROCESS</p>
+    <h2 id="aid-heading" class="section-header">Applying for financial aid</h2>
+    <ol class="guide-list">
+      <li>Complete the CSS Profile.</li>
+      <li>Complete Minerva's Financial Aid Questionnaire.</li>
+      <li>Submit supporting income and parent or guardian bank documents through Minerva's process.</li>
+    </ol>
+    <a href="https://www.minerva.edu/undergraduate/financial-aid/">Official financial aid steps and deadlines <span aria-hidden="true">↗</span>
+    </a>
+    <p class="caption">No financial documents or submissions are accepted here.</p>
+  </section>
+  <section class="guide-section" aria-labelledby="parent-aid-heading">
+    <p class="eyebrow">PARENT PREPARATION</p>
+    <h2 id="parent-aid-heading" class="section-header">Clarify how your family should participate</h2>
+    <p>Confirm with Financial Aid: Can each parent submit separately? Who can see the information? Separate confidential submission has not been verified.</p>
+    <div class="actions">
+      <a href="mailto:newstudentaid@minerva.edu">newstudentaid@minerva.edu</a>
+      <a href="{{ url_for('tracking.edit_question') }}">Save a question</a>
+    </div>
+    <p class="caption">Email opens your email app. Nothing is sent automatically.</p>
+  </section>
+</div>
+{% endblock %}

@@ -16,27 +16,32 @@
 
 ## Current state
 
-- **Status**: Pages release 1.0.1 published and browser-verified.
-- **Active milestone**: M1, parent admissions guide. Stage 00 validation remains open.
-- **Last session**: 2026-11-04.
-- **Owner's aim**: Help parents, especially of applicants aged 16 or 17,
-  participate appropriately in admissions without the applicant account.
+- **Published state**: Static Pages release 1.0.1 remains unchanged.
+- **Local work (2026-11-11)**: Owner-requested Flask/SQLite interview app
+  implemented in parenthub/, with authentication, private planning, reviewed
+  public content, initialization/seed commands, pytest suite, and docs.
+- **UI follow-up (2026-11-11)**: Wider navy/neutral/gold Flask UI, public
+  landing page, data-backed dashboard, five-section guidance, and six
+  official resources. 65 pytest cases and the expanded browser check pass.
+- **Owner feedback (2026-11-11)**: The first UI was too plain, text-heavy,
+  narrow, and difficult to navigate. **Why:** The parent workspace should
+  be intuitive and professional, with official facts kept separate from
+  private planning. See docs/WEB-DESIGN.md and Decision 057.
+- **Scope**: Web only. Native templates untouched. No push or deployment.
+- **Privacy**: No applicant credentials, application status, financial
+  details, or documents. Questions/reminders stay local to each account.
 - **Owner clarification (2026-11-04)**: Do not suggest Minerva lacks parent
   resources. **Why:** Its Parents & Families page already covers general
   information and links to admissions; the question is participation in
   admissions itself, including the parent's own steps.
-- **Evidence**: Owner framing and official public sources; no supplied log,
-  critique, named interviewees, conversations, or user testing.
-- **Notes**: `docs/STAGE-00.md`, `docs/STAGE-01.md`, and `docs/MINERVA-SOURCES.md`.
-- **Next actions**: Owner reviews the why and boundary; completes the log,
-  candidate tests, critique and two conversations; revises and posts the
-  problem; confirms deadline and parent-role questions with Admissions.
-  Gather phone and parent feedback at https://amireness.github.io/minerva-parent-hub/.
-- **Platform scope**: Week 1 web only; later platform choices undecided.
-  Native scaffolds stay untouched. The inherited setup checklist below
-  is not authorization to build native apps now.
-- **Verification**: Official sources rechecked; headless Edge branches, widths, offline and no-JavaScript checked.
-  See docs/STAGE-01.md for evidence and the CRLF-only token-check failure.
+- **Verification**: See docs/FLASK-VERIFICATION.md for commands and actual
+  results. Engineering checks do not establish real-parent usability.
+- **Open content limits**: Official deadlines omit years; parent access,
+  consent duties, and separate financial submission remain unconfirmed.
+- **Next**: Owner follows README setup and interview walkthrough, probes
+  the app on their own devices, and reviews the diff. Stage 00 validation
+  and real-parent feedback remain open. No release version bump until ship.
+
 ---
 
 ## Milestones
@@ -158,51 +163,32 @@ the entry retire when circumstances change).
 <!-- Append-only. Format: state found → work done → state left.
      Keep entries short: one paragraph per session. -->
 
-**2026-11-04: Minerva Parent Hub Stage 00.** Found: uncustomized template
-without project-specific problem evidence. Done: documented the owner's
-person, problem, wish, privacy boundary, five provisional framings and ten
-tests; official source findings and unsent Admissions questions; the three
-idea questions, case against the idea, and one proposed activity. Updated
-AGENTS.md and Decision 054. Archived the oldest template session word for
-word in docs/SESSION-LOG.md. Left: Stage 00 not yet complete; owner review,
-log, critique, two conversations, revised statement and cohort post remain.
-No website code, builds, tests, installs, deployment, or messages to
-Admissions. Public research is not user validation.
+**2026-11-11: Local Flask interview application.** Found: published static
+public guide, no backend; unused native templates and unvalidated Stage 00.
+Done: implemented the owner-requested modular Flask/SQLite app, preserved
+source-derived guidance and shared CSS, added private account planning,
+reviewed content seed and generated demo credentials, CSRF and ownership
+guards, persistence and security tests, and browser verification. Updated
+README, design/architecture/source/parity docs and Decision 056. Rolled the
+oldest session entry and clarification word for word into SESSION-LOG.
+Left: local app ready for owner review, with exact checks recorded in
+FLASK-VERIFICATION.md; real-parent validation and Minerva policy questions
+remain. Static release unchanged; no native edits, commit, push, deployment,
+or release version bump. Secrets and synthetic test databases are ignored.
 
-**Same-day clarification:** Found: the initial framing emphasized access
-to information. Reviewed the official Parents & Families page in detail
-and compared its coverage with the proposal. Updated the Stage 00 note,
-source note, AGENTS.md, and Decision 054 to focus on parent participation
-in admissions. Saved the owner's correction and why above. Left: existing
-parent workflows, minor-specific steps, and confidential submission remain
-unconfirmed; no website changes or messages to Admissions.
 
-**2026-11-04: Stage 01 local prototype.** Found: documented parent
-participation problem with Stage 00 validation still open. Done: built
-the owner-authorized age-group guide, source-derived admissions and aid
-steps, explicit confirmation questions, official links and optional
-Admissions email action. Added a loopback-only Node preview server.
-Updated README, AGENTS, parity and stage/source notes and Decision 055.
-Checked the actual page in headless Edge and inspected screenshots.
-Left: local review at http://127.0.0.1:8080; no commit, deployment, private
-data, uploads or submissions. Interviews, phone feedback and Admissions
-confirmation remain. Standard token drift check finds only line endings;
-no token values changed and unrelated native files were left untouched.
-
-**Pages release follow-up:** The owner authorized commit, main push and
-Pages main/root publication. Reviewed all project changes; temporary browser
-artifacts and credential tooling remain outside the repository. Verified
-the guide under /minerva-parent-hub/ with Edge, added explicit manifest
-scope and a path regression check, and set version 1.0.1/build 2. Six web
-suites passed; the full token test passed in an LF-normalized temporary
-copy. GitHub admin credentials are available; Pages was initially absent.
-Left: commit/push and live verification pending, no new product scope.
-
-**Deployment result:** Commit 1dfa31e pushed to main. Pages configured via
-GitHub API for main/root, build status built for that commit. Public HTML,
-both stylesheets, both scripts and manifest returned HTTP 200 and matched
-release content. Headless Edge repeated all interaction, responsive,
-offline and no-JavaScript checks against the public URL successfully.
-Published: https://amireness.github.io/minerva-parent-hub/.
-No private applicant information or temporary browser files were committed.
-Real-parent validation and policy confirmation still remain open.
+**2026-11-11: Flask UI and official resource integration.** Found: functional
+Flask branch with uncommitted prior work; narrow, plain, text-heavy UI.
+Done: owner-requested navy/neutral/gold redesign, wider responsive workspace,
+public homepage, owned dashboard previews and next actions, concise guidance,
+six source-linked resources, feedback states, and expanded keyboard/browser
+checks. Preserved route URLs, security, schema, and private planning. Kept
+Flask palette overrides in the one JSON source without changing inherited
+platform outputs. Updated source/design/architecture/parity docs, README,
+and Decision 057; archived the oldest session entry word for word. Left:
+65 pytest cases pass; browser checks cover 12 pages in both themes at ten
+widths, with keyboard/offline/no-JavaScript flows and contrast evidence in
+FLASK-VERIFICATION.md. Local missing tables initialized, public data seeded,
+existing private data preserved. Existing CRLF token-check failures remain.
+No commit, push, deployment, native changes, or release version bump.
+Owner device review and Minerva policy confirmation remain open.

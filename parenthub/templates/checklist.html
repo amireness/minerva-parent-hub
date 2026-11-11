@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block content %}
+<p class="section-intro">Personal planning only. Marking an item does not update or reflect a Minerva application. Applicant responsibilities stay with the applicant.</p>
+<div class="split-layout">
+  {% for role, label in [('parent', 'Parent preparation'), ('applicant', 'Applicant responsibilities')] %}
+  <section class="panel" aria-labelledby="{{ role }}-heading">
+    <p class="eyebrow">{{ 'YOUR PART' if role == 'parent' else 'THEIR PART' }}</p>
+    <h2 id="{{ role }}-heading" class="section-header">{{ label }}</h2>
+    {% for item in items if item.responsibility == role %}
+    <article class="record">
+      <form action="{{ url_for('tracking.update_progress', item_id=item.id) }}" method="post">{{ form.hidden_tag() }}<label class="checkbox-label" for="item-{{ item.id }}">
+          <input id="item-{{ item.id }}" name="completed" type="checkbox" {% if item.id in completed %}checked{% endif %}>
+          <span>{{ item.title }}</span>
+        </label>
+        <button type="submit" class="button-secondary">Save</button>
+      </form>
+      <p class="caption">
+        <a href="{{ item.resource.url }}">Official source</a> · Verified {{ item.resource.last_verified }}</p>
+    </article>
+    {% else %}
+    <div class="empty-state">
+      <p>No checklist items available.</p>
+    </div>
+    {% endfor %}
+  </section>
+  {% endfor %}
+</div>
+{% endblock %}

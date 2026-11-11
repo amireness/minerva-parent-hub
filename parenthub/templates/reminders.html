@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="section-heading">
+  <p class="section-intro">Private personal dates, not official deadlines. No notifications or email are sent.</p>
+  <a class="button" href="{{ url_for('tracking.edit_reminder') }}">Create a reminder</a>
+</div>
+<div class="split-layout">
+  {% for done, label in [(false, 'Upcoming and overdue'), (true, 'Completed')] %}
+  <section class="panel" aria-labelledby="reminders-{{ loop.index }}">
+    <h2 class="section-header" id="reminders-{{ loop.index }}">{{ label }}</h2>
+    {% for reminder in reminders if reminder.completed == done %}
+    <article class="record">
+      <p class="record-title">{{ reminder.title }}</p>
+      <p class="caption">
+        <time datetime="{{ reminder.due_date }}">{{ reminder.due_date }}</time>
+        {% if not done and reminder.due_date < today %} · Overdue{% endif %}
+      </p>
+      <div class="actions">
+        <a href="{{ url_for('tracking.edit_reminder', record_id=reminder.id) }}">Edit reminder</a>
+        <form action="{{ url_for('tracking.delete_reminder', record_id=reminder.id) }}" method="post">{{ delete_form.hidden_tag() }}<button type="submit" class="button-danger">Delete reminder</button>
+        </form>
+      </div>
+    </article>
+    {% else %}
+    <div class="empty-state">
+      <p>No {{ 'completed' if done else 'pending' }} reminders.</p>
+      {% if not done %}
+      <a href="{{ url_for('tracking.edit_reminder') }}">Create a reminder</a>
+      {% endif %}
+    </div>
+    {% endfor %}
+  </section>
+  {% endfor %}
+</div>
+{% endblock %}
