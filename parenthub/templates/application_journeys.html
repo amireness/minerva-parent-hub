@@ -1,0 +1,36 @@
+{% from 'icons.html' import icon %}
+{% for applicant, current, upcoming, explanation in journeys %}
+<section class="guided-section journey-panel" aria-labelledby="journey-{{ loop.index }}">
+  <{{ journey_heading|default('h3') }} id="journey-{{ loop.index }}" class="section-header">Your applicant{% if journeys|length > 1 %} {{ loop.index }}{% endif %}</{{ journey_heading|default('h3') }}>
+  {% if not current or not upcoming %}
+  <dl class="journey-summary">
+    <div><dt>Current stage</dt><dd>{{ current.title if current else ('Before first milestone' if applicant.milestones else 'No milestones available') }}</dd></div>
+    <div><dt>Next milestone</dt><dd>{{ upcoming.title if upcoming else ('No further demo milestones' if applicant.milestones else 'Unavailable') }}</dd></div>
+  </dl>
+  {% endif %}
+  {% if applicant.milestones %}
+  <ol class="application-timeline{% if compact_journey %} compact-timeline{% else %} journey-steps{% endif %}" role="list" aria-label="Illustrative application stages">
+    {% for milestone in applicant.milestones if not compact_journey or milestone in (current, upcoming) %}
+    <li {% if milestone == current %}aria-current="step"{% endif %}>
+      {% set state = 'Current stage' if milestone == current else ('Upcoming · Next milestone' if milestone == upcoming else ('Completed' if current and milestone.position < current.position else 'Upcoming')) %}
+      {% if compact_journey %}
+      <strong>{{ milestone.title }}</strong>
+      <span class="caption">{{ state }}</span>
+      {% if compact_journey and milestone == current %}<p>{{ explanation }}</p>{% endif %}
+      {% else %}
+      <details {% if milestone == current %}open{% endif %}>
+        <summary><span class="journey-step-icon">{{ icon('check' if state == 'Completed' else 'application') }}</span><strong>{{ milestone.title }}</strong><span class="caption">{{ state }}</span></summary>
+        <p>{{ stage_explanations.get(milestone.title, 'This is an illustrative application milestone.') }}</p>
+      </details>
+      {% endif %}
+    </li>
+    {% endfor %}
+  </ol>
+  {% endif %}
+  {% if not current %}<p>{{ explanation }}</p>{% endif %}
+  <details class="application-reference">
+    <summary>Demo application reference</summary>
+    <p class="caption">{{ applicant.application_number }}</p>
+  </details>
+</section>
+{% endfor %}

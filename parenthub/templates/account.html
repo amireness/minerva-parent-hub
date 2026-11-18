@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="panel account-panel" aria-labelledby="account-invitations">
+  <h2 id="account-invitations" class="section-header">Applicant invitations</h2>
+  <p>Enter a code issued for {{ current_user.email }} to link an applicant.</p>
+  {% include 'invitation_form.html' %}
+</section>
+{% endblock %}

@@ -2,13 +2,11 @@
 {% block content %}
 <div class="form-layout">
   <aside class="form-aside">
-    <h2 class="section-header">{{ 'Welcome back.' if title == 'Log in' else 'Make space for your next step.' }}</h2>
     {% if title == 'Log in' %}
-    <p>Your checklist, reminders, and questions are right where you left them.</p>
     <p class="form-aside-link">New here? <a href="{{ url_for('auth.register') }}">Create an account</a>
     </p>
     {% elif title == 'Register' %}
-    <p>A private place for your family's planning. Use your own email, never your child's applicant credentials.</p>
+    <p>Use your own email to create a Parent Hub account.</p>
     <p class="form-aside-link">Already registered? <a href="{{ url_for('auth.login') }}">Log in</a>
     </p>
     {% else %}

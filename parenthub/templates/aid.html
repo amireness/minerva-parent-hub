@@ -1,28 +1,49 @@
 {% extends 'base.html' %}
 {% block content %}
-<p class="section-intro">Understand the published steps and clarify your part before sharing family information through the official process.</p>
-<div class="split-layout">
-  <section class="guide-section" aria-labelledby="aid-heading">
-    <p class="eyebrow">MINERVA'S PUBLISHED PROCESS</p>
-    <h2 id="aid-heading" class="section-header">Applying for financial aid</h2>
-    <ol class="guide-list">
-      <li>Complete the CSS Profile.</li>
-      <li>Complete Minerva's Financial Aid Questionnaire.</li>
-      <li>Submit supporting income and parent or guardian bank documents through Minerva's process.</li>
-    </ol>
-    <a href="https://www.minerva.edu/undergraduate/financial-aid/">Official financial aid steps and deadlines <span aria-hidden="true">↗</span>
-    </a>
-    <p class="caption">No financial documents or submissions are accepted here.</p>
+<div class="aid-workspace">
+  <section class="aid-documents" aria-labelledby="document-examples">
+    <div class="aid-list-heading">
+      <div>
+        <h2 id="document-examples" class="section-header">Your documents</h2>
+        <p class="caption">Demo categories from returning-student guidance. Confirm first-year requirements with Minerva.</p>
+        {% if applicant %}<p class="caption">Sharing shows document presence in Parent Hub. Google Drive permissions stay the same.</p>{% endif %}
+      </div>
+      {% if applicant %}
+      <div class="aid-progress">
+        <label for="aid-progress">{{ saved|length }} of {{ examples.documents|length }} documents added</label>
+        <progress id="aid-progress" value="{{ saved|length }}" max="{{ examples.documents|length }}"></progress>
+      </div>
+      {% endif %}
+    </div>
+    {% if applicants|length > 1 %}
+    <nav class="section-nav" aria-label="Choose applicant">
+      {% for item in applicants %}
+      <a href="{{ url_for('main.financial_aid', applicant=item.id, _anchor='document-examples') }}" {% if item == applicant %}aria-current="true"{% endif %}>Applicant {{ loop.index }}</a>
+      {% endfor %}
+    </nav>
+    {% endif %}
+    {% if not current_user.is_authenticated %}
+    <p class="aid-access"><a href="{{ url_for('auth.login') }}">Log in to add demo documents</a></p>
+    {% elif not applicant and not current_user.student %}
+    <p class="aid-access"><a href="{{ url_for('main.dashboard') }}">Accept an invitation to add demo documents</a></p>
+    {% endif %}
+    {% include 'aid_preparation.html' %}
   </section>
-  <section class="guide-section" aria-labelledby="parent-aid-heading">
-    <p class="eyebrow">PARENT PREPARATION</p>
-    <h2 id="parent-aid-heading" class="section-header">Clarify how your family should participate</h2>
-    <p>Confirm with Financial Aid: Can each parent submit separately? Who can see the information? Separate confidential submission has not been verified.</p>
+  <aside class="guide-section aid-guidance" aria-labelledby="aid-heading">
+    <h2 id="aid-heading" class="section-header">Financial aid guidance</h2>
+    <p>Your student submits through Minerva. You can help gather household documents.</p>
+    <p><a href="https://www.minerva.edu/undergraduate/financial-aid/" target="_blank" rel="noopener noreferrer">Minerva's official steps and deadlines</a></p>
+    <details>
+      <summary>How to help</summary>
+      <p>Minerva lists the CSS Profile, its Financial Aid Questionnaire, and supporting documents. Ask Financial Aid who should submit household records and who can see them.</p>
+      <p><a href="mailto:newstudentaid@minerva.edu">Email Minerva Financial Aid</a></p>
+    </details>
+    {% if not current_user.is_authenticated or not current_user.student %}
     <div class="actions">
-      <a href="mailto:newstudentaid@minerva.edu">newstudentaid@minerva.edu</a>
+      <a href="{{ url_for('tracking.edit_reminder') }}">Create a reminder</a>
       <a href="{{ url_for('tracking.edit_question') }}">Save a question</a>
     </div>
-    <p class="caption">Email opens your email app. Nothing is sent automatically.</p>
-  </section>
+    {% endif %}
+  </aside>
 </div>
 {% endblock %}

@@ -1,10 +1,9 @@
 {% extends 'base.html' %}
 {% block content %}
-<p class="section-intro">Personal planning only. Marking an item does not update or reflect a Minerva application. Applicant responsibilities stay with the applicant.</p>
+<p class="section-intro">Check off items for your own plan. Your applicant completes their own application.</p>
 <div class="split-layout">
   {% for role, label in [('parent', 'Parent preparation'), ('applicant', 'Applicant responsibilities')] %}
   <section class="panel" aria-labelledby="{{ role }}-heading">
-    <p class="eyebrow">{{ 'YOUR PART' if role == 'parent' else 'THEIR PART' }}</p>
     <h2 id="{{ role }}-heading" class="section-header">{{ label }}</h2>
     {% for item in items if item.responsibility == role %}
     <article class="record">
@@ -15,7 +14,7 @@
         <button type="submit" class="button-secondary">Save</button>
       </form>
       <p class="caption">
-        <a href="{{ item.resource.url }}">Official source</a> · Verified {{ item.resource.last_verified }}</p>
+        <a href="{{ item.resource.url }}" target="_blank" rel="noopener noreferrer">Official source</a> · Verified {{ item.resource.last_verified }}</p>
     </article>
     {% else %}
     <div class="empty-state">

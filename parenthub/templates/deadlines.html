@@ -1,34 +1,30 @@
 {% extends 'base.html' %}
 {% block content %}
-<p class="guide-question">Official tables omit calendar years. Confirm your intake, year, cutoff time, and any binding aid rules with Admissions. These are published dates, not personalized deadlines.</p>
-<div class="card-grid deadline-grid">
-  {% for deadline in deadlines %}
-  <section class="panel" aria-labelledby="round-{{ deadline.id }}">
-    <p class="eyebrow">PUBLISHED BY MINERVA</p>
-    <h2 id="round-{{ deadline.id }}" class="section-header">{{ deadline.round_name }}</h2>
-    <dl class="deadline-dates">
-      <div>
-        <dt>Admissions</dt>
-        <dd>{{ deadline.admissions }}</dd>
-      </div>
-      <div>
-        <dt>Financial aid</dt>
-        <dd>{{ deadline.financial_aid }}</dd>
-      </div>
-    </dl>
-    <p class="caption">
-      <a href="{{ deadline.resource.url }}">Official source</a> · Last verified {{ deadline.resource.last_verified }}</p>
-  </section>
-  {% else %}
-  <p>No verified deadlines available. <a href="https://www.minerva.edu/undergraduate/admissions/">Check official deadlines</a>
-  </p>
-  {% endfor %}
+{% if events %}
+<div class="deadline-events">
+  {% for deadline in events %}{% include 'deadline_feature.html' %}{% endfor %}
 </div>
-<section class="complement" aria-labelledby="deadline-plan-heading">
-  <div>
-    <h2 id="deadline-plan-heading" class="section-header">Plan a follow-up on your own terms</h2>
-    <p>After confirming the relevant date, save a personal reminder.</p>
+{% else %}
+{% set deadline = none %}
+{% include 'deadline_feature.html' %}
+{% endif %}
+<section id="published-rounds" class="published-rounds" aria-labelledby="published-heading">
+  <h2 id="published-heading" class="section-header">Published dates by round</h2>
+  <p>Official tables omit calendar years. Confirm your intake and cutoff time with Minerva.</p>
+  <div class="published-list">
+    {% for deadline in deadlines %}
+    <article class="published-round">
+      <h3 class="section-header">{{ deadline.round_name }}</h3>
+      <dl class="deadline-dates">
+        <div><dt>Admissions</dt><dd>{{ deadline.admissions }}</dd></div>
+        <div><dt>Financial aid</dt><dd>{{ deadline.financial_aid }}</dd></div>
+      </dl>
+      <p class="caption"><a href="{{ deadline.resource.url }}" target="_blank" rel="noopener noreferrer">Official source</a> &middot; Last verified {{ deadline.resource.last_verified }}</p>
+    </article>
+    {% else %}
+    <p>Check Minerva for the current published dates.</p>
+    {% endfor %}
   </div>
-  <a class="button button-secondary" href="{{ url_for('tracking.edit_reminder') }}">Create a reminder</a>
+  <a class="button button-secondary" href="{{ url_for('tracking.edit_reminder') }}">Create a personal reminder</a>
 </section>
 {% endblock %}

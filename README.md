@@ -39,6 +39,11 @@ a local ignored `.env` is supported by python-dotenv, but exporting secrets
 avoids writing them to disk. Never use the Flask development server as a
 public production service.
 
+Run `init-db` again on an existing local database after upgrading. The
+optional applicant-round table is additive. Public and signed-in Home link
+to the official round dates. Countdown and calendar downloads require a
+verified year, time, and timezone for a future deadline.
+
 ## Local demo account
 
 In an activated shell with SECRET_KEY set, after init-db:
@@ -55,16 +60,51 @@ to reset an existing account. To create another local demo account, use
 `seed-demo --email another@example.com`. Do not use real applicant or
 financial data in demonstrations.
 
+## Try synthetic applicant onboarding
+
+Use a disposable local SQLite database. If you already have a local
+database, run `init-db` to add the three onboarding tables while preserving
+accounts and planning records.
+
+```bash
+python -m flask --app parenthub --debug seed-invitations --email demo@example.com
+```
+
+Register or log in with the matching parent email, then enter the generated
+code on Home. Each code is shown once, has one acceptance, and grants access
+until the displayed UTC expiration date begins. Keep the code private.
+Application numbers identify fictional records only. Use `--count` to
+generate more than one applicant and invitation for the same email.
+Guidance and resources are public. Planning remains available after login.
+
+## Try financial aid preparation and sharing
+
+Run `init-db` again if you already have a local database. It creates the
+document-link table while preserving previous preparation records.
+With the fictional application number from `seed-invitations`, create a
+separate student login in the same disposable SQLite database:
+
+```sh
+python -m flask --app parenthub --debug seed-student --email student@example.com --application-number SYN-YOUR-DEMO-NUMBER
+```
+
+As the invited parent, open **Financial Aid**, choose **Add document**,
+and link a fictional Google Drive example. The document count updates
+automatically. Choose **Share** to show the category's presence to the demo
+student, then use **Stop sharing** to revoke that access. Open previews the
+fictional file locally. The prototype does not accept real links or change
+Google Drive permissions.
+
 ## Verify each feature / interview walkthrough
 
 1. Open Guidance and Financial aid while logged out. Read the preserved
    guidance and follow official links. Deadlines shows verified month/day
    text and explicitly warns that the official table omits years.
 2. Register a new parent account (password length 12 to 128), then log in.
-   Select Under 18 on the dashboard and save; switch to 18 or older to
+   Open Planning, select Under 18 and save, then switch to 18 or older to
    see the different parent-role guidance.
 3. Open Checklist. Mark a parent preparation item and save; mark or unmark
-   an applicant responsibility. Return Home to see the saved count.
+   an applicant responsibility. Return to Planning to see the saved count.
    Explain that this does not update or reflect a Minerva application.
 4. Create a personal reminder with a date. Edit its text and date; mark
    Completed in the edit form, then unmark it. Check Upcoming/overdue and
@@ -117,8 +157,8 @@ See [verification evidence](docs/FLASK-VERIFICATION.md) for actual results.
 
 ## Content, schema, and commands
 
-The redesigned homepage explains the product before registration; signed-in
-Home opens the planning dashboard. It shows saved checklist progress,
+The homepage explains the product before registration. Signed-in Home opens
+the invitation form or the linked synthetic dashboard. Planning shows saved checklist progress,
 personal reminders, open question previews, and a next action derived only
 from your parent preparation items and age-group selection. Guidance has
 five anchored sections. Resources now includes six official destinations,
@@ -155,6 +195,8 @@ redesign. See [web design rules](docs/WEB-DESIGN.md).
 - `init-db`: creates missing tables without dropping records. It does not
   migrate existing tables; future schema changes require migrations.
 - `seed-demo`: creates synthetic local data and a generated password.
+- `seed-invitations`: creates fictional applicants, milestones, and pending
+  parent invitations in local development.
 - [Architecture and relational schema](docs/FLASK-ARCHITECTURE.md)
 - [Source findings and unresolved policy questions](docs/MINERVA-SOURCES.md)
 

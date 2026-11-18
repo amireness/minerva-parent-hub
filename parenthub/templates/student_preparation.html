@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="guided-content">
+  {% for category in shared %}
+  <section class="guided-section">
+    <h2 class="section-header">{{ categories[category].title }}</h2>
+    <p>Example document added</p>
+  </section>
+  {% else %}
+  <p>Your parent has yet to share any documents.</p>
+  {% endfor %}
+</div>
+{% endblock %}

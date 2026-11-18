@@ -1,0 +1,10 @@
+{% from 'icons.html' import icon %}
+<nav class="destination-grid" aria-label="{{ tile_label|default('Explore Parent Hub') }}">
+  {% for endpoint, label, symbol in destinations %}
+  <a class="destination-tile" href="{{ url_for(endpoint) }}">
+    <span class="tile-icon">{{ icon(symbol) }}</span>
+    <strong>{{ label }}</strong>
+    {{ icon('arrow', 'tile-arrow') }}
+  </a>
+  {% endfor %}
+</nav>

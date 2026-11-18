@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="section-heading">
-  <p class="section-intro">Private personal dates, not official deadlines. No notifications or email are sent.</p>
+  <p class="section-intro">Your personal dates. <a href="{{ url_for('main.deadlines') }}">See official deadlines</a>.</p>
   <a class="button" href="{{ url_for('tracking.edit_reminder') }}">Create a reminder</a>
 </div>
 <div class="split-layout">
@@ -24,9 +24,6 @@
     {% else %}
     <div class="empty-state">
       <p>No {{ 'completed' if done else 'pending' }} reminders.</p>
-      {% if not done %}
-      <a href="{{ url_for('tracking.edit_reminder') }}">Create a reminder</a>
-      {% endif %}
     </div>
     {% endfor %}
   </section>

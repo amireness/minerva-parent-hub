@@ -8,8 +8,14 @@ the Flask app is in parenthub/. Native platform templates are unchanged.
 ## Components and request flow
 
 The owner-requested UI redesign adds a public landing page at `/`, while
-signed-in Home still redirects to `/dashboard`. Existing URLs and CRUD
-flows are preserved. Dashboard queries compose owned reminder and question
+signed-in Home redirects to `/dashboard`. The route shows an invitation form
+or a parent overview with one timeline per authorized synthetic applicant.
+The current stage is the last milestone in the consecutive completed prefix,
+and the next milestone is the first pending one. An empty journey and a
+finished journey have distinct states. Personal checklist progress has no
+effect on either value. The existing planning workspace moves to
+`/planning`, and checklist, reminder, and question CRUD retain their routes.
+Planning queries compose owned reminder and question
 previews, personal progress, and the earliest incomplete parent preparation
 item; no applicant action is recommended to a parent. The suggestion first
 asks for an age group if none is saved. It is a transparent rule over saved
@@ -19,8 +25,8 @@ Flask's wider responsive layout and palette are generated from the `flask`
 overrides in design-tokens.json using tools/flask_design_tokens.mjs. It
 inherits semantic colors and leaves all inherited platform outputs intact.
 This is the owner's web-only exception to the template-wide palette rule.
-The original static guide is unchanged. No schema or dependency changes
-were needed. Resource additions use the existing idempotent seed command.
+The original static guide is unchanged. The onboarding schema is additive
+and uses the existing dependencies. Resource additions use the existing idempotent seed command.
 Feedback uses flashed confirmations and small submit/offline handlers;
 HTML forms and native details navigation work without JavaScript.
 
@@ -56,6 +62,43 @@ session. A successful commit redirects to the list, so browser refresh
 does not repeat the mutation. Validation failures render the entered
 values with HTTP 422; database failures roll back and return HTTP 503.
 
+An invitation carries a digest of a random code, a recipient email, and
+an applicant ID. A signed-in parent explicitly accepts by submitting the
+code. A conditional update binds a pending invitation to the current account
+only if the email matches and the invitation is valid. Dashboard reads
+require the accepted account ID and matching email. They recheck expiration
+and revocation on each request. Application numbers are display identifiers.
+
+The invitation row is the access grant. Its separate applicant and parent
+references allow a future student-managed workflow to issue and revoke
+individual grants. An eventual student issuer record can be added when
+student identity is defined. This iteration exposes only the development CLI
+for issuance and a parent form for acceptance.
+
+Signed-in `/account` uses the existing CSRF-protected invitation endpoint.
+`/application-progress` reuses the authorized journey projection. The
+public `/financial-aid` page combines source-linked guidance with local
+`aid_examples.json` disclosures. The old `/aid-preparation` URL redirects
+for signed-in users. Document management requires the session's parent ID
+and a currently authorized applicant. One row per parent, applicant, and
+category stores a fixed sample ID and a share flag. Progress counts those
+rows. An upsert links or replaces a sample and sets it private. The Open
+action shows a local fictional preview. Only catalog choices are accepted,
+and no real URL is taken as input or stored.
+
+`seed-student` provisions a new password account and links it to one
+fictional applicant in the same transaction. Registration and parent
+invitations do not grant student access. The student view looks up the
+applicant from the session account, and projects only explicitly shared
+category names and the presence of a linked file. Each read also requires
+the sharing parent's current email and a valid accepted invitation to that
+applicant. Removing the share, expiring or revoking the invitation, or
+removing the student link makes the row unavailable on the next request.
+Replacing a file clears the share. Parent Hub sharing never changes Google
+Drive permissions or exposes a file URL to the student.
+Responses use the app's existing no-store policy. First-year details and
+confidentiality procedures await specialist validation.
+
 ## Schema
 
 Every table has an integer primary key named id. Foreign keys are enforced
@@ -70,6 +113,36 @@ on SQLite connections. Relationships are declared in models.py.
 | reminder | user_id, title, due_date, completed | User FK and owner index; personal dates only |
 | parent_question | user_id, body, resolved | User FK and owner index; text remains private |
 | official_deadline | slug, round_name, admissions, financial_aid, resource_id | Unique slug; resource FK; month/day text preserves unspecified year |
+| synthetic_applicant | application_number | Unique fictional number with a SYN prefix |
+| synthetic_milestone | applicant_id, position, title, completed | Synthetic applicant FK; unique position within each applicant |
+| parent_invitation | applicant_id, invited_email, code_digest, expires_on, accepted_by_id, accepted_on, revoked_on | Synthetic applicant and user FKs; unique code digest; paired acceptance fields |
+| synthetic_student | user_id, applicant_id | User primary key and unique synthetic applicant FK |
+| aid_preparation | parent_id, applicant_id, category, status, location, shared | Legacy rows retained without conversion |
+| aid_document | parent_id, applicant_id, category, sample, shared | Composite primary key and checked demo sample ID |
+| synthetic_applicant_round | applicant_id, round_slug | Optional association with a published round for deadline prioritization |
+
+Run `init-db` on an existing local database before starting this version.
+It creates missing tables without altering existing columns, accounts, or
+invitations. Legacy preparation statuses do not become linked files or
+student shares. Existing milestone sequences remain readable.
+
+## Exact deadlines and calendar downloads
+
+The reviewed `exact_deadlines` catalog in `parenthub/content.json` is
+independent of the published month/day round table. Each entry has a
+unique cycle-specific `slug`, display `title`, timezone-aware ISO 8601
+`at` timestamp, official Minerva `source`, and ISO `verified_on` date.
+Round-specific entries also have a `round_slug` matching the published
+round. Record a signed offset for the verified cutoff, including daylight
+saving time where applicable. Parent Home prefers matching verified
+events when an authorized applicant has a recorded round.
+
+The official undergraduate tables reviewed for this redesign do not
+provide exact year and cutoff details for their round dates. The catalog
+therefore ships empty. Home links to published dates and official guidance.
+Future verified entries enable clock-driven labels and RFC 5545 downloads.
+Expired events disappear from the next request and calendar URLs return
+404. Dates without a verified cutoff continue to appear by round only.
 
 User-owned ORM collections cascade deletion of dependent records. Resources
 are shared, rather than copied into every parent record. Checklist progress

@@ -1,0 +1,56 @@
+<ul class="aid-file-list" role="list">
+{% for module in examples.documents %}
+{% set row = saved.get(module.key) %}
+<li class="aid-file" id="{{ module.key }}">
+  <div class="aid-file-row">
+    <svg class="aid-file-icon" aria-hidden="true" width="24" height="28" viewBox="0 0 24 28" fill="none" stroke="currentColor" stroke-width="1.5">
+      <path d="M4 1.5h10l6 6V26H4zM14 1.5v6h6M8 14h8m-8 5h8"/>
+    </svg>
+    <div class="aid-file-label">
+      <h3>{{ module.title }}</h3>
+      {% if row %}
+      <p>{{ sample_filename(module.key, row.sample) }}</p>
+      <p class="caption">{{ 'Shared with student' if row.shared else 'Added' }}</p>
+      {% endif %}
+      <details class="aid-category-details">
+        <summary>Category details</summary>
+        <p class="caption">{{ module.examples }}</p>
+      </details>
+    </div>
+    {% if applicant %}
+    <div class="aid-file-actions" role="group" aria-label="Actions for {{ module.title }}">
+      {% if row %}
+      <a href="{{ url_for('main.open_document', applicant_id=applicant.id, category=module.key) }}">Open</a>
+      <a href="{{ url_for('main.financial_aid', applicant=applicant.id, category=module.key, _anchor='document-chooser') }}">Replace</a>
+      {% for action, label in [('unshare', 'Stop sharing') if row.shared else ('share', 'Share'), ('remove', 'Remove')] %}
+      <form method="post" action="{{ url_for('main.manage_document', applicant_id=applicant.id, category=module.key, action=action) }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button type="submit" class="button-quiet">{{ label }}</button>
+      </form>
+      {% endfor %}
+      {% else %}
+      <a class="button button-secondary aid-add" href="{{ url_for('main.financial_aid', applicant=applicant.id, category=module.key, _anchor='document-chooser') }}" aria-label="Add document for {{ module.title }}">Add document</a>
+      {% endif %}
+    </div>
+    {% endif %}
+  </div>
+  {% if form and focused_category == module.key %}
+  <form id="document-chooser" class="aid-link-form" action="{{ url_for('main.manage_document', applicant_id=applicant.id, category=module.key, action='link') }}" method="post">
+    {{ form.hidden_tag() }}
+    <fieldset aria-describedby="sample-help">
+      <legend>{{ 'Replace document' if row else 'Add document' }} &middot; Google Drive example</legend>
+      <p id="sample-help" class="caption">Choose a fictional file. These example links use drive.example.com.</p>
+      {% for option in form.sample %}
+      <label class="aid-sample">{{ option }}<span>{{ option.label.text }}<small>https://drive.example.com/{{ module.key }}/{{ option.data }}</small></span></label>
+      {% endfor %}
+      {% for error in form.sample.errors %}<p class="error" role="alert">{{ error }}</p>{% endfor %}
+    </fieldset>
+    <div class="actions">
+      <button type="submit">{{ 'Replace with example' if row else 'Link example document' }}</button>
+      <a href="{{ url_for('main.financial_aid', applicant=applicant.id, _anchor=module.key) }}">Cancel</a>
+    </div>
+  </form>
+  {% endif %}
+</li>
+{% endfor %}
+</ul>

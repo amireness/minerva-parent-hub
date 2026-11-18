@@ -1,0 +1,11 @@
+<form method="post" action="{{ url_for('main.dashboard') }}">
+  {{ form.hidden_tag() }}
+  {{ form.code.label }}
+  {{ form.code(autocomplete='off', aria_describedby='code-errors', aria_invalid='true' if form.code.errors else 'false') }}
+  <div id="code-errors">
+    {% for error in form.code.errors %}
+    <p class="error" role="alert">{{ error }}</p>
+    {% endfor %}
+  </div>
+  <button type="submit">Accept invitation</button>
+</form>

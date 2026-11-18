@@ -23,13 +23,34 @@
 - **UI follow-up (2026-11-11)**: Wider navy/neutral/gold Flask UI, public
   landing page, data-backed dashboard, five-section guidance, and six
   official resources. 65 pytest cases and the expanded browser check pass.
+- **Local onboarding (2026-11-18)**: Invitation acceptance unlocks read-only
+  synthetic milestones. Personal planning is at /planning and public pages
+  remain accessible. Run init-db on existing local databases before trying
+  the workflow. Verification is recorded in the session entry below.
+- **Owner verification**: The owner manually tested invitation login,
+  synthetic applicant display, planning, checklist, reminders, and questions
+  before requesting a clearer signed-in overview.
+- **Signed-in overview**: Application timeline, planning tools, aid
+  preparation, and account invitations have distinct locations. Aid examples
+  are scoped to returning-student reference material. The specialist
+  interview will clarify first-year requirements and submission privacy.
+- **Parent MVP**: Home, Application progress, and Financial aid are the
+  primary destinations. The two new tables support local category
+  preparation and explicit sharing with CLI-provisioned demo students.
+  Existing local databases need init-db before running this version.
+- **Document tracking**: Financial Aid now derives progress from fictional
+  file links. The prior manual records remain in SQLite. Run init-db to
+  create the document-link table.
 - **Owner feedback (2026-11-11)**: The first UI was too plain, text-heavy,
   narrow, and difficult to navigate. **Why:** The parent workspace should
   be intuitive and professional, with official facts kept separate from
   private planning. See docs/WEB-DESIGN.md and Decision 057.
+- **UI redesign**: Public and parent Home share destination tiles. Help is
+  global. The exact deadline catalog awaits verified round cutoffs.
 - **Scope**: Web only. Native templates untouched. No push or deployment.
-- **Privacy**: No applicant credentials, application status, financial
-  details, or documents. Questions/reminders stay local to each account.
+- **Privacy**: Milestones are fictional. Official application records,
+  applicant credentials, financial details, and documents stay outside the
+  app. Questions and reminders stay local to each account.
 - **Owner clarification (2026-11-04)**: Do not suggest Minerva lacks parent
   resources. **Why:** Its Parents & Families page already covers general
   information and links to admissions; the question is participation in
@@ -155,6 +176,8 @@ the entry retire when circumstances change).
 | Idea | Why declined | Revisit when |
 |---|---|---|
 | Separate parent financial aid submission | Owner excluded it from Week 1; confidentiality unconfirmed | Owner authorizes later exploration and Minerva confirms the workflow |
+| Google Sign-In, student-managed invitations, and revocation controls | First iteration uses existing authentication and local development issuance | Owner scopes a later iteration |
+| Official application integration | Owner limited this iteration to synthetic data | Owner explicitly authorizes a separate scope |
 
 ---
 
@@ -163,32 +186,19 @@ the entry retire when circumstances change).
 <!-- Append-only. Format: state found → work done → state left.
      Keep entries short: one paragraph per session. -->
 
-**2026-11-11: Local Flask interview application.** Found: published static
-public guide, no backend; unused native templates and unvalidated Stage 00.
-Done: implemented the owner-requested modular Flask/SQLite app, preserved
-source-derived guidance and shared CSS, added private account planning,
-reviewed content seed and generated demo credentials, CSRF and ownership
-guards, persistence and security tests, and browser verification. Updated
-README, design/architecture/source/parity docs and Decision 056. Rolled the
-oldest session entry and clarification word for word into SESSION-LOG.
-Left: local app ready for owner review, with exact checks recorded in
-FLASK-VERIFICATION.md; real-parent validation and Minerva policy questions
-remain. Static release unchanged; no native edits, commit, push, deployment,
-or release version bump. Secrets and synthetic test databases are ignored.
+**2026-11-18: Aid document list.** Found: document preparation relied on
+manual status and location fields. Done: replaced those forms with a
+fictional file chooser, automatic linked-file counts, local preview, and
+explicit sharing of category presence. Kept the old rows in SQLite.
+Left: 85 pytest cases passed. Chromium checked 18 page states, ten widths,
+and two themes. Reviewed Financial Aid at 375px and 1280px. Run init-db on
+existing local databases to create the new document table.
 
-
-**2026-11-11: Flask UI and official resource integration.** Found: functional
-Flask branch with uncommitted prior work; narrow, plain, text-heavy UI.
-Done: owner-requested navy/neutral/gold redesign, wider responsive workspace,
-public homepage, owned dashboard previews and next actions, concise guidance,
-six source-linked resources, feedback states, and expanded keyboard/browser
-checks. Preserved route URLs, security, schema, and private planning. Kept
-Flask palette overrides in the one JSON source without changing inherited
-platform outputs. Updated source/design/architecture/parity docs, README,
-and Decision 057; archived the oldest session entry word for word. Left:
-65 pytest cases pass; browser checks cover 12 pages in both themes at ten
-widths, with keyboard/offline/no-JavaScript flows and contrast evidence in
-FLASK-VERIFICATION.md. Local missing tables initialized, public data seeded,
-existing private data preserved. Existing CRLF token-check failures remain.
-No commit, push, deployment, native changes, or release version bump.
-Owner device review and Minerva policy confirmation remain open.
+**2026-11-18: Public and parent UI redesign.** Found: separate public
+marketing content and a working parent journey and document workflow.
+Done: shared destination tiles, deadline sources, native stage
+disclosures, and global Help. Added exact deadline filtering and calendar
+export. Minerva published month/day round dates without exact cutoffs
+in the sources reviewed, so the exact catalog remains empty. Left:
+89 pytest cases passed and Chromium checked 19 page states across ten
+widths and both themes. Run init-db to add the optional round table.

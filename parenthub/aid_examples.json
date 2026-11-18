@@ -1,0 +1,28 @@
+{
+  "documents": [
+    {
+      "title": "Income and tax records",
+      "examples": "Household tax returns or other government-issued income records for the past two years.",
+      "key": "income-tax",
+      "filename": "Tax-record"
+    },
+    {
+      "title": "Recent earnings information",
+      "examples": "W-2 forms or other income records for the most recent three months.",
+      "key": "earnings",
+      "filename": "Earnings-summary"
+    },
+    {
+      "title": "Bank statements",
+      "examples": "Bank statements for the most recent twelve months.",
+      "key": "bank",
+      "filename": "Bank-statement"
+    },
+    {
+      "title": "Property, businesses, and major assets",
+      "examples": "Information about household businesses, farms, properties, and other significant assets or financial changes.",
+      "key": "assets",
+      "filename": "Asset-summary"
+    }
+  ]
+}

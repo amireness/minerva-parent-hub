@@ -15,6 +15,7 @@
     {"slug": "challenges", "title": "Complete Minerva's online challenges.", "responsibility": "applicant", "resource": "admissions"},
     {"slug": "accomplishments", "title": "Share accomplishments and academic records.", "responsibility": "applicant", "resource": "admissions"}
   ],
+  "exact_deadlines": [],
   "deadlines": [
     {"slug": "early-action", "round_name": "Early Action (Binding Optional)", "admissions": "November 1", "financial_aid": "November 8", "resource": "admissions"},
     {"slug": "regular-one", "round_name": "Regular Decision I", "admissions": "January 5", "financial_aid": "January 12", "resource": "admissions"},

@@ -8,18 +8,18 @@ from conftest import login, post, register
 def test_public_home_explains_app_and_has_working_actions(client):
     response = client.get('/')
     assert response.status_code == 200
-    for text in ['verified official resources', 'Get started', 'Explore official resources',
-                 'Your checklist', 'Personal reminders', 'Questions for Admissions',
-                 'A companion to Minerva', 'Independent prototype']:
+    for text in ['Invited parent? Log in', 'Create an account', 'Admissions',
+                 'Financial Aid', 'Deadlines', 'Help', 'Independent prototype']:
         assert text in response.text
     assert '/auth/register' in response.text
-    assert '/resources' in response.text
+    for path in ('/auth/login', '/guide', '/financial-aid', '/deadlines', '/help'):
+        assert f'href="{path}"' in response.text
     assert '<iframe' not in response.text
 
 
 def test_signed_in_home_remains_workspace(parent):
     assert parent.get('/').location.endswith('/dashboard')
-    text = parent.get('/dashboard').text
+    text = parent.get('/planning').text
     assert 'parent@example.com' in text
     assert 'value="0" max="5"' in text
     assert 'Set your family context' in text
@@ -27,17 +27,17 @@ def test_signed_in_home_remains_workspace(parent):
 
 
 def test_next_action_uses_only_own_incomplete_parent_items(app, parent):
-    post(parent, '/dashboard', {'age_group': 'adult'})
-    assert '/checklist#item-1' in parent.get('/dashboard').text
+    post(parent, '/planning', {'age_group': 'adult'})
+    assert '/checklist#item-1' in parent.get('/planning').text
     other = app.test_client()
     register(other, 'another@example.com')
     login(other, 'another@example.com')
     post(other, '/checklist/1', {'completed': 'y'}, source='/checklist')
-    assert '/checklist#item-1' in parent.get('/dashboard').text
+    assert '/checklist#item-1' in parent.get('/planning').text
     post(parent, '/checklist/1', {'completed': 'y'}, source='/checklist')
-    assert '/checklist#item-2' in parent.get('/dashboard').text
+    assert '/checklist#item-2' in parent.get('/planning').text
     post(parent, '/checklist/2', {'completed': 'y'}, source='/checklist')
-    text = parent.get('/dashboard').text
+    text = parent.get('/planning').text
     assert 'Review your questions' in text
     assert '/checklist#item-3' not in text
 
@@ -48,11 +48,11 @@ def test_question_preview_is_owned_open_and_links_to_edit(app, parent):
     register(other, 'another@example.com')
     login(other, 'another@example.com')
     post(other, '/questions/new', {'body': 'Someone else private question'})
-    text = parent.get('/dashboard').text
+    text = parent.get('/planning').text
     assert 'My open planning question' in text and '/questions/1/edit' in text
     assert 'Someone else private question' not in text
     post(parent, '/questions/1/edit', {'body': 'My open planning question', 'resolved': 'y'})
-    assert 'My open planning question' not in parent.get('/dashboard').text
+    assert 'My open planning question' not in parent.get('/planning').text
 
 
 def test_empty_checklist_progress_does_not_divide_by_zero(app, parent):
@@ -60,7 +60,7 @@ def test_empty_checklist_progress_does_not_divide_by_zero(app, parent):
         for item in db.session.scalars(db.select(ChecklistItem)).all():
             db.session.delete(item)
         db.session.commit()
-    response = parent.get('/dashboard')
+    response = parent.get('/planning')
     assert response.status_code == 200
     assert 'value="0" max="1"' in response.text
     assert '0 of 0 planning items' in response.text

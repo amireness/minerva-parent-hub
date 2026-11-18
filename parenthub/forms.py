@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import BooleanField, DateField, PasswordField, SelectField, StringField, TextAreaField
+from wtforms import BooleanField, DateField, PasswordField, RadioField, SelectField, StringField, TextAreaField
 from wtforms.validators import DataRequired, Email, EqualTo, InputRequired, Length
 
 
@@ -20,6 +20,14 @@ class RegisterForm(LoginForm):
 class AgeForm(FlaskForm):
     age_group = SelectField("Your child's age group", choices=[('under18', 'Under 18'), ('adult', '18 or older')], validators=[DataRequired()])
 
+
+class InvitationForm(FlaskForm):
+    code = PasswordField('Invitation code', filters=[stripped],
+                         validators=[DataRequired(), Length(max=128)])
+
+
+class AidDocumentForm(FlaskForm):
+    sample = RadioField('Choose an example file', coerce=int, validators=[InputRequired()])
 
 class ProgressForm(FlaskForm):
     completed = BooleanField('Completed')

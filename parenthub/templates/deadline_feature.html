@@ -1,0 +1,20 @@
+{% from 'icons.html' import icon %}
+<section class="deadline-feature" aria-label="Next published deadline">
+  <div class="deadline-feature-heading">{{ icon('calendar') }}<h2 class="section-header">{{ deadline.title if deadline else 'Next deadline' }}</h2></div>
+  {% if deadline %}
+  {% set seconds = (deadline.at - now).total_seconds() %}
+  <time datetime="{{ deadline.at.isoformat() }}">{{ deadline.display_time }}</time>
+  <p class="deadline-count{% if seconds <= 604800 %} deadline-soon{% endif %}" data-deadline="{{ deadline.at.isoformat() }}">{{ 'Due soon' if seconds <= 604800 else 'Upcoming' }}</p>
+  <div class="actions">
+    <a data-calendar-link href="{{ url_for('main.deadline_calendar', slug=deadline.slug) }}" class="button button-secondary">Add to Calendar</a>
+    <a href="{{ deadline.source }}" target="_blank" rel="noopener noreferrer">Official Minerva source</a>
+  </div>
+  <p class="caption">Verified {{ deadline.verified_on }}</p>
+  {% else %}
+  <p>No upcoming deadline with a verified cutoff.</p>
+  <div class="actions">
+    {% if request.endpoint != 'main.deadlines' %}<a href="{{ url_for('main.deadlines', _anchor='published-rounds') }}">Dates by round</a>{% endif %}
+    <a href="{{ admissions_url }}" target="_blank" rel="noopener noreferrer">Minerva source</a>
+  </div>
+  {% endif %}
+</section>

@@ -2,8 +2,7 @@
 {% block page_heading %}
 <div class="page-heading welcome">
   <div>
-    <p class="eyebrow">YOUR FAMILY'S NEXT CHAPTER</p>
-    <h1 class="view-heading">Welcome to your planning space.</h1>
+    <h1 class="view-heading">Your planning tools</h1>
     <p class="account-label">{{ current_user.email }}</p>
   </div>
   <a class="button" href="{{ url_for('tracking.edit_reminder') }}">Create a reminder</a>
@@ -12,7 +11,6 @@
 {% block content %}
 <div class="dashboard-grid">
   <section class="panel progress-panel" aria-labelledby="progress-heading">
-    <p class="eyebrow">A PLAN AT YOUR PACE</p>
     <h2 id="progress-heading" class="section-header">Your checklist</h2>
     <p class="progress-number">{{ completed }} <span>of {{ total }}</span>
     </p>
@@ -22,7 +20,6 @@
     <p class="caption">Personal planning only. This does not update or reflect a Minerva application.</p>
   </section>
   <section class="panel next-panel" aria-labelledby="suggestion-heading">
-    <p class="eyebrow">ONE NEXT STEP</p>
     <h2 id="suggestion-heading" class="section-header">Suggested next action</h2>
     {% if not current_user.age_group %}
     <p>Choose your child's age group to see the relevant parent guidance.</p>
@@ -85,7 +82,6 @@
 </div>
 <div class="context-grid">
   <section id="family-context" class="panel" aria-labelledby="family-heading">
-    <p class="eyebrow">MAKE THE GUIDANCE RELEVANT</p>
     <h2 id="family-heading" class="section-header">Your family context</h2>
     <form method="post">{{ form.hidden_tag() }}{{ form.age_group.label }}{{ form.age_group(aria_describedby='age-errors') }}<div id="age-errors">
         {% for error in form.age_group.errors %}
@@ -97,11 +93,10 @@
     {% include 'age_guidance.html' %}
   </section>
   <section class="panel" aria-labelledby="official-heading">
-    <p class="eyebrow">DIRECT FROM MINERVA</p>
     <h2 id="official-heading" class="section-header">Official resources for your next step</h2>
     {% for resource in featured %}
     <article class="resource-preview">
-      <a class="record-title" href="{{ resource.url }}">{{ resource.title }} <span aria-hidden="true">↗</span>
+      <a class="record-title" href="{{ resource.url }}" target="_blank" rel="noopener noreferrer">{{ resource.title }} <span aria-hidden="true">↗</span>
       </a>
       <p class="caption">Minerva University · Verified {{ resource.last_verified }}</p>
     </article>

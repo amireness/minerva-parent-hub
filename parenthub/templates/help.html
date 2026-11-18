@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+{% set destinations = [('tracking.questions', 'Saved questions', 'guide'), ('main.resources', 'Official resources', 'application')] %}
+<div class="help-grid">
+  <section class="guide-section" aria-labelledby="official-help">
+    <h2 id="official-help" class="section-header">Official Minerva help</h2>
+    <ul class="support-links" role="list">
+      <li><a href="https://www.minerva.edu/faqs/" target="_blank" rel="noopener noreferrer">Frequently asked questions</a></li>
+      <li><a href="mailto:admissions@minerva.edu">Contact Admissions</a><span class="caption">admissions@minerva.edu</span></li>
+      <li><a href="mailto:newstudentaid@minerva.edu">Contact Financial Aid</a><span class="caption">newstudentaid@minerva.edu</span></li>
+    </ul>
+  </section>
+  <section class="guide-section" aria-labelledby="hub-help">
+    <h2 id="hub-help" class="section-header">In Parent Hub</h2>
+    <p>Saved questions stay in your account until you contact Minerva yourself.</p>
+    {% set tile_label = 'Help tools' %}
+    {% include 'destination_tiles.html' %}
+  </section>
+</div>
+{% endblock %}

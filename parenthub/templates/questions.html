@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="section-heading">
-  <p class="section-intro">Private to your account. Questions are never sent automatically to Minerva.</p>
+  <p class="section-intro">Saved questions are private. <a href="{{ url_for('main.help_center') }}">Contact Minerva</a> when you’re ready.</p>
   <a class="button" href="{{ url_for('tracking.edit_question') }}">Save a question</a>
 </div>
 <div class="split-layout">

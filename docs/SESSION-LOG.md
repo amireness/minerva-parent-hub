@@ -87,3 +87,65 @@ offline and no-JavaScript checks against the public URL successfully.
 Published: https://amireness.github.io/minerva-parent-hub/.
 No private applicant information or temporary browser files were committed.
 Real-parent validation and policy confirmation still remain open.
+
+
+**2026-11-11: Local Flask interview application.** Found: published static
+public guide, no backend; unused native templates and unvalidated Stage 00.
+Done: implemented the owner-requested modular Flask/SQLite app, preserved
+source-derived guidance and shared CSS, added private account planning,
+reviewed content seed and generated demo credentials, CSRF and ownership
+guards, persistence and security tests, and browser verification. Updated
+README, design/architecture/source/parity docs and Decision 056. Rolled the
+oldest session entry and clarification word for word into SESSION-LOG.
+Left: local app ready for owner review, with exact checks recorded in
+FLASK-VERIFICATION.md; real-parent validation and Minerva policy questions
+remain. Static release unchanged; no native edits, commit, push, deployment,
+or release version bump. Secrets and synthetic test databases are ignored.
+
+
+**2026-11-11: Flask UI and official resource integration.** Found: functional
+Flask branch with uncommitted prior work; narrow, plain, text-heavy UI.
+Done: owner-requested navy/neutral/gold redesign, wider responsive workspace,
+public homepage, owned dashboard previews and next actions, concise guidance,
+six source-linked resources, feedback states, and expanded keyboard/browser
+checks. Preserved route URLs, security, schema, and private planning. Kept
+Flask palette overrides in the one JSON source without changing inherited
+platform outputs. Updated source/design/architecture/parity docs, README,
+and Decision 057; archived the oldest session entry word for word. Left:
+65 pytest cases pass; browser checks cover 12 pages in both themes at ten
+widths, with keyboard/offline/no-JavaScript flows and contrast evidence in
+FLASK-VERIFICATION.md. Local missing tables initialized, public data seeded,
+existing private data preserved. Existing CRLF token-check failures remain.
+No commit, push, deployment, native changes, or release version bump.
+Owner device review and Minerva policy confirmation remain open.
+
+
+**2026-11-18: Synthetic applicant onboarding.** Found: email/password
+authentication, a private planning dashboard, and public guidance. Done:
+added fictional applicants and milestones, one-time email-bound invitation
+codes, and per-request access checks. Moved planning to /planning and
+verified the additive schema against an existing account. Left: 73 pytest
+cases passed, plus the Chromium harness across 14 page states, two themes,
+and ten widths. Databases used for checks were disposable. Student issuance
+and revocation controls, real-device review, and deployment remain outside
+this iteration.
+
+
+**2026-11-18: Signed-in overview and aid preparation.** Found: the owner
+verified invitation and planning flows and requested clearer navigation.
+Done: introduced a synthetic timeline, grouped planning tools, placed
+additional invitations under Account, and added expandable aid examples
+and role-based practice tasks. Left: 77 pytest cases passed. Chromium
+checked 16 screen states across ten widths and two themes, including
+keyboard and no-JavaScript disclosure controls. First-year requirements,
+submission roles, and privacy procedures await the specialist interview.
+
+
+**2026-11-18: Parent-centered MVP.** Found: working invitation onboarding and
+aid example modules. Done: guided Home and application timeline, unified
+Financial Aid, local document status and preset location notes, and
+explicit sharing with a separate synthetic student login. Left: 85 pytest
+cases passed. Chromium checked 17 page states, two themes, and ten widths,
+including 375px and 1280px. Screenshots confirmed the parent action is
+visible on Home at both sizes. Existing local databases need init-db.
+Official submission roles and privacy expectations await the interview.

@@ -1,6 +1,6 @@
 // Optional local browser smoke check: Node 22+, Chrome, and the Python venv.
 import assert from 'node:assert/strict';
-import { spawn } from 'node:child_process';
+import { spawn, spawnSync } from 'node:child_process';
 import { randomBytes } from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -20,8 +20,9 @@ for (const url of [origin, `http://127.0.0.1:${debugPort}/json/version`]) {
   try { await fetch(url, { signal: AbortSignal.timeout(500) }); occupied = true; } catch {}
   assert.ok(!occupied, `Port already occupied: ${url}`);
 }
+const env = { ...process.env, SECRET_KEY: randomBytes(32).toString('hex'), DATABASE_URL: 'sqlite:///' + path.join(out, 'smoke.sqlite').replaceAll('\\', '/') };
 const server = spawn(python, ['-c', 'from parenthub import create_app; from parenthub.extensions import db; from parenthub.commands import seed_content; app=create_app(); ctx=app.app_context(); ctx.push(); db.create_all(); seed_content(); app.run(host="127.0.0.1",port=' + port + ',use_reloader=False)'], {
-  cwd: root, env: { ...process.env, SECRET_KEY: randomBytes(32).toString('hex'), DATABASE_URL: 'sqlite:///' + path.join(out, 'smoke.sqlite').replaceAll('\\', '/') },
+  cwd: root, env,
   stdio: 'ignore', windowsHide: true,
 });
 let chrome, socket;
@@ -77,7 +78,7 @@ try {
   };
   const navigate = async pathname => {
     await cdp('Page.navigate', { url: origin + pathname });
-    await waitFor(`location.pathname === ${JSON.stringify(pathname)} && document.readyState === 'complete'`);
+    await waitFor(`location.pathname + location.search === ${JSON.stringify(pathname)} && document.readyState === 'complete'`);
   };
   let scriptsEnabled = true;
   const submit = async (values, destination, selector = 'form[method="post"]:not(.inline-form)') => {
@@ -104,7 +105,11 @@ try {
         assert.ok(overflow.document <= width && overflow.main <= overflow.client, `${page} ${scheme} ${width}: ${JSON.stringify(overflow)}`);
         const menuFits = await evaluate(`(() => { const menu = document.querySelector('.nav-disclosure'); if (!menu) return true; menu.open = true; const rect = menu.querySelector('.nav-dropdown').getBoundingClientRect(); const fits = rect.left >= 0 && rect.right <= innerWidth; menu.open = false; return fits; })()`);
         assert.ok(menuFits, `${page} ${scheme} ${width}: expanded Explore menu leaves viewport`);
-        if (page === '/') assert.ok(await evaluate(`Array.from(document.querySelectorAll('.journey-list li > span')).every(span => span.getBoundingClientRect().height <= parseFloat(getComputedStyle(span).lineHeight) + 1)`), 'Journey step numbers stay on one line');
+        assert.ok(await evaluate(`document.querySelector('.help-nav')?.textContent.trim() === 'Help'`), 'Help remains visible and labeled');
+        if (page === '/') assert.equal(await evaluate(`document.querySelectorAll('.destination-tile').length`), 4);
+        if (page === '/dashboard' && width === 375 && name !== 'invitation-required') {
+          assert.ok(await evaluate(`document.querySelector('#next-action + a').getBoundingClientRect().bottom <= innerHeight`), 'Home action is visible at 375px');
+        }
         if (width === 375 || width === 1280) {
           const png = await cdp('Page.captureScreenshot', { format: 'png' });
           fs.writeFileSync(path.join(out, `${name}-${scheme}-${width}.png`), Buffer.from(png.data, 'base64'));
@@ -128,7 +133,36 @@ try {
   const password = randomBytes(18).toString('hex');
   await submit({ email: 'browser@example.com', password, confirm: password }, '/auth/login');
   await submit({ email: 'browser@example.com', password }, '/dashboard');
-  await submit({ age_group: 'under18' }, '/dashboard');
+  await waitFor(`document.querySelector('h1').textContent === 'Invitation required'`);
+  await responsive('/dashboard', 'invitation-required');
+  const seed = spawnSync(python, ['-m', 'flask', '--app', 'parenthub', '--debug', 'seed-invitations',
+    '--email', 'browser@example.com'], { cwd: root, env, encoding: 'utf8', windowsHide: true });
+  assert.equal(seed.status, 0, seed.stderr);
+  const code = seed.stdout.match(/invitation code: ([\w-]+)/)?.[1];
+  assert.ok(code, 'The synthetic seed produced an invitation code');
+  await submit({ code }, '/dashboard');
+  await waitFor(`document.querySelector('[aria-current="step"]')?.innerText.includes('Application started') && document.body.innerText.includes('Application submitted')`);
+  await navigate('/application-progress');
+  await evaluate(`document.querySelector('.journey-steps li:nth-child(2) summary').focus()`);
+  await key('Enter', 13);
+  await waitFor(`document.querySelector('.journey-steps li:nth-child(2) details').open`);
+  await navigate('/help');
+  assert.ok(await evaluate(`document.querySelector('a[href="mailto:admissions@minerva.edu"]') && document.querySelector('.help-nav[aria-current="page"]')`));
+  await navigate('/financial-aid');
+  await evaluate(`document.querySelector('#income-tax summary').focus()`);
+  await key('Enter', 13);
+  await waitFor(`document.body.innerText.includes('past two years')`);
+  await evaluate(`document.querySelector('#income-tax .aid-file-actions a').click()`);
+  await waitFor(`document.readyState === 'complete' && document.querySelector('#income-tax .aid-link-form') !== null`);
+  await evaluate(`document.querySelector('#income-tax input[type="radio"]').click()`);
+  await submit({}, '/financial-aid', '#income-tax .aid-link-form');
+  await waitFor(`document.body.innerText.includes('1 of 4 documents added') && document.body.innerText.includes('Tax-record-example-1.pdf')`);
+  await submit({}, '/financial-aid', '#income-tax form[action$="/share"]');
+  await waitFor(`document.querySelector('#income-tax').innerText.includes('Shared with student')`);
+  await navigate('/account');
+  assert.ok(await evaluate(`document.querySelector('input[name="code"]') !== null`));
+  await navigate('/planning');
+  await submit({ age_group: 'under18' }, '/planning');
   await waitFor(`document.body.innerText.includes('Published requirement')`);
   await navigate('/checklist');
   await submit({ completed: true }, '/checklist');
@@ -144,6 +178,9 @@ try {
   await waitFor(`location.pathname === '/guide' && document.readyState === 'complete'`);
   await navigate('/auth/login');
   await submit({ email: 'browser@example.com', password }, '/dashboard');
+  await waitFor(`document.body.innerText.includes('Application started')`);
+  assert.ok(await evaluate(`document.body.innerText.includes('Review linked documents')`));
+  await navigate('/planning');
   await waitFor(`document.body.innerText.includes('Edited browser reminder') && document.body.innerText.includes('1 of 5')`);
 
   await navigate('/reminders/new');
@@ -173,8 +210,9 @@ try {
   await key('Enter', 13);
   await waitFor(`!document.querySelector('.nav-disclosure').open`);
 
-  const pages = ['/dashboard', '/guide', '/financial-aid', '/checklist', '/reminders', '/questions', '/resources', '/deadlines', '/reminders/new'];
+  const pages = ['/dashboard', '/application-progress', '/planning', '/account', '/guide', '/financial-aid', '/checklist', '/reminders', '/questions', '/resources', '/deadlines', '/help', '/reminders/new'];
   for (const page of pages) await responsive(page);
+  await responsive('/financial-aid?category=earnings', 'add-document');
   await navigate('/dashboard');
   await cdp('Network.enable');
   await cdp('Network.emulateNetworkConditions', { offline: true, latency: 0, downloadThroughput: 0, uploadThroughput: 0 });
@@ -186,9 +224,28 @@ try {
   await navigate('/checklist');
   assert.ok(await evaluate(`document.querySelectorAll('input[type="checkbox"]').length === 5`));
   await submit({ completed: false }, '/checklist');
-  await navigate('/dashboard');
+  await navigate('/planning');
   assert.ok(await evaluate(`document.body.innerText.includes('0 of 5')`));
-  console.log(`PASS: browser register/login, saved age/checklist/reminder/question, logout/login persistence; reminder/question deletion, resource search/source link, keyboard skip/menu/focus, busy feedback; ${pages.length + 3} pages × 2 themes × 10 widths; offline notice/disabled writes; no-JavaScript checklist update. Screenshots: ${out}`);
+  await navigate('/financial-aid');
+  await evaluate(`document.querySelector('#bank summary').click()`);
+  assert.ok(await evaluate(`document.body.innerText.includes('most recent twelve months')`));
+  await cdp('Emulation.setScriptExecutionDisabled', { value: false });
+  scriptsEnabled = true;
+  const number = seed.stdout.match(/(SYN-[A-F0-9]+) invitation code:/)?.[1];
+  assert.ok(number);
+  const student = spawnSync(python, ['-m', 'flask', '--app', 'parenthub', '--debug', 'seed-student',
+    '--email', 'student@example.com', '--application-number', number],
+    { cwd: root, env, encoding: 'utf8', windowsHide: true });
+  assert.equal(student.status, 0, student.stderr);
+  const studentPassword = student.stdout.match(/shown once\): (\S+)/)?.[1];
+  assert.ok(studentPassword);
+  await evaluate(`document.querySelector('.inline-form').requestSubmit()`);
+  await waitFor(`location.pathname === '/guide' && document.readyState === 'complete'`);
+  await navigate('/auth/login');
+  await submit({ email: 'student@example.com', password: studentPassword }, '/student/preparation');
+  assert.ok(await evaluate(`document.body.innerText.includes('Income and tax records') && document.body.innerText.includes('Example document added') && !document.body.innerText.includes('Bank statements')`));
+  await responsive('/student/preparation');
+  console.log(`PASS: browser register/login, invitations, application progress, demo file chooser, automatic progress, student sharing, planning, keyboard and offline flows; ${pages.length + 6} page states × 2 themes × 10 widths. Screenshots: ${out}`);
 } finally {
   socket?.close();
   chrome?.kill();

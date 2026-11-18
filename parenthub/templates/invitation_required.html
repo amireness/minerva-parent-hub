@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="landing-grid">
+<section class="panel" aria-label="Accept an invitation">
+  <p>Enter an invitation code issued for {{ current_user.email }} to view a synthetic applicant.</p>
+  {% include 'invitation_form.html' %}
+</section>
+{% include 'deadline_feature.html' %}
+</div>
+{% endblock %}

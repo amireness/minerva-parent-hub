@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="guided-content">
+  <p class="caption">Demo application data. These stages illustrate a possible journey.</p>
+  {% set journey_heading = 'h2' %}
+  {% include 'application_journeys.html' %}
+  <p><a href="https://www.minerva.edu/undergraduate/admissions/" target="_blank" rel="noopener noreferrer">Read Minerva&#39;s published admissions process</a></p>
+</div>
+{% endblock %}

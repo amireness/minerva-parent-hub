@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="guide-section aid-preview" aria-label="Document preview">
+  <p>Fictional file preview</p>
+  <p>{{ title }}</p>
+  <a href="{{ url_for('main.financial_aid', applicant=applicant_id, _anchor=category) }}">Back to documents</a>
+</section>
+{% endblock %}

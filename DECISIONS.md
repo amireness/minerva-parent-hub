@@ -1396,3 +1396,21 @@ identity through Flask overrides in design-tokens.json and the Flask-only
 generator. Do not recolor or rebuild unused native scaffolds. Check text
 and control contrast, both themes, keyboard navigation, and responsive
 screenshots. The academic calendar is never an admissions deadline source.
+
+
+---
+
+## 058 - Keep demonstration preparation separate from financial documents
+
+**Why:** Parents need a way to remember what they have found and signal
+readiness to the student without putting household financial information
+into a prototype. An application reference or parent invitation is
+insufficient evidence of student identity.
+
+**How to apply:** Store a fixed category, a preparation state, a preset
+location note, and an explicit share preference per parent and fictional
+applicant. Provision a separate synthetic student login through the local
+development CLI. Verify the student link and the sharing parent's accepted
+invitation on every read. Real documents, URLs, submissions, and student
+records remain outside this MVP. Document categories derived from
+returning-student examples remain illustrative pending the interview.
