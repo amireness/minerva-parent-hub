@@ -1,54 +1,55 @@
 {% extends 'base.html' %}
-{% set titles = {'overview': 'Financial Aid', 'learn': 'Understand financial aid', 'tools': 'Useful Tools',
+{% set titles = {'learn': 'Financial Aid', 'tools': 'Useful Tools',
   'documents': 'Financial document guidance', 'process': 'Where each application goes',
   'glossary': 'Financial aid glossary', 'translations': 'Translation examples', 'currency': 'Practice currency conversion'} %}
 {% set title = titles[view] %}
+{% set workspace = view in ('learn', 'tools') %}
 {% block page_heading %}
-{% if view != 'learn' %}
+{% if not workspace %}
 <div class="page-heading aid-page-heading">
-  {% if view != 'overview' %}
-  <a class="aid-back" href="{{ aid_link('overview' if view == 'tools' else 'tools') }}">{{ 'Financial Aid home' if view == 'tools' else 'Back to Useful Tools' }}</a>
-  {% endif %}
+  <a class="aid-back" href="{{ aid_link('tools') }}">Back to Useful Tools</a>
   <h1 class="view-heading">{{ title }}</h1>
 </div>
 {% endif %}
 {% endblock %}
 {% block content %}
-{% if view == 'learn' %}
-<div class="preparation-workspace">
+{% if workspace %}
+<div class="preparation-workspace"{% if view == 'learn' and not request.args.get('topic') and request.args.get('view') in (none, 'overview') %} data-aid-entry{% endif %}>
   {% from 'learning_topics.html' import topic_navigation %}
   {% set topic_links = [] %}
   {% for topic in guidance.topics %}{% set _ = topic_links.append(aid_link('learn', topic=topic.key)) %}{% endfor %}
-  {{ topic_navigation(guidance.topics, topic_index, topic_links, 'Financial aid', aid_link('tools')) }}
-  <div class="workspace-task"><div class="aid-flow">{% include 'aid_learning.html' %}</div></div>
+  {% set tools_index = guidance.topics|length %}
+  {{ topic_navigation(guidance.topics + [{'label': 'Useful Tools', 'icon': 'aid'}],
+                      tools_index if view == 'tools' else topic_index,
+                      topic_links + [aid_link('tools')], 'Financial aid') }}
+  <div class="workspace-task">
+    <div class="aid-flow">
+      {% if view == 'learn' %}
+        {% include 'aid_learning.html' %}
+      {% else %}
+      <section class="panel aid-focus aid-learning" aria-labelledby="aid-tools-title">
+        <h1 class="view-heading" id="aid-tools-title">Useful Tools</h1>
+        <nav class="aid-tool-list" aria-label="Useful Tools">
+          <a class="aid-resource" href="{{ aid_link('glossary') }}"><strong>Financial glossary</strong><span>Look up unfamiliar financial terms.</span></a>
+          <a class="aid-resource" href="{{ aid_link('translations') }}"><strong>Translation examples</strong><span>See sample English explanations alongside the originals.</span></a>
+          <a class="aid-resource" href="{{ aid_link('currency') }}"><strong>Currency calculator</strong><span>Practice converting fictional amounts.</span></a>
+          <a class="aid-resource" href="{{ aid_link('documents') }}"><strong>Financial document guidance</strong><span>Review document requirements and explore demo examples.</span></a>
+        </nav>
+      </section>
+      {% endif %}
+    </div>
+  </div>
 </div>
 {% elif view == 'documents' %}
   {% include 'aid_documents.html' %}
 {% else %}
 <div class="aid-flow">
-  {% if view == 'overview' %}
-  <section class="panel aid-focus" aria-labelledby="aid-start" data-aid-overview>
-    <h2 class="section-header" id="aid-start">New to financial aid?</h2>
-    <a class="button" href="{{ aid_link('learn') }}">Understand financial aid</a>
-  </section>
-  <nav class="aid-secondary" aria-label="Financial aid shortcuts">
-    <a href="{{ aid_link('tools') }}">Useful Tools</a>
-  </nav>
-  {% elif view == 'tools' %}
-  <nav class="aid-tool-list" aria-label="Useful Tools">
-    <a class="aid-resource" href="{{ aid_link('glossary') }}"><strong>Financial glossary</strong><span>Look up unfamiliar financial terms.</span></a>
-    <a class="aid-resource" href="{{ aid_link('translations') }}"><strong>Translation examples</strong><span>See sample English explanations alongside the originals.</span></a>
-    <a class="aid-resource" href="{{ aid_link('currency') }}"><strong>Currency calculator</strong><span>Practice converting fictional amounts.</span></a>
-    <a class="aid-resource" href="{{ aid_link('documents') }}"><strong>Financial document guidance</strong><span>Review document requirements and explore demo examples.</span></a>
-  </nav>
-  {% else %}
   <section class="guide-section aid-focus" aria-label="{{ title }}">
     {% include 'aid_guidance.html' %}
     {% if view == 'process' %}
     <p><a href="{{ aid_link('learn', topic='forms') }}">Official forms and deadlines</a></p>
     {% endif %}
   </section>
-  {% endif %}
 </div>
 {% endif %}
 <script src="{{ url_for('static', filename='aid-guidance.js') }}" defer></script>

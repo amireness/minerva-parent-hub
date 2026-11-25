@@ -116,7 +116,8 @@ def render_financial_aid(applicants, applicant, failed_category=None, form=None)
     view = request.args.get('view')
     if failed_category or (view is None and (focused_category or 'applicant' in request.args)):
         view = 'documents'
-    view = view or 'overview'
+    if not view or view == 'overview':
+        view = 'learn'
 
     def aid_link(destination, **params):
         return url_for('main.financial_aid', view=destination, applicant=applicant.id if applicant else None, **params)
@@ -131,7 +132,7 @@ def render_financial_aid(applicants, applicant, failed_category=None, form=None)
             abort(404)
         destination, params = LEGACY_AID_STEPS[step]
         return redirect(aid_link(destination, **params))
-    if view not in {'overview', 'learn', 'tools', 'documents', 'process', 'glossary', 'translations', 'currency'}:
+    if view not in {'learn', 'tools', 'documents', 'process', 'glossary', 'translations', 'currency'}:
         abort(404)
     topics = GUIDANCE['topics']
     topic_keys = [topic['key'] for topic in topics]

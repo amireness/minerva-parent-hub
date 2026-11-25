@@ -214,3 +214,9 @@ families to decide whether to apply. Done: added a five-topic introduction
 based on official sources and retained existing checklist records and
 tools. Left: see PRODUCT-UX-AUDIT.md for source differences and validation.
 First-use comprehension still needs parent observation.
+
+**2026-11-25: Financial Aid navigation.** Found: five useful learning
+topics followed by an extra checklist workflow. Done: grouped links to
+existing tools, relocated essential guidance, and redirected old steps.
+Left: saved checklist records remain in the database. Individual tool
+redesign and real document storage remain outside this iteration.

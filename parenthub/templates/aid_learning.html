@@ -30,6 +30,6 @@
   {% endif %}
   <div class="actions">
     <a class="button" href="{{ aid_link('learn', topic=next_topic.key) if next_topic else aid_link('tools') }}">{{ 'Next' if next_topic else 'Useful Tools' }}</a>
-    <a href="{{ aid_link('learn', topic=guidance.topics[topic_index - 1].key) if topic_index else aid_link('overview') }}">Back</a>
+    <a href="{{ aid_link('learn', topic=guidance.topics[topic_index - 1].key) if topic_index else url_for('main.home') }}">Back</a>
   </div>
 </section>

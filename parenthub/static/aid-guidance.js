@@ -54,7 +54,7 @@ if (preview) {
   preview.addEventListener('change', reflectPreview);
   reflectPreview();
 }
-if (document.querySelector('[data-aid-overview]') && location.hash) {
+if (document.querySelector('[data-aid-entry]') && location.hash) {
   const anchor = location.hash.slice(1);
   const legacy = { 'aid-checklist': 'tools', 'aid-tools': 'tools', 'document-examples': 'documents',
     'official-aid': 'process', glossary: 'glossary', translations: 'translations', currency: 'currency' };

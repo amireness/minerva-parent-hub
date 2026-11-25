@@ -158,7 +158,10 @@ try {
   }
   for (const width of [375, 1280]) {
     await cdp('Emulation.setDeviceMetricsOverride', { width, height: 900, deviceScaleFactor: 1, mobile: false });
-    await navigate('/financial-aid?view=learn');
+    await navigate('/');
+    await evaluate(`document.querySelector('.primary-nav a[href="/financial-aid"]').focus()`);
+    await key('Enter', 13);
+    await waitFor(`location.pathname === '/financial-aid' && !location.search && document.querySelector('#learn-understand')`);
     if (width === 375) {
       await evaluate(`document.querySelector('.workspace-mobile > summary').focus()`);
       await key('Enter', 13);
@@ -182,6 +185,20 @@ try {
       await evaluate(`document.querySelector('#learn-${topic} .button').click()`);
     }
     await waitFor(`document.querySelector('.aid-tool-list')`);
+    const topicNavigator = width === 375 ? '.workspace-mobile' : '.workspace-sidebar';
+    if (width === 375) {
+      await evaluate(`document.querySelector('.workspace-mobile > summary').focus()`);
+      await key('Enter', 13);
+      await waitFor(`document.querySelector('.workspace-mobile').open`);
+    }
+    assert.ok(await evaluate(`document.querySelector('${topicNavigator} [aria-current="step"][href$="view=tools"]').getClientRects().length`));
+    await evaluate(`document.querySelector('${topicNavigator} a[href$="topic=understand"]').focus()`);
+    await key('Enter', 13);
+    await waitFor(`document.querySelector('#learn-understand') && location.search.includes('topic=understand')`);
+    await evaluate(`history.back()`);
+    await waitFor(`location.search.includes('view=tools') && document.querySelector('.aid-tool-list')`);
+    await evaluate(`history.forward()`);
+    await waitFor(`location.search.includes('topic=understand') && document.querySelector('#learn-understand')`);
   }
   await navigate('/auth/register');
   const password = randomBytes(18).toString('hex');
@@ -213,9 +230,15 @@ try {
   await waitFor(`document.body.innerText.includes('1 of 4 documents added') && document.body.innerText.includes('Tax-record-example-1.pdf')`);
   await submit({}, '/financial-aid', '#income-tax form[action$="/share"]');
   await waitFor(`document.querySelector('#income-tax').innerText.includes('Shared with student')`);
+  await evaluate(`document.querySelector('.primary-nav a[href="/financial-aid"]').click()`);
+  await waitFor(`!location.search && document.querySelector('#learn-understand')`);
   await responsive('/financial-aid', 'aid-start');
-  assert.ok(await evaluate(`document.querySelector('.aid-focus .button').innerText === 'Understand financial aid' && !document.querySelector('#demo-amount')`));
-  await evaluate(`document.querySelector('.aid-secondary a[href*="view=tools"]').click()`);
+  assert.ok(await evaluate(`document.querySelector('#learn-understand h1').textContent === 'What is financial aid?' && !document.querySelector('#demo-amount')`));
+  await evaluate(`document.querySelector('.workspace-mobile > summary').focus()`);
+  await key('Enter', 13);
+  await waitFor(`document.querySelector('.workspace-mobile').open`);
+  await evaluate(`document.querySelector('.workspace-mobile a[href*="view=tools"]').focus()`);
+  await key('Enter', 13);
   await waitFor(`document.querySelector('.aid-tool-list')`);
   assert.equal(await evaluate(`document.querySelectorAll('.aid-tool-list a').length`), 4);
   await evaluate(`document.querySelector('.aid-tool-list a[href*="view=glossary"]').focus()`);

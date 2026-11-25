@@ -117,12 +117,12 @@ ul.aid-learning-points { grid-template-columns: repeat(auto-fit, minmax(min(100%
 .aid-secondary { display: flex; flex-wrap: wrap; gap: 0 var(--space-4); }
 .aid-secondary a, .aid-back { display: inline-flex; align-items: center; min-height: 44px; }
 .aid-term summary { font-weight: 600; }
-.aid-tool-list { display: grid; gap: var(--space-3); grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr)); }
+.aid-tool-list { display: grid; gap: var(--space-3); grid-template-columns: repeat(auto-fit, minmax(min(100%, max(17rem, 45%)), 1fr)); }
 .aid-resource { display: grid; gap: var(--space-1); padding: var(--space-4); border: 1px solid var(--color-border); border-radius: var(--radius-control); background: var(--color-surface); text-decoration: none; }
 .aid-resource strong { text-decoration: underline; }
 .aid-resource span { color: var(--color-text); }
 .aid-resource:hover { background: var(--color-surface-alt); }
-.aid-learning .aid-resource { margin-block: var(--space-4); }
+.aid-learning > .aid-resource { margin-block: var(--space-4); }
 .aid-term { border-top: 1px solid var(--color-border); }
 .aid-term > p { margin-block: var(--space-2); }
 #glossary > * + *, #translations > * + *, #currency > * + * { margin-top: var(--space-4); }

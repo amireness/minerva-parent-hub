@@ -186,14 +186,14 @@ the entry retire when circumstances change).
 <!-- Append-only. Format: state found → work done → state left.
      Keep entries short: one paragraph per session. -->
 
-**2026-11-25: Financial Aid navigation.** Found: five useful learning
-topics followed by an extra checklist workflow. Done: grouped links to
-existing tools, relocated essential guidance, and redirected old steps.
-Left: saved checklist records remain in the database. Individual tool
-redesign and real document storage remain outside this iteration.
-
 **2026-11-25: Admissions journey.** Found: the public guide combined
 Admissions, aid, planning, and help in one set of disclosures. Done:
 replaced it with six question-based topics using the Financial Aid
 navigator. Left: ADMISSIONS-GUIDE.md records sources and ambiguities.
 First-use comprehension still needs parent observation.
+
+**2026-11-25: Unified Financial Aid workspace.** Found: the landing
+screen required an extra click, and Useful Tools replaced the topic
+navigator. Done: opened Financial Aid directly on Understand and added
+Useful Tools to the same selector. Left: existing tool URLs and content
+remain available for a separate tool-by-tool review.

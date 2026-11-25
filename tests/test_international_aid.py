@@ -9,12 +9,16 @@ from parenthub.models import ChecklistItem, UserChecklistProgress
 def test_public_preparation_has_connected_guides_and_no_upload(client):
     page = client.get('/financial-aid')
     assert page.status_code == 200
-    assert 'Understand financial aid' in page.text and 'type="file"' not in page.text
+    assert 'What is financial aid?' in page.text and 'type="file"' not in page.text
+    assert 'New to financial aid?' not in page.text
+    assert page.text.count('href="/financial-aid?view=learn&amp;topic=understand" aria-current="step"') == 2
+    assert 'What is financial aid?' in client.get('/financial-aid?view=overview').text
     assert 'Example amount' not in page.text and 'Fictional original excerpt' not in page.text
     for view, text in [('glossary', 'id="term-income"'), ('translations', 'Fictional original excerpt'),
                        ('currency', 'Illustrative rates authored'), ('process', 'Financial Aid Questionnaire')]:
         assert text in client.get('/financial-aid?view=' + view).text
     tools = client.get('/financial-aid?view=tools').text
+    assert tools.count('href="/financial-aid?view=tools" aria-current="step"') == 2
     for view in ('glossary', 'translations', 'currency', 'documents'):
         assert f'view={view}"' in tools
     assert 'Preparation checklist' not in page.text and 'Log in to save progress' not in page.text
@@ -24,6 +28,8 @@ def test_public_preparation_has_connected_guides_and_no_upload(client):
 
 
 def test_learning_journey_explains_aid_before_preparation(parent):
+    page = parent.get('/financial-aid')
+    assert page.status_code == 200 and 'What is financial aid?' in page.text
     topics = [
         ('understand', 'Financial aid helps students', 'process'),
         ('process', 'Tax returns are one part', 'role'),
