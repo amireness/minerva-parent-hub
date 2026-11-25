@@ -46,11 +46,12 @@ p, li, dd, .record-title { overflow-wrap: anywhere; }
 .workspace-mobile summary { font-weight: 600; }
 .workspace-mobile summary span { margin-inline-start: var(--space-2); font-weight: 400; }
 .workspace-steps { list-style: none; margin-top: var(--space-2); }
-.workspace-steps a { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: start; gap: var(--space-2); padding: var(--space-2); min-height: 44px; border-radius: var(--radius-control); color: var(--color-text); line-height: 1.35; text-decoration: none; }
+.workspace-steps a { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: var(--space-2); padding: var(--space-2); min-height: 44px; border-radius: var(--radius-control); color: var(--color-text); line-height: 1.35; text-decoration: none; }
 .workspace-steps a:hover { background: var(--color-surface-alt); }
 .workspace-steps a[aria-current] { background: var(--color-surface-alt); box-shadow: inset 3px 0 var(--color-primary); font-weight: 600; }
-.workspace-steps small { display: block; font-weight: 400; }
-.step-index { color: var(--color-primary); width: 1.5em; text-align: center; }
+.step-index { color: var(--color-primary); width: 1.5em; display: grid; place-items: center; }
+.step-dot { width: 10px; height: 10px; border: 2px solid var(--color-control-border); border-radius: 50%; }
+.workspace-steps [aria-current] .step-dot { background: var(--color-primary); border-color: var(--color-primary); }
 .step-index .ui-icon { width: 18px; height: 18px; }
 .workspace-steps [data-prepared] .step-index { color: var(--color-success); }
 .form-companion { margin-top: var(--space-4); padding-top: var(--space-3); border-top: 1px solid var(--color-border); }
@@ -120,6 +121,7 @@ p, li, dd, .record-title { overflow-wrap: anywhere; }
 .aid-tools, .aid-step-help { border-top: 1px solid var(--color-border); }
 .aid-tools summary, .aid-step-help summary, .aid-term summary { font-weight: 600; }
 .aid-step-help a + a { margin-inline-start: var(--space-3); }
+.aid-step-help p { margin: 0; }
 .aid-review-list { padding-inline-start: var(--space-6); }
 .aid-review-list li { padding-block: var(--space-2); border-top: 1px solid var(--color-border); }
 .aid-review-list a { display: inline-flex; align-items: center; min-height: 44px; }

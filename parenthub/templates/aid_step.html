@@ -4,8 +4,7 @@
 {% set forward = aid_link('review') if is_last else aid_link('step', step=guidance.steps[step_index + 1][0]) %}
 {% set tools = {'#official-aid': 'process', '#term-income': 'glossary', '#translations': 'translations', '#currency': 'currency'} %}
 <section class="panel aid-focus" id="step-{{ key }}" aria-labelledby="step-title">
-  <p class="caption">Step {{ step_index + 1 }} of {{ guidance.steps|length }} &middot; {{ 'Parent helps prepare' if role == 'parent' else 'Applicant leads' }}</p>
-  <h2 id="step-title" class="section-header">{{ heading }}</h2>
+  <h1 id="step-title" class="view-heading">{{ heading }}</h1>
   <p>{{ detail }}</p>
   <div class="actions">
   {% if item and not item[1] %}
@@ -13,11 +12,11 @@
       {{ progress_form.hidden_tag() }}
       <input type="hidden" name="completed" value="y">
       <input type="hidden" name="advance" value="1">
-      <button type="submit">{{ 'Mark prepared and review' if is_last else 'Mark prepared and continue' }}</button>
+      <button type="submit">{{ 'Save and review' if is_last else 'Save and next' }}</button>
     </form>
-    <a href="{{ forward }}">Continue without marking</a>
+    <a href="{{ forward }}">Skip for now</a>
   {% else %}
-    <a class="button" href="{{ forward }}">{{ 'Review checklist' if is_last else 'Continue' }}</a>
+    <a class="button" href="{{ forward }}">{{ 'Review' if is_last else 'Next' }}</a>
     {% if item %}
     <form method="post" action="{{ url_for('tracking.update_progress', item_id=item[0], applicant=applicant.id if applicant else none) }}">
       {{ progress_form.hidden_tag() }}
@@ -27,7 +26,8 @@
   {% endif %}
   </div>
   <details class="aid-step-help">
-    <summary>Help with this step</summary>
+    <summary>Help</summary>
+    <p class="caption">{{ 'Parent helps prepare' if role == 'parent' else 'Applicant leads' }}</p>
     {% if href in tools %}
     <a href="{{ aid_link(tools[href], return_step=key, term='income' if href == '#term-income' else none) }}">{{ label }}</a>
     {% else %}
@@ -37,9 +37,5 @@
   </details>
 </section>
 <nav class="aid-secondary" aria-label="Preparation steps">
-  <a href="{{ aid_link('step', step=guidance.steps[step_index - 1][0]) if step_index else aid_link('overview') }}">Previous</a>
-  <a href="{{ aid_link('review') }}">View checklist</a>
+  <a href="{{ aid_link('step', step=guidance.steps[step_index - 1][0]) if step_index else aid_link('overview') }}">Back</a>
 </nav>
-{% if not item and not current_user.is_authenticated %}
-<p class="caption"><a href="{{ url_for('auth.login') }}">Log in</a> to save your checklist.</p>
-{% endif %}

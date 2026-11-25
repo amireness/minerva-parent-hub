@@ -66,6 +66,10 @@ desktop sidebar and a native mobile disclosure. Contextual tools keep
 the parent step selected. Keep the direct review, document, and tool
 links. Use URLs for these views so browser history also works. Reuse the
 existing private checklist.
+Use short step names, a selected-row indicator, and checkmarks. Keep one
+task heading and one saved progress count in the workspace. Explain guest
+persistence at entry and review. Keep the task's substantive guidance and
+put the responsibility label with contextual help.
 Distinguish public requirements from fictional learning examples. Currency
 inputs and student visibility previews stay in the browser.
 

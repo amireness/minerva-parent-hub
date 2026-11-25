@@ -6,9 +6,10 @@ from parenthub.models import SyntheticApplicantRound
 
 
 def test_unconfirmed_deadlines_have_source_and_no_calendar(client):
-    for path in ('/', '/deadlines'):
+    for path, notice in (('/', 'No upcoming deadline with a verified cutoff.'),
+                         ('/deadlines', 'Official tables omit calendar years.')):
         page = client.get(path).text
-        assert 'No upcoming deadline with a verified cutoff.' in page
+        assert notice in page
         assert 'https://www.minerva.edu/undergraduate/admissions/' in page
         assert 'Add to Calendar' not in page
     assert client.get('/deadlines/unconfirmed.ics').status_code == 404

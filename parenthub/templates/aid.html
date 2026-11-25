@@ -4,12 +4,14 @@
   'glossary': 'Financial aid glossary', 'translations': 'Translation examples', 'currency': 'Practice currency conversion'} %}
 {% set title = titles[view] %}
 {% block page_heading %}
+{% if view != 'step' %}
 <div class="page-heading aid-page-heading">
   {% if view != 'overview' %}
   <a class="aid-back" href="{{ aid_link('step', step=return_step) if return_step else aid_link('overview') }}">{{ 'Back to preparation step' if return_step else 'Financial Aid home' }}</a>
   {% endif %}
   <h1 class="view-heading">{{ title }}</h1>
 </div>
+{% endif %}
 {% endblock %}
 {% block content %}
 {% set has_workspace = view == 'step' or return_step %}
@@ -25,9 +27,11 @@
   {% if view == 'overview' %}
   <section class="panel aid-focus" aria-labelledby="aid-start" data-aid-overview>
     <h2 class="section-header" id="aid-start">Prepare your first financial aid application</h2>
-    <p>See what to do, one step at a time.</p>
     {% if completed_count and next_step %}<p class="caption">Next: {{ next_step[1] }}</p>{% endif %}
     <a class="button" href="{{ aid_link('step') if next_step else aid_link('review') }}">{{ 'Review preparation' if not next_step else ('Continue preparation' if completed_count else 'Start preparation') }}</a>
+    {% if not current_user.is_authenticated %}
+    <p class="caption"><a href="{{ url_for('auth.login') }}">Log in to save progress</a></p>
+    {% endif %}
   </section>
   <nav class="aid-secondary" aria-label="Financial aid shortcuts">
     <a href="{{ aid_link('review') }}">Checklist</a>
@@ -40,7 +44,7 @@
     {% if step_records %}
     <label for="prep-progress">{{ completed_count }} of {{ guidance.steps|length }} prepared</label>
     <progress id="prep-progress" value="{{ completed_count }}" max="{{ guidance.steps|length }}"></progress>
-    <p class="caption">Checkmarks are private planning notes.</p>
+    <p class="caption">Private checklist. Submit through Minerva.</p>
     {% elif not current_user.is_authenticated %}
     <p><a href="{{ url_for('auth.login') }}">Log in to save your checklist</a></p>
     {% elif not current_user.student %}

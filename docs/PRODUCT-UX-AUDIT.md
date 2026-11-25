@@ -49,3 +49,33 @@ contain matching mobile and desktop filenames for Home, parent Home,
 Admissions, the aid task, the checklist and tools, documents and the
 chooser, Deadlines, Help, login and registration, invitations, and the
 student view. Captures use disposable test data and are ignored by Git.
+
+## Follow-up: interface friction
+
+The Chromium baseline in `build/qa/flask-1795633867540/` showed two
+headings for each Financial Aid task, multiple step counts, a written
+state beside each visual state, and a checklist shortcut alongside
+ongoing navigation. Planning also repeated its progress count.
+
+- Financial Aid uses one task heading and short step names. A ring,
+  selected state, and checkmark show what remains, where the user is,
+  and what is prepared. Screen readers retain position and saved status.
+- Guests move through the steps with Next and Back. The save-progress
+  prompt appears on Financial Aid Home and review. Signed-in parents
+  see a single progress count and confirmation after saving, and can
+  skip or mark a step incomplete. Step-specific tools and role guidance
+  remain available under Help.
+- Home and parent Home rely on their destination tiles and next action.
+  Planning, Help, Admissions, Deadlines, sign-in, invitations, and demo
+  documents use shorter labels or consolidate repeated explanations.
+
+The updated captures are in `build/qa/flask-1795634272163/`. In both
+directories, compare `aid-step-light-375.png` and
+`aid-step-dark-1280.png` at the same saved step. All 94 pytest tests
+passed. Chromium exercised every step as a guest at both widths,
+saved all seven steps on mobile, followed them again on desktop, and
+verified persistence after signing back in. The visual sweep covered
+28 page states in both themes at ten widths.
+
+In the next observed session, check whether guests notice that progress
+is temporary and whether mobile parents discover the Steps control.

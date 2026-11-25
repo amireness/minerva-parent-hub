@@ -2,7 +2,7 @@
 {% block content %}
 <div class="form-layout">
 <section class="panel" aria-label="Accept an invitation">
-  <p>Enter the code issued to <strong>{{ current_user.email }}</strong> to link your demo applicant.</p>
+  <p>Link your demo applicant with the code issued to <strong>{{ current_user.email }}</strong>.</p>
   {% include 'invitation_form.html' %}
   <p class="form-companion"><a href="{{ url_for('main.help_center') }}">Get help</a></p>
 </section>

@@ -26,7 +26,7 @@ def test_account_preserves_invitation_flow(app, parent):
     response = parent.get('/dashboard')
     assert 'Application submitted' in response.text
     assert re.search(r'aria-current="step">\s*<strong>Application started</strong>', response.text)
-    assert 'What you can do now' in response.text and 'Review financial aid documents' in response.text
+    assert 'id="next-action"' in response.text and 'Review financial aid documents' in response.text
     progress = parent.get('/application-progress')
     assert '<strong>Application started</strong>' in progress.text
     assert '<strong>Application submitted</strong>' in progress.text

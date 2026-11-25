@@ -11,9 +11,8 @@
 {% block content %}
 <div class="dashboard-grid">
   <section class="panel next-panel" aria-labelledby="suggestion-heading">
-    <h2 id="suggestion-heading" class="section-header">Suggested next action</h2>
+    <h2 id="suggestion-heading" class="section-header">Next</h2>
     {% if not current_user.age_group %}
-    <p>Choose your child's age group to see the relevant parent guidance.</p>
     <a href="#family-context" class="text-link">Set your family context <span aria-hidden="true">→</span>
     </a>
     {% elif next_item %}
@@ -28,8 +27,6 @@
   </section>
   <section class="panel progress-panel" aria-labelledby="progress-heading">
     <h2 id="progress-heading" class="section-header">Your checklist</h2>
-    <p class="progress-number">{{ completed }} <span>of {{ total }}</span>
-    </p>
     <label class="caption" for="checklist-progress">{{ completed }} of {{ total }} planning items marked complete.</label>
     <progress id="checklist-progress" value="{{ completed }}" max="{{ total or 1 }}">{{ completed }} of {{ total }}</progress>
     <a class="button button-secondary" href="{{ url_for('tracking.checklist') }}">Update checklist</a>
@@ -37,7 +34,7 @@
   </section>
   <section class="panel reminders-panel" aria-labelledby="next-heading">
     <div class="section-heading">
-      <h2 id="next-heading" class="section-header">Upcoming saved reminders</h2>
+      <h2 id="next-heading" class="section-header">Reminders</h2>
       <a href="{{ url_for('tracking.reminders') }}">View all</a>
     </div>
     {% for reminder in reminders %}
@@ -64,7 +61,7 @@
   </section>
   <section class="panel questions-panel" aria-labelledby="questions-heading">
     <div class="section-heading">
-      <h2 id="questions-heading" class="section-header">Questions on your mind</h2>
+      <h2 id="questions-heading" class="section-header">Questions</h2>
       <a href="{{ url_for('tracking.questions') }}">View all</a>
     </div>
     {% for question in questions %}
@@ -93,7 +90,7 @@
     {% include 'age_guidance.html' %}
   </section>
   <section class="panel" aria-labelledby="official-heading">
-    <h2 id="official-heading" class="section-header">Official resources for your next step</h2>
+    <h2 id="official-heading" class="section-header">Official resources</h2>
     {% for resource in featured %}
     <article class="resource-preview">
       <a class="record-title" href="{{ resource.url }}" target="_blank" rel="noopener noreferrer">{{ resource.title }} <span aria-hidden="true">↗</span>

@@ -24,7 +24,7 @@
       </div>
     </form>
     {% if title == 'Log in' %}
-    <p class="form-companion">New here? <a href="{{ url_for('auth.register') }}">Create an account</a></p>
+    <p class="form-companion"><a href="{{ url_for('auth.register') }}">Create an account</a></p>
     {% elif title == 'Register' %}
     <p class="form-companion">Already registered? <a href="{{ url_for('auth.login') }}">Log in</a></p>
     {% endif %}

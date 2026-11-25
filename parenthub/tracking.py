@@ -49,7 +49,7 @@ def update_progress(item_id):
         db.session.add(progress)
     progress.completed = form.completed.data
     db.session.commit()
-    flash('Checklist updated.')
+    flash('Saved.' if aid_step else 'Checklist updated.')
     if aid_step:
         key = item.slug.removeprefix(STEP_PREFIX)
         keys = [step[0] for step in GUIDANCE['steps']]

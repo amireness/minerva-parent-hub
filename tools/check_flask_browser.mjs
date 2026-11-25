@@ -113,7 +113,7 @@ try {
           assert.ok(await evaluate(`new Set([...document.querySelectorAll('.primary-nav > a')].map(link => link.offsetTop)).size === 1`), 'Parent navigation stays on one row at 375px');
         }
         if (page === '/dashboard' && width === 375 && name !== 'invitation-required') {
-          assert.ok(await evaluate(`document.querySelector('#next-action + a').getBoundingClientRect().bottom <= innerHeight`), 'Home action is visible at 375px');
+          assert.ok(await evaluate(`document.querySelector('#next-action').getBoundingClientRect().bottom <= innerHeight`), 'Home action is visible at 375px');
         }
         if (width === 375 || width === 1280) {
           const png = await cdp('Page.captureScreenshot', { format: 'png' });
@@ -134,6 +134,23 @@ try {
   assert.ok(await evaluate(`document.activeElement.classList.contains('skip-link')`), 'Skip link is first keyboard stop');
   await key('Enter', 13);
   assert.ok(await evaluate(`document.activeElement.id === 'main-content'`), 'Skip link reaches main');
+  const aidSteps = ['start', 'forms', 'dates', 'records', 'translations', 'review', 'submission'];
+  const followAidSteps = async (width, prepared) => {
+    await cdp('Emulation.setDeviceMetricsOverride', { width, height: 900, deviceScaleFactor: 1, mobile: false });
+    await navigate('/financial-aid?view=step&step=start');
+    for (const step of aidSteps) {
+      await waitFor(`document.querySelector('#step-${step}') && new URLSearchParams(location.search).get('step') === '${step}'`);
+      assert.equal(await evaluate(`document.querySelectorAll('main h1').length`), 1);
+      assert.equal(await evaluate(`document.body.innerText.includes('7 of 7 prepared')`), prepared);
+      assert.ok(await evaluate(`!document.querySelector('#step-${step} input[name="advance"]') && !document.body.innerText.includes('Log in to save')`));
+      assert.equal(await evaluate(`document.querySelectorAll('[data-prepared]').length`), prepared ? 14 : 0);
+      await evaluate(`document.querySelector('#step-${step} a.button').click()`);
+    }
+    await waitFor(`new URLSearchParams(location.search).get('view') === 'review' && document.readyState === 'complete'`);
+  };
+  await responsive('/financial-aid?view=step&step=start', 'aid-guest-step');
+  await followAidSteps(375, false);
+  await followAidSteps(1280, false);
   await navigate('/auth/register');
   const password = randomBytes(18).toString('hex');
   await submit({ email: 'browser@example.com', password, confirm: password }, '/auth/login');
@@ -177,7 +194,7 @@ try {
   await evaluate(`document.querySelector('.workspace-mobile summary').focus()`);
   await key('Enter', 13);
   await waitFor(`document.querySelector('.workspace-mobile').open`);
-  assert.ok(await evaluate(`document.querySelector('.workspace-mobile [aria-current="step"]').textContent.includes('Find household income')`));
+  assert.ok(await evaluate(`document.querySelector('.workspace-mobile [aria-current="step"]').textContent.includes('Documents')`));
   assert.ok(await evaluate(`document.querySelector('.workspace-mobile').innerText.includes('3 of 7 prepared')`));
   await evaluate(`document.querySelector('.workspace-mobile a[href*="step=dates"]').click()`);
   await waitFor(`document.readyState === 'complete' && document.querySelector('#step-dates')`);
@@ -202,6 +219,7 @@ try {
     await submit({}, '/financial-aid', `#step-${step} form`);
   }
   await waitFor(`document.body.innerText.includes('7 of 7 prepared')`);
+  await followAidSteps(1280, true);
   await navigate('/financial-aid?view=translations');
   assert.ok(await evaluate(`document.querySelector('#translations').innerText.includes('Illustrative English translation')`));
   await navigate('/financial-aid?view=currency');
@@ -305,7 +323,7 @@ try {
   await navigate('/student/preparation');
   assert.equal(await evaluate(`document.querySelectorAll('#student-visibility input:checked').length`), 0);
   await responsive('/student/preparation');
-  console.log(`PASS: browser register/login, invitations, application progress, demo documents, student sharing, guided checklist, glossary, translations, currency calculator, visibility preview, keyboard and offline flows; ${pages.length + 14} page states × 2 themes × 10 widths. Screenshots: ${out}`);
+  console.log(`PASS: browser register/login, invitations, application progress, demo documents, student sharing, guided checklist, glossary, translations, currency calculator, visibility preview, keyboard and offline flows; ${pages.length + 15} page states × 2 themes × 10 widths. Screenshots: ${out}`);
 } finally {
   socket?.close();
   chrome?.kill();

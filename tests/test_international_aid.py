@@ -16,6 +16,9 @@ def test_public_preparation_has_connected_guides_and_no_upload(client):
     assert 'step=translations' in step and 'step=dates' in step
     assert 'view=glossary' in step and 'return_step=records' in step
     assert 'step-submission' not in step and 'Mark prepared' not in step
+    assert 'aria-current="step"' in step and '>Documents</span>' in step
+    assert 'Save and next' not in step and 'Not prepared' not in step
+    assert 'to save your checklist' not in step and 'Log in to save progress' in page.text
     tool = client.get('/financial-aid?view=glossary&return_step=records&term=income').text
     assert 'Back to preparation step' in tool and 'step=records' in tool
     assert 'id="term-income"' in tool and ' open>' in tool
@@ -30,6 +33,9 @@ def test_guided_checklist_uses_existing_private_progress(app, parent):
     page = parent.get('/financial-aid?view=review').text
     assert 'step=forms">Continue preparation' in page
     assert '1 of 7 prepared' in page
+    step = parent.get('/financial-aid?view=step&step=forms').text
+    assert 'data-prepared' in step and 'class="sr-only">Prepared' in step
+    assert 'Save and next' in step
     assert '0 of 5' in parent.get('/planning').text
     assert '/checklist/' + str(item_id) not in parent.get('/checklist').text
     other = app.test_client()

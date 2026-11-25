@@ -185,3 +185,11 @@ create missing tables and refresh public data in a SQLite transaction.
 Added fresh-start, concurrency, preservation, and failed-seed tests.
 Left: local verification only. Render disk settings remain unconfirmed.
 Default Render SQLite storage is ephemeral.
+
+**2026-11-25: Financial Aid UX.** Found: Chromium showed the document
+manager and three equal navigation choices at entry, with the first
+checklist action below the initial mobile view. Done: placed one
+Start or Continue action on Financial Aid Home, added URL-based steps
+and review, and made each existing tool open and return independently.
+Left: 94 pytest cases passed and Chromium completed all seven steps.
+Parent and applicant usability observation remains open.
