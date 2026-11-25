@@ -159,6 +159,30 @@ try {
   await waitFor(`document.body.innerText.includes('1 of 4 documents added') && document.body.innerText.includes('Tax-record-example-1.pdf')`);
   await submit({}, '/financial-aid', '#income-tax form[action$="/share"]');
   await waitFor(`document.querySelector('#income-tax').innerText.includes('Shared with student')`);
+  await submit({ completed: true }, '/financial-aid', '#step-start form');
+  await waitFor(`document.querySelector('#completed-start').checked && document.querySelector('a[href="#step-forms"]')`);
+  await evaluate(`document.querySelector('#step-records a').click()`);
+  await waitFor(`document.querySelector('#glossary').open`);
+  await evaluate(`(() => { const input = document.querySelector('#term-search'); input.value = 'current account'; input.dispatchEvent(new Event('input')); })()`);
+  assert.equal(await evaluate(`document.querySelectorAll('.aid-term:not([hidden])').length`), 1);
+  await evaluate(`document.querySelector('#translations summary').click()`);
+  assert.ok(await evaluate(`document.querySelector('#translations').innerText.includes('Illustrative English translation')`));
+  await evaluate(`document.querySelector('#currency summary').click()`);
+  await evaluate(`document.querySelector('#demo-amount').value = '90'; document.querySelector('#demo-convert').click()`);
+  assert.ok(await evaluate(`document.querySelector('#demo-result').textContent.includes('100.00 USD')`));
+  await evaluate(`document.querySelector('#demo-amount').value = '-1'; document.querySelector('#demo-convert').click()`);
+  assert.equal(await evaluate(`document.querySelector('#demo-amount').getAttribute('aria-invalid')`), 'true');
+  await evaluate(`document.querySelector('#demo-amount').value = '90'; document.querySelector('#demo-convert').click()`);
+  for (const [width, scheme] of [[375, 'light'], [1280, 'dark']]) {
+    await cdp('Emulation.setDeviceMetricsOverride', { width, height: 900, deviceScaleFactor: 1, mobile: false });
+    await cdp('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-color-scheme', value: scheme }] });
+    for (const section of ['aid-checklist', 'glossary', 'translations', 'currency']) {
+      await evaluate(`document.getElementById(${JSON.stringify(section)}).scrollIntoView()`);
+      assert.ok(await evaluate(`document.querySelector('main').scrollWidth <= document.querySelector('main').clientWidth`));
+      const png = await cdp('Page.captureScreenshot', { format: 'png' });
+      fs.writeFileSync(path.join(out, `${section}-${scheme}-${width}.png`), Buffer.from(png.data, 'base64'));
+    }
+  }
   await navigate('/account');
   assert.ok(await evaluate(`document.querySelector('input[name="code"]') !== null`));
   await navigate('/planning');
@@ -244,8 +268,12 @@ try {
   await navigate('/auth/login');
   await submit({ email: 'student@example.com', password: studentPassword }, '/student/preparation');
   assert.ok(await evaluate(`document.body.innerText.includes('Income and tax records') && document.body.innerText.includes('Example document added') && !document.body.innerText.includes('Bank statements')`));
+  await evaluate(`document.querySelector('#student-visibility summary').click(); document.querySelector('#student-visibility input').click()`);
+  assert.ok(await evaluate(`document.querySelector('#student-visibility output').textContent.includes('application milestones')`));
+  await navigate('/student/preparation');
+  assert.equal(await evaluate(`document.querySelectorAll('#student-visibility input:checked').length`), 0);
   await responsive('/student/preparation');
-  console.log(`PASS: browser register/login, invitations, application progress, demo file chooser, automatic progress, student sharing, planning, keyboard and offline flows; ${pages.length + 6} page states × 2 themes × 10 widths. Screenshots: ${out}`);
+  console.log(`PASS: browser register/login, invitations, application progress, demo documents, student sharing, guided checklist, glossary, translations, currency calculator, visibility preview, keyboard and offline flows; ${pages.length + 6} page states × 2 themes × 10 widths. Screenshots: ${out}`);
 } finally {
   socket?.close();
   chrome?.kill();

@@ -76,7 +76,7 @@ def test_cli_seeding_idempotent_and_preserves_data(app):
     assert 'not changed' in duplicate.output
     with app.app_context():
         assert db.session.get(User, user_id).check_password(password)
-        for model, count in [(Resource, 6), (ChecklistItem, 5), (OfficialDeadline, 3), (User, 1),
+        for model, count in [(Resource, 6), (ChecklistItem, 12), (OfficialDeadline, 3), (User, 1),
                              (Reminder, 1), (ParentQuestion, 1), (UserChecklistProgress, 1)]:
             assert db.session.scalar(db.select(db.func.count()).select_from(model)) == count
 

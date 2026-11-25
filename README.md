@@ -79,6 +79,12 @@ Guidance and resources are public. Planning remains available after login.
 
 ## Try financial aid preparation and sharing
 
+Financial Aid also includes first-time guidance, a searchable glossary,
+fictional translation examples, and a browser-only calculator. Run
+`seed-content` after updating an existing database to enable saving the
+new steps. It preserves admissions checklist marks. See the [international
+aid research and interview questions](docs/INTERNATIONAL-AID-RESEARCH.md).
+
 Run `init-db` again if you already have a local database. It creates the
 document-link table while preserving previous preparation records.
 With the fictional application number from `seed-invitations`, create a

@@ -6,6 +6,7 @@ from flask import Blueprint, abort, flash, redirect, render_template, url_for
 from flask_login import current_user, login_required
 from flask_wtf import FlaskForm
 
+from .aid_guidance import STEP_PREFIX
 from .extensions import db
 from .forms import ProgressForm, QuestionForm, ReminderForm
 from .models import ChecklistItem, ParentQuestion, Reminder, UserChecklistProgress
@@ -21,7 +22,8 @@ def owned_record(model, record_id):
 @bp.get('/checklist')
 @login_required
 def checklist():
-    items = db.session.scalars(db.select(ChecklistItem).order_by(ChecklistItem.position)).all()
+    items = db.session.scalars(db.select(ChecklistItem).where(~ChecklistItem.slug.startswith(STEP_PREFIX))
+                               .order_by(ChecklistItem.position)).all()
     completed = set(db.session.scalars(db.select(UserChecklistProgress.item_id).where(
         UserChecklistProgress.user_id == current_user.id, UserChecklistProgress.completed.is_(True)
     )).all())
@@ -32,7 +34,10 @@ def checklist():
 @bp.post('/checklist/<int:item_id>')
 @login_required
 def update_progress(item_id):
-    db.get_or_404(ChecklistItem, item_id)
+    item = db.get_or_404(ChecklistItem, item_id)
+    aid_step = item.slug.startswith(STEP_PREFIX)
+    if aid_step and current_user.student:
+        abort(404)
     form = ProgressForm()
     if not form.validate_on_submit():
         abort(400)
@@ -45,6 +50,8 @@ def update_progress(item_id):
     progress.completed = form.completed.data
     db.session.commit()
     flash('Checklist updated.')
+    if aid_step:
+        return redirect(url_for('main.financial_aid', _anchor='step-' + item.slug.removeprefix(STEP_PREFIX)))
     return redirect(url_for('tracking.checklist'))
 
 

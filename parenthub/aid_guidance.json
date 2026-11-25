@@ -1,0 +1,134 @@
+{
+  "steps": [
+    [
+      "start",
+      "Decide whether to apply for aid",
+      "applicant",
+      "Start with Minerva's undergraduate aid instructions while applying for admission.",
+      "#official-aid",
+      "Official aid steps"
+    ],
+    [
+      "forms",
+      "Identify the two aid forms",
+      "applicant",
+      "Use College Board for CSS Profile and Minerva for its Financial Aid Questionnaire.",
+      "#official-aid",
+      "Where the forms go"
+    ],
+    [
+      "dates",
+      "Check your financial aid deadline",
+      "applicant",
+      "Confirm the intake, round, year, and cutoff with Minerva before planning.",
+      "/deadlines",
+      "Published dates by round"
+    ],
+    [
+      "records",
+      "Find household income and bank records",
+      "parent",
+      "Check the person, period, and currency. Ask Minerva about missing records or local alternatives.",
+      "#term-income",
+      "Understand income terms"
+    ],
+    [
+      "translations",
+      "Prepare English explanations if needed",
+      "parent",
+      "Keep the original and ask which translation format Minerva accepts.",
+      "#translations",
+      "See fictional translation samples"
+    ],
+    [
+      "review",
+      "Review names, periods, and amounts",
+      "parent",
+      "Keep reported amounts separate from conversions and double-check who each amount belongs to.",
+      "#currency",
+      "Try the example calculator"
+    ],
+    [
+      "submission",
+      "Review outstanding requests before submitting",
+      "applicant",
+      "Check the places Minerva tells you to submit. Ask Financial Aid who can submit and view parent records.",
+      "/help",
+      "Contact Financial Aid"
+    ]
+  ],
+  "terms": [
+    [
+      "income",
+      "Gross and net income",
+      "Gross pay is pay before deductions. Net pay is what remains after deductions.",
+      "2,000 gross minus 350 in deductions leaves 1,650 net.",
+      "A form may ask for income before deductions rather than the bank deposit.",
+      "gross salary net salary take home pay remuneration"
+    ],
+    [
+      "deductions",
+      "Taxes and mandatory deductions",
+      "Income tax is a tax on earnings. Payroll deductions can also include required insurance or social contributions.",
+      "A payslip lists 200 in withheld tax and 100 in social insurance.",
+      "Record each line separately and distinguish withholding from a final tax bill.",
+      "tax withholding paye mandatory payroll deduction social insurance"
+    ],
+    [
+      "pension",
+      "Pension contributions and pension income",
+      "A contribution pays into a retirement plan. Pension income is a payment received from a plan.",
+      "A worker contributes 120. A retired person receives a pension payment of 900.",
+      "A contribution and a payment received describe different flows of money.",
+      "retirement cpp qpp pension"
+    ],
+    [
+      "accounts",
+      "Savings and checking accounts",
+      "Checking accounts commonly support everyday payments. Savings accounts commonly hold money set aside.",
+      "A salary arrives in an everyday account. Emergency funds are kept in savings.",
+      "Check the account holder, reporting period, currency, and balance listed on the statement.",
+      "bank current account deposit balance savings checking"
+    ],
+    [
+      "debt",
+      "Loans, debt, and installment payments",
+      "A loan is borrowed money. Debt is what is owed. Installments are scheduled payments.",
+      "A loan has a 3,000 balance and a 150 monthly payment.",
+      "An outstanding balance and a monthly expense answer different questions.",
+      "borrow liability debt repayment monthly installment"
+    ],
+    [
+      "assets",
+      "Assets and liabilities",
+      "An asset is something of value you own. A liability is a financial obligation you owe.",
+      "A property may be an asset and its mortgage a liability.",
+      "Keep ownership value and outstanding debt separate unless a form tells you how to combine them.",
+      "assets liabilities equity property mortgage investments"
+    ],
+    [
+      "benefits",
+      "Government benefits and allowances",
+      "Benefits can be payments from a public program. An allowance can mean a payment or a tax-related amount, depending on the label.",
+      "A child benefit paid monthly differs from a tax-free allowance.",
+      "Keep the original label and confirm how the form treats the specific program.",
+      "government benefit allowance child subsidy public program"
+    ],
+    [
+      "aid-types",
+      "Scholarships, grants, and student loans",
+      "Scholarships and grants generally do not require repayment if their conditions are met. Loans generally must be repaid.",
+      "An award lists a 1,000 grant and a separate 1,000 loan.",
+      "Check which part of an offer is funding you would repay.",
+      "scholarship grant bursary student loan award"
+    ],
+    [
+      "ownership",
+      "Parent income and student income",
+      "Separate income by the person who earned or received it.",
+      "A student's summer wages and a parent's salary belong in different records.",
+      "Check which person and time period the question asks about before combining anything.",
+      "parent student earnings wages income ownership"
+    ]
+  ]
+}

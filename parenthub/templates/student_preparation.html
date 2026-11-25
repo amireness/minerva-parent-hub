@@ -9,5 +9,17 @@
   {% else %}
   <p>Your parent has yet to share any documents.</p>
   {% endfor %}
+  <details id="student-visibility" class="guide-section">
+    <summary>Preview parent visibility</summary>
+    <p>Visual mockup for a fictional invitation. Changes are temporary and do not affect who can see your account or any shared documents.</p>
+    <p>Public admissions guides would remain available. Private application answers, credentials, and financial records are outside this preview.</p>
+    <fieldset class="visibility-options">
+      <legend>What an invited parent could see</legend>
+      <label class="checkbox-label"><input type="checkbox" value="application milestones"> Application milestones</label>
+      <label class="checkbox-label"><input type="checkbox" value="financial aid preparation categories"> Financial aid preparation categories</label>
+    </fieldset>
+    <output role="status">Example parent view: public guides only.</output>
+  </details>
 </div>
+<script src="{{ url_for('static', filename='aid-guidance.js') }}" defer></script>
 {% endblock %}

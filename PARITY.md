@@ -21,6 +21,7 @@ remains open. Decision 056 governs this expansion beyond the static guide.
 | Accept parent invitations and view synthetic applicant milestones | Local Flask | Out of scope | Out of scope | Out of scope | Out of scope | Flask-only iteration; tests/test_invitations.py |
 | Read synthetic application timeline and aid preparation modules | Local Flask | Out of scope | Out of scope | Out of scope | Out of scope | Web redesign only; tests/test_parent_overview.py |
 | Link fictional aid files and share their presence with a demo student | Local Flask | Out of scope | Out of scope | Out of scope | Out of scope | Derived progress; local synthetic account and active invitation required |
+| Prepare a first-time aid application with glossary, examples, and checklist | Local Flask | Out of scope | Out of scope | Out of scope | Out of scope | Public guidance, private checklist marks, browser-only currency practice |
 | Find Help, view deadline sources, and download verified calendar events | Local Flask | Out of scope | Out of scope | Out of scope | Out of scope | Calendar export requires a verified future timestamp; tests/test_deadline_events.py |
 | Understand the product from the public homepage | Local Flask | Out of scope | Out of scope | Out of scope | Out of scope | Owner-requested web-only redesign; tests/test_workspace.py |
 | Save age group and view dashboard | Local Flask | Out of scope | Out of scope | Out of scope | Out of scope | tests/test_planning.py; docs/WEB-DESIGN.md |

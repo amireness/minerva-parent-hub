@@ -39,7 +39,7 @@
     {{ form.hidden_tag() }}
     <fieldset aria-describedby="sample-help">
       <legend>{{ 'Replace document' if row else 'Add document' }} &middot; Google Drive example</legend>
-      <p id="sample-help" class="caption">Choose a fictional file. These example links use drive.example.com.</p>
+      <p id="sample-help" class="caption">Choose a fictional file from drive.example.com. No file is uploaded or connected to Google Drive.</p>
       {% for option in form.sample %}
       <label class="aid-sample">{{ option }}<span>{{ option.label.text }}<small>https://drive.example.com/{{ module.key }}/{{ option.data }}</small></span></label>
       {% endfor %}

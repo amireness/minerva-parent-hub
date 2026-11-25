@@ -58,6 +58,11 @@ Sharing a document's presence is an explicit Parent Hub action. Replacing
 or removing a file clears the share. Category examples come from
 returning-student guidance. First-year details await the specialist interview.
 
+Financial Aid links to one first-time preparation area with collapsible
+learning tools and a guided slice of the existing private checklist.
+Distinguish public requirements from fictional learning examples. Currency
+inputs and student visibility previews stay in the browser.
+
 ## States and privacy
 
 Browser navigation supplies loading feedback. Empty lists have a creation

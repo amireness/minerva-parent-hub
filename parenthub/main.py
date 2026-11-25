@@ -7,9 +7,10 @@ from flask_login import current_user, login_required
 from sqlalchemy import or_
 from sqlalchemy.dialects.sqlite import insert
 
+from .aid_guidance import GUIDANCE, STEP_PREFIX
 from .deadline_events import ADMISSIONS_URL, calendar_bytes, homepage_deadline, upcoming_events
 from .extensions import db
-from .forms import AgeForm, AidDocumentForm, InvitationForm
+from .forms import AgeForm, AidDocumentForm, InvitationForm, ProgressForm
 from .models import (
     AidDocument, ChecklistItem, OfficialDeadline, ParentInvitation, ParentQuestion, Reminder,
     Resource, SyntheticApplicant, SyntheticApplicantRound, User, UserChecklistProgress,
@@ -99,6 +100,19 @@ def financial_aid():
 
 def render_financial_aid(applicants, applicant, failed_category=None, form=None):
     saved = {}
+    step_records = {}
+    if current_user.is_authenticated and not current_user.student:
+        step_records = {
+            slug: (item_id, bool(done))
+            for slug, item_id, done in db.session.execute(
+                db.select(ChecklistItem.slug, ChecklistItem.id, UserChecklistProgress.completed)
+                .outerjoin(UserChecklistProgress, (UserChecklistProgress.item_id == ChecklistItem.id)
+                           & (UserChecklistProgress.user_id == current_user.id))
+                .where(ChecklistItem.slug.startswith(STEP_PREFIX))
+            )
+        }
+    next_step = next((step for step in GUIDANCE['steps']
+                      if not step_records.get(STEP_PREFIX + step[0], (None, False))[1]), None)
     focused_category = failed_category or request.args.get('category')
     if applicant:
         saved = {row.category: row for row in db.session.scalars(db.select(AidDocument).where(
@@ -110,7 +124,9 @@ def render_financial_aid(applicants, applicant, failed_category=None, form=None)
             form.sample.choices = [(sample, sample_filename(focused_category, sample)) for sample in (1, 2)]
     return render_template('aid.html', title='Financial Aid', examples=AID_EXAMPLES,
                            applicants=applicants, applicant=applicant, form=form, saved=saved,
-                           focused_category=focused_category, sample_filename=sample_filename)
+                           focused_category=focused_category, sample_filename=sample_filename,
+                           guidance=GUIDANCE, step_records=step_records, step_prefix=STEP_PREFIX,
+                           next_step=next_step, progress_form=ProgressForm())
 
 
 @bp.get('/aid-preparation')
@@ -270,15 +286,18 @@ def planning():
     reminders = db.session.scalars(db.select(Reminder).where(
         Reminder.user_id == current_user.id, Reminder.completed.is_(False)
     ).order_by(Reminder.due_date, Reminder.id).limit(5)).all()
-    total = db.session.scalar(db.select(db.func.count()).select_from(ChecklistItem))
-    completed = db.session.scalar(db.select(db.func.count()).select_from(UserChecklistProgress).where(
-        UserChecklistProgress.user_id == current_user.id, UserChecklistProgress.completed.is_(True)
+    admissions_item = ~ChecklistItem.slug.startswith(STEP_PREFIX)
+    total = db.session.scalar(db.select(db.func.count()).select_from(ChecklistItem).where(admissions_item))
+    completed = db.session.scalar(db.select(db.func.count()).select_from(UserChecklistProgress)
+                                  .join(ChecklistItem).where(
+        UserChecklistProgress.user_id == current_user.id, UserChecklistProgress.completed.is_(True),
+        admissions_item,
     ))
     completed_ids = db.select(UserChecklistProgress.item_id).where(
         UserChecklistProgress.user_id == current_user.id, UserChecklistProgress.completed.is_(True)
     )
     next_item = db.session.scalar(db.select(ChecklistItem).where(
-        ChecklistItem.responsibility == 'parent', ChecklistItem.id.not_in(completed_ids)
+        admissions_item, ChecklistItem.responsibility == 'parent', ChecklistItem.id.not_in(completed_ids)
     ).order_by(ChecklistItem.position).limit(1))
     questions = db.session.scalars(db.select(ParentQuestion).where(
         ParentQuestion.user_id == current_user.id, ParentQuestion.resolved.is_(False)

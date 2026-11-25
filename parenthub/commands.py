@@ -9,6 +9,7 @@ import click
 from email_validator import EmailNotValidError, validate_email
 from sqlalchemy.exc import IntegrityError
 
+from .aid_guidance import GUIDANCE, STEP_PREFIX
 from .extensions import db
 from .models import (
     ChecklistItem, OfficialDeadline, ParentInvitation, ParentQuestion, Reminder, Resource,
@@ -38,7 +39,11 @@ def seed_content():
         row.last_verified = date.fromisoformat(content['last_verified'])
         resources[row.slug] = row
     db.session.flush()
-    for position, values in enumerate(content['checklist']):
+    aid_items = [
+        dict(slug=STEP_PREFIX + key, title=title, responsibility=role, resource='aid')
+        for key, title, role, *_ in GUIDANCE['steps']
+    ]
+    for position, values in enumerate([*content['checklist'], *aid_items]):
         row = db.session.scalar(db.select(ChecklistItem).where(ChecklistItem.slug == values['slug']))
         if row is None:
             row = ChecklistItem(slug=values['slug'])

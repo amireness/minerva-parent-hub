@@ -126,6 +126,15 @@ It creates missing tables without altering existing columns, accounts, or
 invitations. Legacy preparation statuses do not become linked files or
 student shares. Existing milestone sequences remain readable.
 
+## First-time financial aid preparation
+
+First-time aid steps use the existing `checklist_item` and
+`user_checklist_progress` tables. Run `seed-content` to add the reviewed
+definitions by stable slug. Admissions progress queries exclude the
+first-aid prefix. The public glossary and translation samples are local
+content, and calculator inputs and the synthetic visibility preview stay
+in the browser. See [international aid research](INTERNATIONAL-AID-RESEARCH.md).
+
 ## Exact deadlines and calendar downloads
 
 The reviewed `exact_deadlines` catalog in `parenthub/content.json` is

@@ -186,14 +186,6 @@ the entry retire when circumstances change).
 <!-- Append-only. Format: state found → work done → state left.
      Keep entries short: one paragraph per session. -->
 
-**2026-11-18: Aid document list.** Found: document preparation relied on
-manual status and location fields. Done: replaced those forms with a
-fictional file chooser, automatic linked-file counts, local preview, and
-explicit sharing of category presence. Kept the old rows in SQLite.
-Left: 85 pytest cases passed. Chromium checked 18 page states, ten widths,
-and two themes. Reviewed Financial Aid at 375px and 1280px. Run init-db on
-existing local databases to create the new document table.
-
 **2026-11-18: Public and parent UI redesign.** Found: separate public
 marketing content and a working parent journey and document workflow.
 Done: shared destination tiles, deadline sources, native stage
@@ -202,3 +194,11 @@ export. Minerva published month/day round dates without exact cutoffs
 in the sources reviewed, so the exact catalog remains empty. Left:
 89 pytest cases passed and Chromium checked 19 page states across ten
 widths and both themes. Run init-db to add the optional round table.
+
+**2026-11-25: First-time international aid.** Found: public aid guidance,
+private checklist records, and fictional document linking. Done: added
+a glossary, translation samples, illustrative currency conversion, guided
+checklist steps, and a browser-only student visibility preview. Left:
+91 pytest cases passed and Chromium exercised the new tools at phone and
+desktop widths. Run seed-content to save the new steps on existing
+databases. Minerva translation and parent submission rules remain open.

@@ -149,3 +149,12 @@ cases passed. Chromium checked 17 page states, two themes, and ten widths,
 including 375px and 1280px. Screenshots confirmed the parent action is
 visible on Home at both sizes. Existing local databases need init-db.
 Official submission roles and privacy expectations await the interview.
+
+
+**2026-11-18: Aid document list.** Found: document preparation relied on
+manual status and location fields. Done: replaced those forms with a
+fictional file chooser, automatic linked-file counts, local preview, and
+explicit sharing of category presence. Kept the old rows in SQLite.
+Left: 85 pytest cases passed. Chromium checked 18 page states, ten widths,
+and two themes. Reviewed Financial Aid at 375px and 1280px. Run init-db on
+existing local databases to create the new document table.

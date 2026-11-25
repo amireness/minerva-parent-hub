@@ -1,5 +1,10 @@
 {% extends 'base.html' %}
 {% block content %}
+<nav class="section-nav aid-sections" aria-label="Financial aid sections">
+  <a href="#aid-checklist">Preparation checklist</a>
+  <a href="#aid-tools">International preparation tools</a>
+  <a href="#document-examples">Demo documents</a>
+</nav>
 <div class="aid-workspace">
   <section class="aid-documents" aria-labelledby="document-examples">
     <div class="aid-list-heading">
@@ -46,4 +51,5 @@
     {% endif %}
   </aside>
 </div>
+{% include 'aid_guidance.html' %}
 {% endblock %}
