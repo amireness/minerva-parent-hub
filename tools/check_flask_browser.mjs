@@ -141,7 +141,6 @@ try {
     for (const step of aidSteps) {
       await waitFor(`document.querySelector('#step-${step}') && new URLSearchParams(location.search).get('step') === '${step}'`);
       assert.equal(await evaluate(`document.querySelectorAll('main h1').length`), 1);
-      assert.equal(await evaluate(`document.body.innerText.includes('7 of 7 prepared')`), prepared);
       assert.ok(await evaluate(`!document.querySelector('#step-${step} input[name="advance"]') && !document.body.innerText.includes('Log in to save')`));
       assert.equal(await evaluate(`document.querySelectorAll('[data-prepared]').length`), prepared ? 14 : 0);
       await evaluate(`document.querySelector('#step-${step} a.button').click()`);
@@ -149,6 +148,29 @@ try {
     await waitFor(`new URLSearchParams(location.search).get('view') === 'review' && document.readyState === 'complete'`);
   };
   await responsive('/financial-aid?view=step&step=start', 'aid-guest-step');
+  const learningTopics = ['understand', 'process', 'role', 'forms', 'offer'];
+  for (const topic of learningTopics) {
+    await responsive('/financial-aid?view=learn&topic=' + topic, 'aid-learn-' + topic);
+  }
+  for (const width of [375, 1280]) {
+    await cdp('Emulation.setDeviceMetricsOverride', { width, height: 900, deviceScaleFactor: 1, mobile: false });
+    await navigate('/financial-aid?view=learn');
+    if (width === 375) {
+      await evaluate(`document.querySelector('.workspace-mobile > summary').focus()`);
+      await key('Enter', 13);
+      await waitFor(`document.querySelector('.workspace-mobile').open`);
+      await key('Enter', 13);
+      await waitFor(`!document.querySelector('.workspace-mobile').open`);
+      assert.ok(await evaluate(`document.querySelector('#learn-understand .button').getBoundingClientRect().bottom <= innerHeight`));
+    }
+    for (const topic of learningTopics) {
+      await waitFor(`document.querySelector('#learn-${topic}')`);
+      assert.equal(await evaluate(`document.querySelectorAll('main h1').length`), 1);
+      assert.ok(await evaluate(`document.querySelector('[aria-current="step"][href$="topic=${topic}"]')`));
+      await evaluate(`document.querySelector('#learn-${topic} .button').click()`);
+    }
+    await waitFor(`document.querySelector('#step-start')`);
+  }
   await followAidSteps(375, false);
   await followAidSteps(1280, false);
   await navigate('/auth/register');
@@ -182,8 +204,8 @@ try {
   await submit({}, '/financial-aid', '#income-tax form[action$="/share"]');
   await waitFor(`document.querySelector('#income-tax').innerText.includes('Shared with student')`);
   await responsive('/financial-aid', 'aid-start');
-  assert.ok(await evaluate(`document.querySelector('.aid-focus .button').innerText === 'Start preparation' && !document.querySelector('#demo-amount')`));
-  await evaluate(`document.querySelector('.aid-focus .button').click()`);
+  assert.ok(await evaluate(`document.querySelector('.aid-focus .button').innerText === 'Understand financial aid' && !document.querySelector('#demo-amount')`));
+  await evaluate(`document.querySelector('.aid-secondary a[href*="view=step"]').click()`);
   await waitFor(`document.readyState === 'complete' && document.querySelector('#step-start')`);
   await submit({}, '/financial-aid', '#step-start form');
   await waitFor(`document.querySelector('#step-forms')`);
@@ -195,7 +217,7 @@ try {
   await key('Enter', 13);
   await waitFor(`document.querySelector('.workspace-mobile').open`);
   assert.ok(await evaluate(`document.querySelector('.workspace-mobile [aria-current="step"]').textContent.includes('Documents')`));
-  assert.ok(await evaluate(`document.querySelector('.workspace-mobile').innerText.includes('3 of 7 prepared')`));
+  assert.equal(await evaluate(`document.querySelectorAll('.workspace-mobile [data-prepared]').length`), 3);
   await evaluate(`document.querySelector('.workspace-mobile a[href*="step=dates"]').click()`);
   await waitFor(`document.readyState === 'complete' && document.querySelector('#step-dates')`);
   await evaluate(`document.querySelector('#step-dates a.button').click()`);
@@ -323,7 +345,7 @@ try {
   await navigate('/student/preparation');
   assert.equal(await evaluate(`document.querySelectorAll('#student-visibility input:checked').length`), 0);
   await responsive('/student/preparation');
-  console.log(`PASS: browser register/login, invitations, application progress, demo documents, student sharing, guided checklist, glossary, translations, currency calculator, visibility preview, keyboard and offline flows; ${pages.length + 15} page states × 2 themes × 10 widths. Screenshots: ${out}`);
+  console.log(`PASS: browser registration, invitations, aid learning journey, guided checklist, contextual tools, demo document sharing, keyboard and offline flows; ${pages.length + 20} page states × 2 themes × 10 widths. Screenshots: ${out}`);
 } finally {
   socket?.close();
   chrome?.kill();

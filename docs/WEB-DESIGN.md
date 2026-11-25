@@ -60,14 +60,16 @@ Sharing a document's presence is an explicit Parent Hub action. Replacing
 or removing a file clears the share. Category examples come from
 returning-student guidance. First-year details await the specialist interview.
 
-Financial Aid starts with one link to begin or resume preparation. Keep
-the active step and its checklist in one workspace. The checklist is a
+Financial Aid starts with a plain-language learning journey. Its topics
+use Next and Back without changing saved preparation progress. A separate
+preparation link lets returning families resume their existing checklist.
+Keep the active step and its checklist in one workspace. The checklist is a
 desktop sidebar and a native mobile disclosure. Contextual tools keep
 the parent step selected. Keep the direct review, document, and tool
 links. Use URLs for these views so browser history also works. Reuse the
 existing private checklist.
-Use short step names, a selected-row indicator, and checkmarks. Keep one
-task heading and one saved progress count in the workspace. Explain guest
+Use short topic names, a green selected-row indicator, and preparation
+checkmarks. Keep one task heading. Show the saved count at review. Explain guest
 persistence at entry and review. Keep the task's substantive guidance and
 put the responsibility label with contextual help.
 Distinguish public requirements from fictional learning examples. Currency

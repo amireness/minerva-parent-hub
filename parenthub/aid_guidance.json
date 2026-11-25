@@ -1,10 +1,72 @@
 {
+  "topics": [
+    {
+      "key": "understand",
+      "label": "Understand",
+      "icon": "guide",
+      "heading": "What is financial aid?",
+      "summary": "Financial aid helps students and families pay for university.",
+      "points": [
+        ["What your family can pay", "Minerva looks at your family's financial situation to understand how much help you need. This is called financial need."],
+        ["Help with costs", "Students and families are expected to contribute. Aid may help with some of the costs."]
+      ],
+      "note": "Aid depends on available funding, so an offer is not guaranteed. Minerva may consider financial need in admissions."
+    },
+    {
+      "key": "process",
+      "label": "How it works",
+      "icon": "journey",
+      "heading": "How does Minerva decide?",
+      "points": [
+        ["Apply", "The student applies for aid. The family helps provide financial information."],
+        ["Review", "Minerva reviews the forms and supporting records. Tax returns are one part of the picture."],
+        ["Assess", "Minerva considers the family's finances, what the family can contribute, and the funding available."],
+        ["Receive a decision", "If the student qualifies, Minerva may offer a mix of support."]
+      ]
+    },
+    {
+      "key": "role",
+      "label": "Your role",
+      "icon": "help",
+      "heading": "What can parents do?",
+      "points": [
+        ["Parents and guardians", "Help gather employment and income records, tax returns or local equivalents, bank statements, and any other records Minerva requests."],
+        ["Student", "Complete the official application, check what Minerva requests, and submit it through the official services. The student keeps control of their private answers."]
+      ],
+      "note": "Keep real financial details and documents out of Parent Hub."
+    },
+    {
+      "key": "forms",
+      "label": "Forms",
+      "icon": "aid",
+      "heading": "Which forms does the student use?",
+      "points": [
+        ["Minerva admissions application", "Apply to study at Minerva. This is separate from applying for financial aid.", "https://www.minerva.edu/undergraduate/admissions/"],
+        ["College Board CSS Profile", "Complete this form about family finances on College Board to apply for aid. Minerva requires it for international applicants too.", "https://cssprofile.collegeboard.org/"],
+        ["Minerva Financial Aid Questionnaire", "After submitting the CSS Profile, use Minerva's Financial Aid Center to answer additional questions and submit the requested records.", "https://www.minerva.edu/financial-aid-center/"]
+      ],
+      "note": "The student submits through College Board and Minerva. Parent Hub is for planning."
+    },
+    {
+      "key": "offer",
+      "label": "Aid offer",
+      "icon": "mail",
+      "heading": "What might an aid offer include?",
+      "points": [
+        ["Scholarships or grants", "Support that generally does not have to be paid back. Minerva calls this type of need-based support a scholarship."],
+        ["Student loans", "Money the student borrows and must repay under the loan terms."],
+        ["Work-study", "An opportunity to earn money through work."]
+      ],
+      "note_heading": "Expected family contribution",
+      "note": "The amount Minerva expects the family to contribute toward educational costs. It is a cost for the family to plan for. The mix of aid varies with the family's circumstances and available funding."
+    }
+  ],
   "steps": [
     [
       "start",
-      "Decide whether to apply for aid",
+      "Read Minerva's aid instructions",
       "applicant",
-      "Start with Minerva's undergraduate aid instructions while applying for admission.",
+      "If your student needs aid to attend, they must apply during their admissions cycle, before receiving an admissions decision.",
       "#official-aid",
       "Official aid steps"
     ],
@@ -28,7 +90,7 @@
       "records",
       "Find household income and bank records",
       "parent",
-      "Check the person, period, and currency. Ask Minerva about missing records or local alternatives.",
+      "Minerva lists income records such as tax returns or local equivalents, and 12 months of parent or guardian bank statements. Have your student check the exact requests in their Financial Aid Center.",
       "#term-income",
       "Understand income terms"
     ],

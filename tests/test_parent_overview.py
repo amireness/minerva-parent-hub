@@ -62,7 +62,7 @@ def test_account_preserves_invitation_flow(app, parent):
 def test_aid_examples_are_scoped_and_read_only(parent):
     response = parent.get('/aid-preparation', follow_redirects=True)
     assert response.status_code == 200
-    assert 'Start preparation' in response.text
+    assert 'Understand financial aid' in response.text
     response = parent.get('/financial-aid?view=documents')
     assert response.text.count('<details class="aid-category-details"') == 4
     for text in ('returning-student guidance', 'Confirm first-year requirements',

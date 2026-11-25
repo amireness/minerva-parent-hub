@@ -7,7 +7,7 @@ from parenthub.models import ChecklistItem
 def test_public_preparation_has_connected_guides_and_no_upload(client):
     page = client.get('/financial-aid')
     assert page.status_code == 200
-    assert 'Start preparation' in page.text and 'type="file"' not in page.text
+    assert 'Understand financial aid' in page.text and 'type="file"' not in page.text
     assert 'Example amount' not in page.text and 'Fictional original excerpt' not in page.text
     for view, text in [('glossary', 'id="term-income"'), ('translations', 'Fictional original excerpt'),
                        ('currency', 'Illustrative rates authored'), ('process', 'Financial Aid Questionnaire')]:
@@ -22,6 +22,24 @@ def test_public_preparation_has_connected_guides_and_no_upload(client):
     tool = client.get('/financial-aid?view=glossary&return_step=records&term=income').text
     assert 'Back to preparation step' in tool and 'step=records' in tool
     assert 'id="term-income"' in tool and ' open>' in tool
+
+
+def test_learning_journey_explains_aid_before_preparation(parent):
+    topics = [
+        ('understand', 'Financial aid helps students', 'process'),
+        ('process', 'Tax returns are one part', 'role'),
+        ('role', 'The student keeps control', 'forms'),
+        ('forms', 'https://www.minerva.edu/financial-aid-center/', 'offer'),
+        ('offer', 'Expected family contribution', None),
+    ]
+    for key, content, following in topics:
+        page = parent.get('/financial-aid?view=learn&topic=' + key)
+        assert page.status_code == 200
+        assert content in page.text and 'Save and next' not in page.text
+        expected = f'topic={following}">Next' if following else 'view=step">Go to preparation'
+        assert expected in page.text
+    assert parent.get('/financial-aid?view=learn&topic=invalid').status_code == 404
+    assert '0 of 7 prepared' in parent.get('/financial-aid?view=review').text
 
 
 def test_guided_checklist_uses_existing_private_progress(app, parent):

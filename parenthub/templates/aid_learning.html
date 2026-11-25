@@ -1,0 +1,26 @@
+{% set topic = guidance.topics[topic_index] %}
+{% set next_topic = guidance.topics[topic_index + 1] if topic_index + 1 < guidance.topics|length else none %}
+<section class="panel aid-focus aid-learning" id="learn-{{ topic.key }}" aria-labelledby="learning-title">
+  <h1 class="view-heading" id="learning-title">{{ topic.heading }}</h1>
+  {% if topic.summary %}<p>{{ topic.summary }}</p>{% endif %}
+  {% set list_tag = 'ol' if topic.key == 'process' else 'ul' %}
+  <{{ list_tag }} class="aid-learning-points">
+    {% for point in topic.points %}
+    <li>
+      <h2 class="section-header">{% if point|length > 2 %}<a href="{{ point[2] }}" target="_blank" rel="noopener noreferrer">{{ point[0] }}</a>{% else %}{{ point[0] }}{% endif %}</h2>
+      <p>{{ point[1] }}</p>
+    </li>
+    {% endfor %}
+  </{{ list_tag }}>
+  {% if topic.note %}
+  <div class="aid-learning-note">
+    {% if topic.note_heading %}<h2 class="section-header">{{ topic.note_heading }}</h2>{% endif %}
+    <p>{{ topic.note }}</p>
+  </div>
+  {% endif %}
+  <p class="caption"><a href="https://www.minerva.edu/undergraduate/financial-aid/" target="_blank" rel="noopener noreferrer">Minerva’s financial aid guide</a></p>
+  <div class="actions">
+    <a class="button" href="{{ aid_link('learn', topic=next_topic.key) if next_topic else (aid_link('step') if next_step else aid_link('review')) }}">{{ 'Next' if next_topic else 'Go to preparation' }}</a>
+    <a href="{{ aid_link('learn', topic=guidance.topics[topic_index - 1].key) if topic_index else aid_link('overview') }}">Back</a>
+  </div>
+</section>

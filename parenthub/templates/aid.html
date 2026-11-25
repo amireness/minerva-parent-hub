@@ -1,10 +1,10 @@
 {% extends 'base.html' %}
-{% set titles = {'overview': 'Financial Aid', 'step': 'Prepare for financial aid',
+{% set titles = {'overview': 'Financial Aid', 'learn': 'Understand financial aid', 'step': 'Prepare for financial aid',
   'review': 'Preparation checklist', 'documents': 'Demo documents', 'process': 'Where each application goes',
   'glossary': 'Financial aid glossary', 'translations': 'Translation examples', 'currency': 'Practice currency conversion'} %}
 {% set title = titles[view] %}
 {% block page_heading %}
-{% if view != 'step' %}
+{% if view not in ('step', 'learn') %}
 <div class="page-heading aid-page-heading">
   {% if view != 'overview' %}
   <a class="aid-back" href="{{ aid_link('step', step=return_step) if return_step else aid_link('overview') }}">{{ 'Back to preparation step' if return_step else 'Financial Aid home' }}</a>
@@ -14,7 +14,7 @@
 {% endif %}
 {% endblock %}
 {% block content %}
-{% set has_workspace = view == 'step' or return_step %}
+{% set has_workspace = view in ('learn', 'step') or return_step %}
 {% if has_workspace %}
 <div class="preparation-workspace">
   {% include 'aid_step_navigation.html' %}
@@ -26,17 +26,18 @@
 <div class="aid-flow">
   {% if view == 'overview' %}
   <section class="panel aid-focus" aria-labelledby="aid-start" data-aid-overview>
-    <h2 class="section-header" id="aid-start">Prepare your first financial aid application</h2>
-    {% if completed_count and next_step %}<p class="caption">Next: {{ next_step[1] }}</p>{% endif %}
-    <a class="button" href="{{ aid_link('step') if next_step else aid_link('review') }}">{{ 'Review preparation' if not next_step else ('Continue preparation' if completed_count else 'Start preparation') }}</a>
+    <h2 class="section-header" id="aid-start">New to financial aid?</h2>
+    <a class="button" href="{{ aid_link('learn') }}">Understand financial aid</a>
     {% if not current_user.is_authenticated %}
     <p class="caption"><a href="{{ url_for('auth.login') }}">Log in to save progress</a></p>
     {% endif %}
   </section>
   <nav class="aid-secondary" aria-label="Financial aid shortcuts">
-    <a href="{{ aid_link('review') }}">Checklist</a>
+    <a href="{{ aid_link('step') if next_step else aid_link('review') }}">{{ 'Review preparation' if not next_step else ('Continue preparation' if completed_count else 'Preparation checklist') }}</a>
     <a href="{{ aid_link('documents') }}">Demo documents</a>
   </nav>
+  {% elif view == 'learn' %}
+    {% include 'aid_learning.html' %}
   {% elif view == 'step' %}
     {% include 'aid_step.html' %}
   {% elif view == 'review' %}

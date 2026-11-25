@@ -193,3 +193,11 @@ Start or Continue action on Financial Aid Home, added URL-based steps
 and review, and made each existing tool open and return independently.
 Left: 94 pytest cases passed and Chromium completed all seven steps.
 Parent and applicant usability observation remains open.
+
+**2026-11-25: Product UX redesign.** Found: repeated destinations,
+long admissions panels, and a Financial Aid step detached from progress.
+Done: moved Planning into primary navigation, aligned public and parent
+entry points with next actions, regrouped guidance and forms, and added
+a desktop checklist and native mobile selector to the aid workspace.
+Kept the existing routes and saved state. Left: see PRODUCT-UX-AUDIT.md
+for evidence and the parent and applicant research questions.

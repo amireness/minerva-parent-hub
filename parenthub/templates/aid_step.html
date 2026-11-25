@@ -37,5 +37,5 @@
   </details>
 </section>
 <nav class="aid-secondary" aria-label="Preparation steps">
-  <a href="{{ aid_link('step', step=guidance.steps[step_index - 1][0]) if step_index else aid_link('overview') }}">Back</a>
+  <a href="{{ aid_link('step', step=guidance.steps[step_index - 1][0]) if step_index else aid_link('learn', topic=guidance.topics[-1].key) }}">Back</a>
 </nav>

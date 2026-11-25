@@ -3,7 +3,16 @@
 {% set labels = {'start': 'Start', 'forms': 'Forms', 'dates': 'Deadlines', 'records': 'Documents',
   'translations': 'Translations', 'review': 'Amounts', 'submission': 'Review'} %}
 {% macro steps() %}
-<nav aria-label="Preparation checklist">
+<nav aria-label="Financial aid topics">
+  <ul class="workspace-steps">
+    {% for topic in guidance.topics %}
+    <li><a href="{{ aid_link('learn', topic=topic.key) }}"{% if view == 'learn' and loop.index0 == topic_index %} aria-current="step"{% endif %}>
+      <span class="step-index">{{ icon(topic.icon) }}</span><span>{{ topic.label }}</span>
+    </a></li>
+    {% endfor %}
+  </ul>
+  <details class="workspace-preparation"{% if view != 'learn' %} open{% endif %}>
+  <summary>Preparation</summary>
   <ol class="workspace-steps">
     {% for key, heading, role, detail, href, label in guidance.steps %}
     {% set item = step_records.get(step_prefix ~ key) %}
@@ -16,15 +25,15 @@
     </li>
     {% endfor %}
   </ol>
+  </details>
+  <a class="workspace-review" href="{{ aid_link('review') }}">Review checklist</a>
 </nav>
 {% endmacro %}
-{% set progress_label = (completed_count ~ ' of ' ~ guidance.steps|length ~ ' prepared') if step_records else none %}
-<aside class="workspace-sidebar panel" aria-label="Preparation progress">
-  <h2 class="section-header">Steps</h2>
-  {% if progress_label %}<p class="caption">{{ progress_label }}</p>{% endif %}
+<aside class="workspace-sidebar panel" aria-label="Financial aid journey">
+  <h2 class="section-header">Topics</h2>
   {{ steps() }}
 </aside>
 <details class="workspace-mobile panel">
-  <summary>Steps{% if progress_label %} <span class="caption">{{ progress_label }}</span>{% endif %}</summary>
+  <summary>Topics</summary>
   {{ steps() }}
 </details>

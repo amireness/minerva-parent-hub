@@ -79,3 +79,51 @@ verified persistence after signing back in. The visual sweep covered
 
 In the next observed session, check whether guests notice that progress
 is temporary and whether mobile parents discover the Steps control.
+
+## Beginner Financial Aid journey
+
+The old entry asked families to decide whether to apply before explaining
+what aid is. The new default opens five short topics: Understand, How it
+works, Your role, Forms, and Aid offer. Parents can learn before opening
+Preparation, jump between topics, or resume their saved checklist directly.
+The desktop sidebar and mobile Topics control share the same links.
+Reading a topic never marks a preparation task complete. Existing checklist
+keys and saved records are retained, with no database migration.
+
+The journey helps families interpret the process, discuss their respective
+roles, and choose their own next steps. The student retains control of
+their application. The guide links to official services and leaves the
+aid decision to Minerva. This addresses the learning, participation,
+agency, and simplicity checks without a calculator for eligibility.
+
+### Policy verification, November 25, 2026
+
+- [Minerva undergraduate aid guide](https://www.minerva.edu/undergraduate/financial-aid/)
+  confirms demonstrated need, limited funding, need-aware admissions,
+  family contribution, and the first-time forms and supporting documents.
+- [Minerva FAQ](https://www.minerva.edu/faqs/) confirms that Minerva uses
+  forms and supporting records, including local income equivalents, and
+  that the College Board form and Minerva process apply to international
+  applicants. It describes a loan-first offer, while the undergraduate
+  guide describes a possible combination with no specified order. The
+  journey presents possible components without promising their order,
+  amounts, or coverage. The FAQ also gives exceptions to its general
+  dependent-applicant guidance. The journey makes no determination of
+  dependency or which exceptions apply to a particular household.
+- The [admissions page](https://www.minerva.edu/undergraduate/admissions/),
+  [College Board CSS Profile](https://cssprofile.collegeboard.org/), and
+  [Minerva Financial Aid Center](https://www.minerva.edu/financial-aid-center/)
+  were checked separately. The Center redirects to Minerva's applicant
+  login, so instructions visible only after login were outside this check.
+
+Returning-student demo document examples remain labeled separately from
+first-time requirements. Confirm unavailable records, translation formats,
+and individual circumstances with Minerva Financial Aid.
+
+Chromium captures are in `build/qa/flask-1795635211133/`. The
+`aid-learn-*` files cover each topic across mobile and desktop in both
+themes. At 375px the first topic's Next button fits on screen, and the
+Topics control opens and closes with the keyboard. Chromium followed
+the introduction at 375px and 1280px and exercised saved checklist
+progress and contextual tools. First-time parent comprehension still
+needs observation.

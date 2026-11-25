@@ -104,8 +104,14 @@ def render_financial_aid(applicants, applicant, failed_category=None, form=None)
     if failed_category or (view is None and (focused_category or 'applicant' in request.args)):
         view = 'documents'
     view = view or 'overview'
-    if view not in {'overview', 'step', 'review', 'documents', 'process', 'glossary', 'translations', 'currency'}:
+    if view not in {'overview', 'learn', 'step', 'review', 'documents', 'process', 'glossary', 'translations', 'currency'}:
         abort(404)
+    topics = GUIDANCE['topics']
+    topic_keys = [topic['key'] for topic in topics]
+    topic_key = request.args.get('topic', topic_keys[0])
+    if view == 'learn' and topic_key not in topic_keys:
+        abort(404)
+    topic_index = topic_keys.index(topic_key) if view == 'learn' else None
     saved = {}
     step_records = {}
     if current_user.is_authenticated and not current_user.student:
@@ -144,7 +150,7 @@ def render_financial_aid(applicants, applicant, failed_category=None, form=None)
                            focused_category=focused_category, sample_filename=sample_filename,
                            guidance=GUIDANCE, step_records=step_records, step_prefix=STEP_PREFIX,
                            next_step=next_step, progress_form=ProgressForm(), view=view,
-                           step_index=step_index, aid_link=aid_link,
+                           step_index=step_index, aid_link=aid_link, topic_index=topic_index,
                            completed_count=sum(done for _, done in step_records.values()),
                            return_step=return_step if return_step in step_keys else None)
 
