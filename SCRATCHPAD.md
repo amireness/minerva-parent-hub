@@ -186,15 +186,14 @@ the entry retire when circumstances change).
 <!-- Append-only. Format: state found → work done → state left.
      Keep entries short: one paragraph per session. -->
 
-**2026-11-25: UI friction pass.** Found: Financial Aid repeated task
-titles, counts, navigation, and states, and Planning repeated its
-progress count. Done: simplified the workspace and copy across the
-Flask app. Left: 94 pytest tests passed and Chromium exercised guest
-and signed-in steps, persistence, and keyboard use. See the audit for
-before-and-after evidence. First-use observation remains open.
-
 **2026-11-25: Beginner Financial Aid.** Found: the first task asked
 families to decide whether to apply. Done: added a five-topic introduction
 based on official sources and retained existing checklist records and
 tools. Left: see PRODUCT-UX-AUDIT.md for source differences and validation.
 First-use comprehension still needs parent observation.
+
+**2026-11-25: Financial Aid navigation.** Found: five useful learning
+topics followed by an extra checklist workflow. Done: grouped links to
+existing tools, relocated essential guidance, and redirected old steps.
+Left: saved checklist records remain in the database. Individual tool
+redesign and real document storage remain outside this iteration.

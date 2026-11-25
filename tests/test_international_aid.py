@@ -1,7 +1,9 @@
-from conftest import login, post, register
+import pytest
+
+from conftest import post
 from parenthub.aid_guidance import STEP_PREFIX
 from parenthub.extensions import db
-from parenthub.models import ChecklistItem
+from parenthub.models import ChecklistItem, UserChecklistProgress
 
 
 def test_public_preparation_has_connected_guides_and_no_upload(client):
@@ -12,15 +14,12 @@ def test_public_preparation_has_connected_guides_and_no_upload(client):
     for view, text in [('glossary', 'id="term-income"'), ('translations', 'Fictional original excerpt'),
                        ('currency', 'Illustrative rates authored'), ('process', 'Financial Aid Questionnaire')]:
         assert text in client.get('/financial-aid?view=' + view).text
-    step = client.get('/financial-aid?view=step&step=records').text
-    assert 'step=translations' in step and 'step=dates' in step
-    assert 'view=glossary' in step and 'return_step=records' in step
-    assert 'step-submission' not in step and 'Mark prepared' not in step
-    assert 'aria-current="step"' in step and '>Documents</span>' in step
-    assert 'Save and next' not in step and 'Not prepared' not in step
-    assert 'to save your checklist' not in step and 'Log in to save progress' in page.text
+    tools = client.get('/financial-aid?view=tools').text
+    for view in ('glossary', 'translations', 'currency', 'documents'):
+        assert f'view={view}"' in tools
+    assert 'Preparation checklist' not in page.text and 'Log in to save progress' not in page.text
     tool = client.get('/financial-aid?view=glossary&return_step=records&term=income').text
-    assert 'Back to preparation step' in tool and 'step=records' in tool
+    assert 'Back to Useful Tools' in tool
     assert 'id="term-income"' in tool and ' open>' in tool
 
 
@@ -36,29 +35,40 @@ def test_learning_journey_explains_aid_before_preparation(parent):
         page = parent.get('/financial-aid?view=learn&topic=' + key)
         assert page.status_code == 200
         assert content in page.text and 'Save and next' not in page.text
-        expected = f'topic={following}">Next' if following else 'view=step">Go to preparation'
+        expected = f'topic={following}">Next' if following else 'view=tools">Useful Tools'
         assert expected in page.text
+        assert 'Review checklist' not in page.text and 'Keep real financial details' not in page.text
+        assert ('Official Minerva Financial Aid' in page.text) == (key == 'forms')
     assert parent.get('/financial-aid?view=learn&topic=invalid').status_code == 404
-    assert '0 of 7 prepared' in parent.get('/financial-aid?view=review').text
 
 
-def test_guided_checklist_uses_existing_private_progress(app, parent):
+@pytest.mark.parametrize(('query', 'destination'), [
+    ('view=step', '/financial-aid?view=learn&topic=understand'),
+    ('view=step&step=forms', '/financial-aid?view=learn&topic=forms'),
+    ('view=step&step=dates', '/deadlines'),
+    ('view=step&step=records', '/financial-aid?view=documents'),
+    ('view=step&step=translations', '/financial-aid?view=translations'),
+    ('view=step&step=review', '/financial-aid?view=currency'),
+    ('view=step&step=submission', '/financial-aid?view=learn&topic=forms'),
+    ('view=review', '/financial-aid?view=tools'),
+])
+def test_retired_preparation_urls_redirect(client, query, destination):
+    response = client.get('/financial-aid?' + query)
+    assert response.status_code == 302
+    assert response.location == destination
+    assert client.get(response.location).status_code == 200
+
+
+def test_retired_checklist_preserves_private_progress(app, parent):
     with app.app_context():
         item_id = db.session.scalar(db.select(ChecklistItem.id).where(ChecklistItem.slug == STEP_PREFIX + 'start'))
     response = post(parent, f'/checklist/{item_id}', {'completed': 'y', 'advance': '1'},
-                    source='/financial-aid?view=step&step=start')
+                    source='/checklist')
     assert response.location.endswith('/financial-aid?view=step&step=forms')
-    page = parent.get('/financial-aid?view=review').text
-    assert 'step=forms">Continue preparation' in page
-    assert '1 of 7 prepared' in page
-    step = parent.get('/financial-aid?view=step&step=forms').text
-    assert 'data-prepared' in step and 'class="sr-only">Prepared' in step
-    assert 'Save and next' in step
+    page = parent.get('/financial-aid?view=review', follow_redirects=True).text
+    assert 'Useful Tools' in page and 'prepared' not in page
     assert '0 of 5' in parent.get('/planning').text
     assert '/checklist/' + str(item_id) not in parent.get('/checklist').text
-    other = app.test_client()
-    register(other, 'other@example.com')
-    login(other, 'other@example.com')
-    assert 'step=start">Start preparation' in other.get('/financial-aid?view=review').text
-    post(parent, f'/checklist/{item_id}', source='/financial-aid?view=step&step=start')
-    assert '0 of 7 prepared' in parent.get('/financial-aid?view=review').text
+    with app.app_context():
+        mark = db.session.scalar(db.select(UserChecklistProgress).where(UserChecklistProgress.item_id == item_id))
+        assert mark.completed

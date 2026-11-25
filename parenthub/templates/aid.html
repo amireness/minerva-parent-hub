@@ -1,26 +1,25 @@
 {% extends 'base.html' %}
-{% set titles = {'overview': 'Financial Aid', 'learn': 'Understand financial aid', 'step': 'Prepare for financial aid',
-  'review': 'Preparation checklist', 'documents': 'Demo documents', 'process': 'Where each application goes',
+{% set titles = {'overview': 'Financial Aid', 'learn': 'Understand financial aid', 'tools': 'Useful Tools',
+  'documents': 'Financial document guidance', 'process': 'Where each application goes',
   'glossary': 'Financial aid glossary', 'translations': 'Translation examples', 'currency': 'Practice currency conversion'} %}
 {% set title = titles[view] %}
 {% block page_heading %}
-{% if view not in ('step', 'learn') %}
+{% if view != 'learn' %}
 <div class="page-heading aid-page-heading">
   {% if view != 'overview' %}
-  <a class="aid-back" href="{{ aid_link('step', step=return_step) if return_step else aid_link('overview') }}">{{ 'Back to preparation step' if return_step else 'Financial Aid home' }}</a>
+  <a class="aid-back" href="{{ aid_link('overview' if view == 'tools' else 'tools') }}">{{ 'Financial Aid home' if view == 'tools' else 'Back to Useful Tools' }}</a>
   {% endif %}
   <h1 class="view-heading">{{ title }}</h1>
 </div>
 {% endif %}
 {% endblock %}
 {% block content %}
-{% set has_workspace = view in ('learn', 'step') or return_step %}
-{% if has_workspace %}
+{% if view == 'learn' %}
 <div class="preparation-workspace">
   {% include 'aid_step_navigation.html' %}
-  <div class="workspace-task">
-{% endif %}
-{% if view == 'documents' %}
+  <div class="workspace-task"><div class="aid-flow">{% include 'aid_learning.html' %}</div></div>
+</div>
+{% elif view == 'documents' %}
   {% include 'aid_documents.html' %}
 {% else %}
 <div class="aid-flow">
@@ -28,65 +27,26 @@
   <section class="panel aid-focus" aria-labelledby="aid-start" data-aid-overview>
     <h2 class="section-header" id="aid-start">New to financial aid?</h2>
     <a class="button" href="{{ aid_link('learn') }}">Understand financial aid</a>
-    {% if not current_user.is_authenticated %}
-    <p class="caption"><a href="{{ url_for('auth.login') }}">Log in to save progress</a></p>
-    {% endif %}
   </section>
   <nav class="aid-secondary" aria-label="Financial aid shortcuts">
-    <a href="{{ aid_link('step') if next_step else aid_link('review') }}">{{ 'Review preparation' if not next_step else ('Continue preparation' if completed_count else 'Preparation checklist') }}</a>
-    <a href="{{ aid_link('documents') }}">Demo documents</a>
+    <a href="{{ aid_link('tools') }}">Useful Tools</a>
   </nav>
-  {% elif view == 'learn' %}
-    {% include 'aid_learning.html' %}
-  {% elif view == 'step' %}
-    {% include 'aid_step.html' %}
-  {% elif view == 'review' %}
-  <section class="panel aid-focus" id="aid-checklist" aria-label="Preparation progress">
-    {% if step_records %}
-    <label for="prep-progress">{{ completed_count }} of {{ guidance.steps|length }} prepared</label>
-    <progress id="prep-progress" value="{{ completed_count }}" max="{{ guidance.steps|length }}"></progress>
-    <p class="caption">Private checklist. Submit through Minerva.</p>
-    {% elif not current_user.is_authenticated %}
-    <p><a href="{{ url_for('auth.login') }}">Log in to save your checklist</a></p>
-    {% elif not current_user.student %}
-    <p>Checklist saving is currently unavailable. You can still read all steps.</p>
-    {% endif %}
-    {% if next_step %}<a class="button" href="{{ aid_link('step', step=next_step[0]) }}">{{ 'Continue preparation' if completed_count else 'Start preparation' }}</a>{% else %}
-    <p>All preparation steps checked off. Review any outstanding requests in Minerva's process.</p>
-    {% endif %}
-    <ol class="aid-review-list">
-      {% for key, heading, role, detail, href, label in guidance.steps %}
-      <li><a href="{{ aid_link('step', step=key) }}">{{ heading }}</a>
-        {% if step_records %}<span class="caption">{{ 'Prepared' if step_records.get(step_prefix ~ key, (none, false))[1] else 'Remaining' }}</span>{% endif %}
-      </li>
-      {% endfor %}
-    </ol>
-  </section>
+  {% elif view == 'tools' %}
+  <nav class="aid-tool-list" aria-label="Useful Tools">
+    <a class="aid-resource" href="{{ aid_link('glossary') }}"><strong>Financial glossary</strong><span>Look up unfamiliar financial terms.</span></a>
+    <a class="aid-resource" href="{{ aid_link('translations') }}"><strong>Translation examples</strong><span>See sample English explanations alongside the originals.</span></a>
+    <a class="aid-resource" href="{{ aid_link('currency') }}"><strong>Currency calculator</strong><span>Practice converting fictional amounts.</span></a>
+    <a class="aid-resource" href="{{ aid_link('documents') }}"><strong>Financial document guidance</strong><span>Review document requirements and explore demo examples.</span></a>
+  </nav>
   {% else %}
   <section class="guide-section aid-focus" aria-label="{{ title }}">
     {% include 'aid_guidance.html' %}
     {% if view == 'process' %}
-    <p><a href="https://www.minerva.edu/undergraduate/financial-aid/" target="_blank" rel="noopener noreferrer">Minerva's official steps and deadlines</a></p>
-    <details><summary>How to help</summary>
-      <p>Your student submits through Minerva. You can help gather household documents. Minerva lists the CSS Profile, its Financial Aid Questionnaire, and supporting documents. Ask Financial Aid who should submit household records and who can see them.</p>
-      <p><a href="mailto:newstudentaid@minerva.edu">Email Minerva Financial Aid</a></p>
-    </details>
+    <p><a href="{{ aid_link('learn', topic='forms') }}">Official forms and deadlines</a></p>
     {% endif %}
   </section>
   {% endif %}
-  {% if view in ('overview', 'review') %}
-  <details class="aid-tools" id="aid-tools" {% if view == 'review' %}open{% endif %}>
-    <summary>Preparation tools</summary>
-    <nav class="aid-secondary" aria-label="Preparation tools">
-      <a href="{{ aid_link('process') }}">Financial aid process</a>
-      <a href="{{ aid_link('glossary') }}">Glossary</a>
-      <a href="{{ aid_link('translations') }}">Translation examples</a>
-      <a href="{{ aid_link('currency') }}">Currency calculator</a>
-    </nav>
-  </details>
-  {% endif %}
 </div>
 {% endif %}
-{% if has_workspace %}</div></div>{% endif %}
 <script src="{{ url_for('static', filename='aid-guidance.js') }}" defer></script>
 {% endblock %}

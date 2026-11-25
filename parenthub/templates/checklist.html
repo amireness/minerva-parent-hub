@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
 <p class="section-intro">Check off items for your own plan. Your applicant completes their own application.</p>
-<p class="section-intro"><a href="{{ url_for('main.financial_aid', view='review') }}">First-time financial aid checklist</a></p>
 <div class="split-layout">
   {% for role, label in [('parent', 'Parent preparation'), ('applicant', 'Applicant responsibilities')] %}
   <section class="panel" aria-labelledby="{{ role }}-heading">

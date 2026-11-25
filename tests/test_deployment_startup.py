@@ -24,7 +24,7 @@ def test_render_startup_serves_seeded_pages_without_cli(render_database):
         assert 'January 5' in deadlines.text
         assert 'Official application process and deadlines' in client.get('/resources').text
         assert 'Understand financial aid' in client.get('/financial-aid').text
-        assert "aid instructions" in client.get('/financial-aid?view=review').text
+        assert 'Useful Tools' in client.get('/financial-aid?view=review', follow_redirects=True).text
     with app.app_context():
         assert db.session.scalar(db.select(db.func.count()).select_from(ChecklistItem)) == 12
         assert inspect(db.engine).has_table('aid_document')

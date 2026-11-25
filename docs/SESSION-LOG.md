@@ -201,3 +201,10 @@ entry points with next actions, regrouped guidance and forms, and added
 a desktop checklist and native mobile selector to the aid workspace.
 Kept the existing routes and saved state. Left: see PRODUCT-UX-AUDIT.md
 for evidence and the parent and applicant research questions.
+
+**2026-11-25: UI friction pass.** Found: Financial Aid repeated task
+titles, counts, navigation, and states, and Planning repeated its
+progress count. Done: simplified the workspace and copy across the
+Flask app. Left: 94 pytest tests passed and Chromium exercised guest
+and signed-in steps, persistence, and keyboard use. See the audit for
+before-and-after evidence. First-use observation remains open.

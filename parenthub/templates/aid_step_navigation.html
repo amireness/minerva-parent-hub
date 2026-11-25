@@ -1,7 +1,4 @@
 {% from 'icons.html' import icon %}
-{% set active_key = guidance.steps[step_index][0] if view == 'step' else return_step %}
-{% set labels = {'start': 'Start', 'forms': 'Forms', 'dates': 'Deadlines', 'records': 'Documents',
-  'translations': 'Translations', 'review': 'Amounts', 'submission': 'Review'} %}
 {% macro steps() %}
 <nav aria-label="Financial aid topics">
   <ul class="workspace-steps">
@@ -10,23 +7,8 @@
       <span class="step-index">{{ icon(topic.icon) }}</span><span>{{ topic.label }}</span>
     </a></li>
     {% endfor %}
+    <li><a href="{{ aid_link('tools') }}"><span class="step-index">{{ icon('aid') }}</span><span>Useful Tools</span></a></li>
   </ul>
-  <details class="workspace-preparation"{% if view != 'learn' %} open{% endif %}>
-  <summary>Preparation</summary>
-  <ol class="workspace-steps">
-    {% for key, heading, role, detail, href, label in guidance.steps %}
-    {% set item = step_records.get(step_prefix ~ key) %}
-    <li>
-      <a href="{{ aid_link('step', step=key) }}"{% if key == active_key %} aria-current="step"{% endif %}{% if item and item[1] %} data-prepared{% endif %}>
-        <span class="step-index" aria-hidden="true">{% if item and item[1] %}{{ icon('check') }}{% else %}<span class="step-dot"></span>{% endif %}</span>
-        <span>{{ labels[key] }}</span>
-        {% if step_records %}<span class="sr-only">{{ 'Prepared' if item and item[1] else 'Not prepared' }}</span>{% endif %}
-      </a>
-    </li>
-    {% endfor %}
-  </ol>
-  </details>
-  <a class="workspace-review" href="{{ aid_link('review') }}">Review checklist</a>
 </nav>
 {% endmacro %}
 <aside class="workspace-sidebar panel" aria-label="Financial aid journey">

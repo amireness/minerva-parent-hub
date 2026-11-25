@@ -4,10 +4,10 @@
   <h1 class="view-heading" id="learning-title">{{ topic.heading }}</h1>
   {% if topic.summary %}<p>{{ topic.summary }}</p>{% endif %}
   {% set list_tag = 'ol' if topic.key == 'process' else 'ul' %}
-  <{{ list_tag }} class="aid-learning-points">
+  <{{ list_tag }} class="aid-learning-points" role="list">
     {% for point in topic.points %}
     <li>
-      <h2 class="section-header">{% if point|length > 2 %}<a href="{{ point[2] }}" target="_blank" rel="noopener noreferrer">{{ point[0] }}</a>{% else %}{{ point[0] }}{% endif %}</h2>
+      <h2 class="section-header">{% if topic.key == 'process' %}{{ loop.index }}. {% endif %}{% if point|length > 2 %}<a href="{{ point[2] }}" target="_blank" rel="noopener noreferrer">{{ point[0] }}</a>{% else %}{{ point[0] }}{% endif %}</h2>
       <p>{{ point[1] }}</p>
     </li>
     {% endfor %}
@@ -18,9 +18,18 @@
     <p>{{ topic.note }}</p>
   </div>
   {% endif %}
-  <p class="caption"><a href="https://www.minerva.edu/undergraduate/financial-aid/" target="_blank" rel="noopener noreferrer">Minerva’s financial aid guide</a></p>
+  {% if topic.key == 'forms' %}
+  <p>Apply for aid during your admissions cycle, before the admissions decision. <a href="{{ url_for('main.deadlines') }}">Check deadlines by round</a> and confirm the cutoff and outstanding requests in the Financial Aid Center.</p>
+  <p><a href="mailto:newstudentaid@minerva.edu">Ask Minerva Financial Aid</a> who can submit and view parent records.</p>
+  <a class="aid-resource" href="https://www.minerva.edu/undergraduate/financial-aid/" target="_blank" rel="noopener noreferrer">
+    <strong>Official Minerva Financial Aid</strong>
+    <span>Requirements and application instructions</span>
+  </a>
+  {% elif topic.key == 'role' %}
+  <p><a href="{{ aid_link('documents') }}">Financial document guidance</a></p>
+  {% endif %}
   <div class="actions">
-    <a class="button" href="{{ aid_link('learn', topic=next_topic.key) if next_topic else (aid_link('step') if next_step else aid_link('review')) }}">{{ 'Next' if next_topic else 'Go to preparation' }}</a>
+    <a class="button" href="{{ aid_link('learn', topic=next_topic.key) if next_topic else aid_link('tools') }}">{{ 'Next' if next_topic else 'Useful Tools' }}</a>
     <a href="{{ aid_link('learn', topic=guidance.topics[topic_index - 1].key) if topic_index else aid_link('overview') }}">Back</a>
   </div>
 </section>

@@ -56,7 +56,7 @@ if (preview) {
 }
 if (document.querySelector('[data-aid-overview]') && location.hash) {
   const anchor = location.hash.slice(1);
-  const legacy = { 'aid-checklist': 'review', 'document-examples': 'documents',
+  const legacy = { 'aid-checklist': 'tools', 'aid-tools': 'tools', 'document-examples': 'documents',
     'official-aid': 'process', glossary: 'glossary', translations: 'translations', currency: 'currency' };
   const view = anchor.startsWith('step-') ? 'step' : anchor.startsWith('term-') ? 'glossary' : legacy[anchor];
   if (view) {
@@ -66,7 +66,5 @@ if (document.querySelector('[data-aid-overview]') && location.hash) {
     if (anchor.startsWith('step-')) destination.searchParams.set('step', anchor.slice(5));
     if (anchor.startsWith('term-')) destination.searchParams.set('term', anchor.slice(5));
     location.replace(destination);
-  } else if (anchor === 'aid-tools') {
-    document.querySelector('#aid-tools').open = true;
   }
 }

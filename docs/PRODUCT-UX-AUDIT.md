@@ -127,3 +127,27 @@ Topics control opens and closes with the keyboard. Chromium followed
 the introduction at 375px and 1280px and exercised saved checklist
 progress and contextual tools. First-time parent comprehension still
 needs observation.
+
+## Financial Aid navigation and tools
+
+The five learning topics remain the main journey. How it works uses
+numbered headings inside the cards. Forms links to the official Minerva
+aid guide through one resource card. Useful Tools is available from
+Financial Aid Home, the topic selector, and the Aid offer screen.
+
+All seven retired preparation topics were reviewed:
+
+| Retired topic | Where the guidance is now |
+| --- | --- |
+| Start | Understand introduces need-based aid. Forms explains when to apply and links to the official guide. |
+| Forms | Forms keeps the separate admissions, College Board, and Minerva responsibilities. |
+| Dates | Forms links to Deadlines and directs the student to confirm the cutoff in the Financial Aid Center. |
+| Records | Your role links to Financial document guidance, which separates current Minerva requests from returning-student demo examples. |
+| Translations | Translation examples retain the advice on keeping the original and confirming the accepted format. |
+| Review amounts | Financial document guidance covers names and periods. The calculator separates original amounts from conversions. |
+| Submission | Forms points to outstanding requests in the Financial Aid Center and Minerva Financial Aid for questions about who can submit and see parent records. |
+
+Old Financial Aid checklist and step URLs redirect. The existing private
+checklist tables, seeded item identifiers, and saved progress remain.
+Planning retains its separate checklist. Demo document access and sharing
+continue to use the existing authorization rules.

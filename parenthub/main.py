@@ -10,7 +10,7 @@ from sqlalchemy.dialects.sqlite import insert
 from .aid_guidance import GUIDANCE, STEP_PREFIX
 from .deadline_events import ADMISSIONS_URL, calendar_bytes, homepage_deadline, upcoming_events
 from .extensions import db
-from .forms import AgeForm, AidDocumentForm, InvitationForm, ProgressForm
+from .forms import AgeForm, AidDocumentForm, InvitationForm
 from .models import (
     AidDocument, ChecklistItem, OfficialDeadline, ParentInvitation, ParentQuestion, Reminder,
     Resource, SyntheticApplicant, SyntheticApplicantRound, User, UserChecklistProgress,
@@ -20,6 +20,14 @@ bp = Blueprint('main', __name__)
 ROOT = Path(__file__).resolve().parent.parent
 AID_EXAMPLES = json.loads(Path(__file__).with_name('aid_examples.json').read_text(encoding='utf-8'))
 AID_CATEGORIES = {item['key']: item for item in AID_EXAMPLES['documents']}
+LEGACY_AID_STEPS = {
+    'start': ('learn', {'topic': 'understand'}),
+    'forms': ('learn', {'topic': 'forms'}),
+    'records': ('documents', {}),
+    'translations': ('translations', {}),
+    'review': ('currency', {}),
+    'submission': ('learn', {'topic': 'forms'}),
+}
 STAGE_EXPLANATIONS = {
     'Application started': 'Your applicant has begun working on the application.',
     'Application submitted': 'Your applicant has finished and sent in the application.',
@@ -104,7 +112,21 @@ def render_financial_aid(applicants, applicant, failed_category=None, form=None)
     if failed_category or (view is None and (focused_category or 'applicant' in request.args)):
         view = 'documents'
     view = view or 'overview'
-    if view not in {'overview', 'learn', 'step', 'review', 'documents', 'process', 'glossary', 'translations', 'currency'}:
+
+    def aid_link(destination, **params):
+        return url_for('main.financial_aid', view=destination, applicant=applicant.id if applicant else None, **params)
+
+    if view == 'review':
+        return redirect(aid_link('tools'))
+    if view == 'step':
+        step = request.args.get('step', 'start')
+        if step == 'dates':
+            return redirect(url_for('main.deadlines'))
+        if step not in LEGACY_AID_STEPS:
+            abort(404)
+        destination, params = LEGACY_AID_STEPS[step]
+        return redirect(aid_link(destination, **params))
+    if view not in {'overview', 'learn', 'tools', 'documents', 'process', 'glossary', 'translations', 'currency'}:
         abort(404)
     topics = GUIDANCE['topics']
     topic_keys = [topic['key'] for topic in topics]
@@ -113,29 +135,6 @@ def render_financial_aid(applicants, applicant, failed_category=None, form=None)
         abort(404)
     topic_index = topic_keys.index(topic_key) if view == 'learn' else None
     saved = {}
-    step_records = {}
-    if current_user.is_authenticated and not current_user.student:
-        step_records = {
-            slug: (item_id, bool(done))
-            for slug, item_id, done in db.session.execute(
-                db.select(ChecklistItem.slug, ChecklistItem.id, UserChecklistProgress.completed)
-                .outerjoin(UserChecklistProgress, (UserChecklistProgress.item_id == ChecklistItem.id)
-                           & (UserChecklistProgress.user_id == current_user.id))
-                .where(ChecklistItem.slug.startswith(STEP_PREFIX))
-            )
-        }
-    steps = GUIDANCE['steps']
-    step_keys = [step[0] for step in steps]
-    next_step = next((step for step in steps
-                      if not step_records.get(STEP_PREFIX + step[0], (None, False))[1]), None)
-    step_key = request.args.get('step') or (next_step or steps[-1])[0]
-    if view == 'step' and step_key not in step_keys:
-        abort(404)
-    step_index = step_keys.index(step_key) if view == 'step' else None
-    return_step = request.args.get('return_step')
-
-    def aid_link(destination, **params):
-        return url_for('main.financial_aid', view=destination, applicant=applicant.id if applicant else None, **params)
 
     if applicant and view == 'documents':
         saved = {row.category: row for row in db.session.scalars(db.select(AidDocument).where(
@@ -148,17 +147,13 @@ def render_financial_aid(applicants, applicant, failed_category=None, form=None)
     return render_template('aid.html', title='Financial Aid', examples=AID_EXAMPLES,
                            applicants=applicants, applicant=applicant, form=form, saved=saved,
                            focused_category=focused_category, sample_filename=sample_filename,
-                           guidance=GUIDANCE, step_records=step_records, step_prefix=STEP_PREFIX,
-                           next_step=next_step, progress_form=ProgressForm(), view=view,
-                           step_index=step_index, aid_link=aid_link, topic_index=topic_index,
-                           completed_count=sum(done for _, done in step_records.values()),
-                           return_step=return_step if return_step in step_keys else None)
+                           guidance=GUIDANCE, view=view, aid_link=aid_link, topic_index=topic_index)
 
 
 @bp.get('/aid-preparation')
 @login_required
 def aid_preparation():
-    return redirect(url_for('main.financial_aid'))
+    return redirect(url_for('main.financial_aid', view='tools'))
 
 
 def parent_document_scope(applicant_id, category):
@@ -203,7 +198,7 @@ def manage_document(applicant_id, category, action):
     db.session.commit()
     flash(message)
     return redirect(url_for('main.financial_aid', view='documents', applicant=applicant.id,
-                            return_step=request.args.get('return_step'), _anchor=category))
+                            _anchor=category))
 
 
 @bp.get('/financial-aid/<int:applicant_id>/<category>/open')

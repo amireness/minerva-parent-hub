@@ -20,30 +20,30 @@
     {% if applicant %}
     <div class="aid-file-actions" role="group" aria-label="Actions for {{ module.title }}">
       {% if row %}
-      <a href="{{ url_for('main.open_document', applicant_id=applicant.id, category=module.key, return_step=return_step) }}">Open</a>
+      <a href="{{ url_for('main.open_document', applicant_id=applicant.id, category=module.key) }}">Open</a>
       {% set action, label = ('unshare', 'Stop sharing') if row.shared else ('share', 'Share') %}
-      <form method="post" action="{{ url_for('main.manage_document', applicant_id=applicant.id, category=module.key, action=action, return_step=return_step) }}">
+      <form method="post" action="{{ url_for('main.manage_document', applicant_id=applicant.id, category=module.key, action=action) }}">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         <button type="submit" class="button-quiet">{{ label }}</button>
       </form>
       <details class="file-options">
         <summary>File options</summary>
         <div class="actions">
-          <a href="{{ aid_link('documents', category=module.key, return_step=return_step, _anchor='document-chooser') }}">Replace</a>
-          <form method="post" action="{{ url_for('main.manage_document', applicant_id=applicant.id, category=module.key, action='remove', return_step=return_step) }}">
+          <a href="{{ aid_link('documents', category=module.key, _anchor='document-chooser') }}">Replace</a>
+          <form method="post" action="{{ url_for('main.manage_document', applicant_id=applicant.id, category=module.key, action='remove') }}">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             <button type="submit" class="button-quiet">Remove</button>
           </form>
         </div>
       </details>
       {% else %}
-      <a class="button button-secondary aid-add" href="{{ aid_link('documents', category=module.key, return_step=return_step, _anchor='document-chooser') }}" aria-label="Add document for {{ module.title }}">Add document</a>
+      <a class="button button-secondary aid-add" href="{{ aid_link('documents', category=module.key, _anchor='document-chooser') }}" aria-label="Add document for {{ module.title }}">Add document</a>
       {% endif %}
     </div>
     {% endif %}
   </div>
   {% if form and focused_category == module.key %}
-  <form id="document-chooser" class="aid-link-form" action="{{ url_for('main.manage_document', applicant_id=applicant.id, category=module.key, action='link', return_step=return_step) }}" method="post">
+  <form id="document-chooser" class="aid-link-form" action="{{ url_for('main.manage_document', applicant_id=applicant.id, category=module.key, action='link') }}" method="post">
     {{ form.hidden_tag() }}
     <fieldset aria-describedby="sample-help">
       <legend>{{ 'Replace document' if row else 'Add document' }} &middot; Google Drive example</legend>
@@ -55,7 +55,7 @@
     </fieldset>
     <div class="actions">
       <button type="submit">{{ 'Replace with example' if row else 'Link example document' }}</button>
-      <a href="{{ aid_link('documents', return_step=return_step, _anchor=module.key) }}">Cancel</a>
+      <a href="{{ aid_link('documents', _anchor=module.key) }}">Cancel</a>
     </div>
   </form>
   {% endif %}

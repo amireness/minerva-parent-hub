@@ -60,18 +60,13 @@ Sharing a document's presence is an explicit Parent Hub action. Replacing
 or removing a file clears the share. Category examples come from
 returning-student guidance. First-year details await the specialist interview.
 
-Financial Aid starts with a plain-language learning journey. Its topics
-use Next and Back without changing saved preparation progress. A separate
-preparation link lets returning families resume their existing checklist.
-Keep the active step and its checklist in one workspace. The checklist is a
-desktop sidebar and a native mobile disclosure. Contextual tools keep
-the parent step selected. Keep the direct review, document, and tool
-links. Use URLs for these views so browser history also works. Reuse the
-existing private checklist.
-Use short topic names, a green selected-row indicator, and preparation
-checkmarks. Keep one task heading. Show the saved count at review. Explain guest
-persistence at entry and review. Keep the task's substantive guidance and
-put the responsibility label with contextual help.
+Financial Aid starts with a plain-language learning journey. Its five topics
+use Next and Back, with short labels and a green selected-row indicator
+in the desktop sidebar and native mobile disclosure. Keep one heading
+per topic. Put official requirements beside the Forms topic and give
+families direct access to Useful Tools. Legacy preparation links lead
+to the closest surviving topic or tool. Private checklist records remain
+stored, and Planning keeps its separate checklist.
 Distinguish public requirements from fictional learning examples. Currency
 inputs and student visibility previews stay in the browser.
 

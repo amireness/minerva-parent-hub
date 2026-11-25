@@ -1,8 +1,14 @@
 <div class="aid-workspace">
+  <section class="panel" aria-labelledby="applicant-records-heading">
+    <h2 class="section-header" id="applicant-records-heading">Records Minerva asks for</h2>
+    <p>Minerva lists income records such as tax returns or local equivalents, and 12 months of parent or guardian bank statements. Have your student check the exact requests in their Financial Aid Center.</p>
+    <p>Check the name, reporting period, and currency on each record. <a href="{{ aid_link('learn', topic='forms') }}">Official forms and instructions</a></p>
+  </section>
   <section class="aid-documents" id="document-examples" aria-label="Demo document list">
     <div class="aid-list-heading">
       <div>
         <p class="caption">Demo categories from returning-student guidance. Confirm first-year requirements with Minerva.</p>
+        <p class="caption">Parent Hub links fictional examples only.</p>
         {% if applicant %}<p class="caption">Sharing shows document presence in Parent Hub. Google Drive permissions stay the same.</p>{% endif %}
       </div>
       {% if applicant %}
@@ -15,7 +21,7 @@
     {% if applicants|length > 1 %}
     <nav class="section-nav" aria-label="Choose applicant">
       {% for item in applicants %}
-      <a href="{{ url_for('main.financial_aid', view='documents', applicant=item.id, return_step=return_step, _anchor='document-examples') }}" {% if item == applicant %}aria-current="true"{% endif %}>Applicant {{ loop.index }}</a>
+      <a href="{{ url_for('main.financial_aid', view='documents', applicant=item.id, _anchor='document-examples') }}" {% if item == applicant %}aria-current="true"{% endif %}>Applicant {{ loop.index }}</a>
       {% endfor %}
     </nav>
     {% endif %}

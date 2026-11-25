@@ -3,6 +3,6 @@
 <section class="guide-section aid-preview" aria-label="Document preview">
   <p>Fictional file preview</p>
   <p>{{ title }}</p>
-  <a href="{{ url_for('main.financial_aid', view='documents', applicant=applicant_id, return_step=request.args.get('return_step'), _anchor=category) }}">Back to documents</a>
+  <a href="{{ url_for('main.financial_aid', view='documents', applicant=applicant_id, _anchor=category) }}">Back to documents</a>
 </section>
 {% endblock %}
