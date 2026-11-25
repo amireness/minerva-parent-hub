@@ -27,19 +27,13 @@ p, li, dd, .record-title { overflow-wrap: anywhere; }
 .primary-nav a[aria-current] { color: var(--color-primary); border-bottom-color: var(--color-gold); }
 .page-shell { max-width: 1280px; padding: var(--space-6) var(--space-4) 0; margin: auto; }
 .page-heading { margin-bottom: var(--space-8); }
-.product-home, .support-layout, .guide-layout, .preparation-workspace { display: grid; gap: var(--space-4); align-items: start; min-width: 0; }
+.product-home, .support-layout, .preparation-workspace { display: grid; gap: var(--space-4); align-items: start; min-width: 0; }
 .product-home .landing-intro { padding: var(--space-6); }
 .product-home .home-journeys { margin: 0; }
 .home-secondary { margin-top: var(--space-6); }
 .home-dates { border-block: 1px solid var(--color-border); padding-block: var(--space-3); }
-.home-dates a, .home-secondary > a, .guide-index a, .file-options a { display: inline-flex; align-items: center; min-height: 44px; }
+.home-dates a, .home-secondary > a, .file-options a { display: inline-flex; align-items: center; min-height: 44px; }
 .home-dates a + a { margin-inline-start: var(--space-3); }
-.guide-index { display: none; }
-.guide-topic + .guide-topic { margin-top: var(--space-3); }
-.panel.guide-topic { padding-block: var(--space-2); }
-.guide-topic > summary { display: list-item; }
-.guide-topic-body { padding-block: var(--space-2) var(--space-4); }
-.guide-topic-body > * + * { margin-top: var(--space-3); }
 .workspace-task { min-width: 0; }
 .workspace-sidebar { display: none; }
 .panel.workspace-mobile { padding: var(--space-2) var(--space-4); }
@@ -294,11 +288,10 @@ dd { margin-bottom: var(--space-4); }
   .footer-note { grid-column: 1/-1; }
 }
 @media (min-width: 850px) {
-  .preparation-workspace, .guide-layout { grid-template-columns: minmax(0, 18rem) minmax(0, 1fr); }
+  .preparation-workspace { grid-template-columns: minmax(0, 18rem) minmax(0, 1fr); }
   .workspace-sidebar { display: block; }
   .workspace-mobile { display: none; }
-  .guide-index { display: grid; }
-  .workspace-sidebar, .guide-index { position: sticky; top: var(--space-4); }
+  .workspace-sidebar { position: sticky; top: var(--space-4); }
   .workspace-sidebar { max-height: calc(100dvh - 2 * var(--space-4)); overflow-y: auto; }
   .workspace-task > .aid-flow { max-width: none; }
 }

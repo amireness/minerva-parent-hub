@@ -19,6 +19,7 @@ from .models import (
 bp = Blueprint('main', __name__)
 ROOT = Path(__file__).resolve().parent.parent
 AID_EXAMPLES = json.loads(Path(__file__).with_name('aid_examples.json').read_text(encoding='utf-8'))
+ADMISSIONS_TOPICS = json.loads(Path(__file__).with_name('admissions_guidance.json').read_text(encoding='utf-8'))
 AID_CATEGORIES = {item['key']: item for item in AID_EXAMPLES['documents']}
 LEGACY_AID_STEPS = {
     'start': ('learn', {'topic': 'understand'}),
@@ -86,7 +87,11 @@ def home():
 
 @bp.get('/guide')
 def guide():
-    return render_template('guide.html', title='Parent guidance')
+    key = request.args.get('topic', ADMISSIONS_TOPICS[0]['key'])
+    topic_index = next((index for index, topic in enumerate(ADMISSIONS_TOPICS) if topic['key'] == key), None)
+    if topic_index is None:
+        abort(404)
+    return render_template('guide.html', title='Admissions', topics=ADMISSIONS_TOPICS, topic_index=topic_index)
 
 
 @bp.get('/help')

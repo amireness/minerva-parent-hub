@@ -16,7 +16,10 @@
 {% block content %}
 {% if view == 'learn' %}
 <div class="preparation-workspace">
-  {% include 'aid_step_navigation.html' %}
+  {% from 'learning_topics.html' import topic_navigation %}
+  {% set topic_links = [] %}
+  {% for topic in guidance.topics %}{% set _ = topic_links.append(aid_link('learn', topic=topic.key)) %}{% endfor %}
+  {{ topic_navigation(guidance.topics, topic_index, topic_links, 'Financial aid', aid_link('tools')) }}
   <div class="workspace-task"><div class="aid-flow">{% include 'aid_learning.html' %}</div></div>
 </div>
 {% elif view == 'documents' %}

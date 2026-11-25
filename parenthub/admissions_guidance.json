@@ -1,0 +1,65 @@
+[
+  {
+    "key": "understand", "label": "Understand", "icon": "guide",
+    "heading": "How does applying to Minerva work?",
+    "sequence": true,
+    "cards": [
+      ["Start the application", "The student can start on Minerva’s website or through the Common Application."],
+      ["Open the Admission Center", "Minerva invites students to its online Admission Center after Part 1. Students who start through the Common Application also complete Minerva’s own steps."],
+      ["Finish the application", "The student completes the Minerva Challenges and shares accomplishments and academic records."]
+    ],
+    "links": [["apply", "Official Minerva application"], ["faq", "Minerva’s admissions FAQ"]]
+  },
+  {
+    "key": "student", "label": "Student application", "icon": "journey",
+    "heading": "What does the student complete?",
+    "summary": "The student completes their own application.",
+    "cards": [
+      ["Personal and academic information", "In Part 1, the student provides personal details and information about their schooling."],
+      ["Minerva Challenges", "These are timed online exercises in areas such as reasoning, creativity, and communication. Once a timed challenge starts, the student finishes it in one sitting."],
+      ["Accomplishments and academic background", "The student describes their achievements and provides academic records. They can include supporting materials for their achievements when relevant."]
+    ],
+    "links": [["admissions", "Official application overview"], ["faq", "Minerva’s admissions FAQ"]]
+  },
+  {
+    "key": "school", "label": "School documents", "icon": "aid",
+    "heading": "What does the school provide?",
+    "cards": [
+      ["Student: unofficial copy", "Minerva asks the student for an unofficial transcript early in the application and for a counselor’s or school official’s contact details."],
+      ["School: official records and verification", "A counselor, registrar, or other authorized official verifies the records and sends official transcripts directly. Minerva’s counselor guide describes a link the student shares for the school to complete the academic form and submit records."],
+      ["If using a transcript service", "Have the service send the official transcript to admissions@minerva.edu. A school official still completes the academic form."]
+    ],
+    "links": [["admissions", "Minerva’s transcript instructions"], ["counselors", "Minerva’s counselor guide"]]
+  },
+  {
+    "key": "parent", "label": "Parent’s role", "icon": "help",
+    "heading": "When are parents involved?",
+    "cards": [
+      ["During the application", "If the student is under 18, they provide a parent or guardian’s contact details in Part 1."],
+      ["If admitted and enrolling", "Minerva’s FAQ says a parent or guardian signs the Enrollment Agreement with a student who is under 18."]
+    ],
+    "summary": "Support your student in keeping track of dates and questions while they manage their own application.",
+    "links": [["admissions", "Minerva’s application instructions"], ["faq", "Minerva’s enrollment FAQ"], ["help", "Contact Admissions"]]
+  },
+  {
+    "key": "documents", "label": "Documents", "icon": "aid",
+    "heading": "What documents are needed?",
+    "cards": [
+      ["Academic records", "Minerva asks for the most recent three years of school records, which can come from more than one school. Depending on the school system, records may include final or national exam results."],
+      ["Translations and extra records", "Minerva may ask for certified translations of records in other languages or for additional records based on the student’s educational background."],
+      ["Evidence of accomplishments", "The student can include supporting materials such as a portfolio, a video, or a report when relevant."]
+    ],
+    "links": [["school", "Who sends school records?"], ["financial_aid", "Separate Financial Aid guidance"], ["admissions", "Minerva’s academic record guidance"]]
+  },
+  {
+    "key": "next", "label": "What happens next?", "icon": "mail",
+    "heading": "What happens after submission?",
+    "sequence": true,
+    "cards": [
+      ["Confirmation", "The student should look for Minerva’s confirmation email after submitting the completed application. If it is missing, check spam and contact Admissions from the email used to apply."],
+      ["Review", "Minerva reviews the completed application, including the student’s academic history. Students who started through the Common Application must finish Minerva’s additional steps first."],
+      ["Decision and enrollment", "Minerva publishes decision dates by application round. Admitted students receive access to an Enrollment Center. To enroll, they sign the agreement and pay the enrollment deposit there."]
+    ],
+    "links": [["deadlines", "Published deadlines by round"], ["faq", "Minerva’s decision and enrollment FAQ"], ["help", "Contact Admissions"]]
+  }
+]

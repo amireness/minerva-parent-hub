@@ -1,0 +1,23 @@
+{% from 'icons.html' import icon %}
+{% macro topic_navigation(topics, active_index, topic_links, label, extra_link=none) %}
+  {% macro links() %}
+    <nav aria-label="{{ label }} topics">
+      <ul class="workspace-steps" role="list">
+        {% for topic in topics %}
+        <li><a href="{{ topic_links[loop.index0] }}"{% if loop.index0 == active_index %} aria-current="step"{% endif %}>
+          <span class="step-index">{{ icon(topic.icon) }}</span><span>{{ topic.label }}</span>
+        </a></li>
+        {% endfor %}
+        {% if extra_link %}<li><a href="{{ extra_link }}"><span class="step-index">{{ icon('aid') }}</span><span>Useful Tools</span></a></li>{% endif %}
+      </ul>
+    </nav>
+  {% endmacro %}
+  <aside class="workspace-sidebar panel" aria-label="{{ label }} journey">
+    <h2 class="section-header">Topics</h2>
+    {{ links() }}
+  </aside>
+  <details class="workspace-mobile panel">
+    <summary>Topics</summary>
+    {{ links() }}
+  </details>
+{% endmacro %}

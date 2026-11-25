@@ -1,93 +1,45 @@
 {% extends 'base.html' %}
+{% from 'learning_topics.html' import topic_navigation %}
+{% set topic = topics[topic_index] %}
+{% block page_heading %}{% endblock %}
 {% block content %}
-<div class="guide-layout">
-<nav class="guide-index panel" aria-label="Guidance sections">
-  <a href="#application">Application process</a>
-  <a href="#parent-involvement">Parent involvement</a>
-  <a href="#aid-preparation">Financial aid</a>
-  <a href="#planning">Deadlines &amp; planning</a>
-  <a href="#support">Official support</a>
-</nav>
-<div class="guide-topics">
-  <details class="guide-topic panel" open>
-    <summary class="section-header">Application steps</summary>
-    <div class="guide-topic-body" id="application">
-    <p class="role-label">Applicant responsibilities</p>
-
-    <ol class="guide-list">
-      <li>Provide background and academic information.</li>
-      <li>Complete Minerva's online challenges.</li>
-      <li>Share accomplishments and academic records.</li>
-    </ol>
-    <a href="https://www.minerva.edu/undergraduate/admissions/" target="_blank" rel="noopener noreferrer">Source: Minerva undergraduate admissions <span aria-hidden="true">↗</span>
-    </a>
+{% set topic_links = [] %}
+{% for item in topics %}{% set _ = topic_links.append(url_for('main.guide', topic=item.key)) %}{% endfor %}
+{% set links = {
+  'apply': 'https://www.minerva.edu/apply/',
+  'admissions': 'https://www.minerva.edu/undergraduate/admissions/',
+  'faq': 'https://www.minerva.edu/faqs/',
+  'counselors': 'https://www.minerva.edu/blog/application-advice-a-guide-for-minervas-transcripts-school-requirements-for-counselors-school-officials/',
+  'help': url_for('main.help_center'),
+  'school': url_for('main.guide', topic='school'),
+  'financial_aid': url_for('main.financial_aid'),
+  'deadlines': url_for('main.deadlines')
+} %}
+<div class="preparation-workspace">
+  {{ topic_navigation(topics, topic_index, topic_links, 'Admissions') }}
+  <section class="panel aid-focus aid-learning" id="admissions-{{ topic.key }}" aria-labelledby="admissions-title" data-admissions-guide>
+    <h1 class="view-heading" id="admissions-title">{{ topic.heading }}</h1>
+    {% if topic.summary %}<p>{{ topic.summary }}</p>{% endif %}
+    {% set list_tag = 'ol' if topic.sequence else 'ul' %}
+    <{{ list_tag }} class="aid-learning-points" role="list">
+      {% for label, detail in topic.cards %}
+      <li><h2 class="section-header">{{ label }}</h2><p>{{ detail }}</p></li>
+      {% endfor %}
+    </{{ list_tag }}>
+    <nav class="aid-secondary" aria-label="Topic resources">
+      {% for key, label in topic.links %}
+      <a href="{{ links[key] }}"{% if links[key].startswith('https://') %} target="_blank" rel="noopener noreferrer"{% endif %}>{{ label }}</a>
+      {% endfor %}
+    </nav>
     <div class="actions">
-      <a href="{{ url_for('tracking.checklist') }}">Open your planning checklist</a>
+      {% if topic_index + 1 < topics|length %}
+      <a class="button" href="{{ topic_links[topic_index + 1] }}">Next</a>
+      {% endif %}
+      <a href="{{ topic_links[topic_index - 1] if topic_index else url_for('main.home') }}">Back</a>
     </div>
-    </div>
-  </details>
-  <details class="guide-topic panel">
-    <summary class="section-header">Parent involvement</summary>
-    <div class="guide-topic-body" id="parent-involvement">
-    <p class="role-label">Parent planning</p>
-
-    <h3 class="body-strong">Under 18 · Published requirement</h3>
-    <p>Minerva requires applicants under 18 to provide a parent or guardian's contact details in Part 1.</p>
-    <p>For applicants 18 or older, confirm the parent's role and any applicant permission with Admissions.</p>
-    <details>
-      <summary>What still needs confirmation?</summary>
-      <p>What happens after parent contact details are provided? Are any parent consent or application steps required? This guide has not verified parent access rights.</p>
-    </details>
-    <a href="https://www.minerva.edu/undergraduate/admissions/" target="_blank" rel="noopener noreferrer">Source: Starting Your Application <span aria-hidden="true">↗</span>
-    </a>
-    <div class="actions">
-      <a href="{{ url_for('tracking.edit_question') }}">Save a question for Admissions</a>
-    </div>
-    </div>
-  </details>
-  <details class="guide-topic panel">
-    <summary class="section-header">Financial aid preparation</summary>
-    <div class="guide-topic-body" id="aid-preparation">
-
-
-    <p>Minerva's published process includes the CSS Profile, its Financial Aid Questionnaire, and supporting documents through its own process.</p>
-    <p>Confirm who submits parent information and who can view it. Separate confidential parent submission has not been verified.</p>
-    <a href="https://www.minerva.edu/undergraduate/financial-aid/" target="_blank" rel="noopener noreferrer">Source: Minerva financial aid <span aria-hidden="true">↗</span>
-    </a>
-    <div class="actions">
-      <a href="{{ url_for('main.financial_aid') }}">Explore financial aid guidance</a>
-    </div>
-    </div>
-  </details>
-  <details class="guide-topic panel">
-    <summary class="section-header">Deadlines and planning</summary>
-    <div class="guide-topic-body" id="planning">
-
-
-    <p>The official admissions table publishes dates without calendar years. Confirm the intake, year, and cutoff time before planning around them.</p>
-    <a href="https://www.minerva.edu/undergraduate/admissions/" target="_blank" rel="noopener noreferrer">Source: Minerva application rounds <span aria-hidden="true">↗</span>
-    </a>
-    <div class="actions">
-      <a href="{{ url_for('main.deadlines') }}">Review published deadlines</a>
-      <a href="{{ url_for('tracking.edit_reminder') }}">Create a personal reminder</a>
-    </div>
-    </div>
-  </details>
-  <details class="guide-topic panel">
-    <summary class="section-header">Official support and resources</summary>
-    <div class="guide-topic-body" id="support">
-
-
-    <p>Minerva's Parents &amp; Families page connects families with admissions, financial aid, and student support information.</p>
-    <a href="https://www.minerva.edu/parents-families/" target="_blank" rel="noopener noreferrer">Source: Minerva Parents &amp; Families <span aria-hidden="true">↗</span>
-    </a>
-    <div class="actions">
-      <a href="{{ url_for('main.resources') }}">Browse the resource library</a>
-      <a href="{{ url_for('main.help_center') }}">Find contact information</a>
-    </div>
-    </div>
-  </details>
+  </section>
 </div>
-</div>
-<p class="caption content-verified">Public sources checked November 11, 2026.</p>
+{% if not request.args.get('topic') %}
+<script src="{{ url_for('static', filename='admissions-guidance.js') }}" defer></script>
+{% endif %}
 {% endblock %}

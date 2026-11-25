@@ -67,15 +67,26 @@ def test_empty_checklist_progress_does_not_divide_by_zero(app, parent):
 
 
 def test_guidance_sections_and_source_links(client):
-    text = client.get('/guide').text
-    for anchor in ['application', 'parent-involvement', 'aid-preparation', 'planning', 'support']:
-        assert f'href="#{anchor}"' in text and f'id="{anchor}"' in text
-    for source in ['https://www.minerva.edu/undergraduate/admissions/',
-                   'https://www.minerva.edu/parents-families/',
-                   'https://www.minerva.edu/undergraduate/financial-aid/']:
-        assert source in text
-    assert 'Applicant responsibilities' in text
-    assert 'Parent planning' in text
+    topics = {
+        'understand': 'https://www.minerva.edu/apply/',
+        'student': 'timed online exercises',
+        'school': 'a link the student shares',
+        'parent': 'Enrollment Agreement',
+        'documents': 'Separate Financial Aid guidance',
+        'next': 'confirmation email',
+    }
+    assert 'id="admissions-understand"' in client.get('/guide').text
+    for index, (topic, expected) in enumerate(topics.items()):
+        response = client.get(f'/guide?topic={topic}')
+        assert response.status_code == 200
+        assert expected in response.text
+        assert f'href="/guide?topic={topic}" aria-current="step"' in response.text
+        assert 'target="_blank" rel="noopener noreferrer"' in response.text
+        remaining = list(topics)[index + 1:]
+        if remaining:
+            assert f'href="/guide?topic={remaining[0]}">Next' in response.text
+        assert 'name="completed"' not in response.text
+    assert client.get('/guide?topic=unknown').status_code == 404
 
 
 def test_new_resources_keep_provenance_and_search(client, app):

@@ -134,6 +134,24 @@ try {
   assert.ok(await evaluate(`document.activeElement.classList.contains('skip-link')`), 'Skip link is first keyboard stop');
   await key('Enter', 13);
   assert.ok(await evaluate(`document.activeElement.id === 'main-content'`), 'Skip link reaches main');
+  const admissionsTopics = ['understand', 'student', 'school', 'parent', 'documents', 'next'];
+  for (const topic of admissionsTopics) {
+    await responsive('/guide?topic=' + topic, 'admissions-' + topic);
+  }
+  for (const width of [375, 1280]) {
+    await cdp('Emulation.setDeviceMetricsOverride', { width, height: 900, deviceScaleFactor: 1, mobile: false });
+    await navigate('/guide');
+    for (const [index, topic] of admissionsTopics.entries()) {
+      await waitFor(`document.readyState === 'complete' && document.querySelector('#admissions-${topic}')`);
+      assert.equal(await evaluate(`document.querySelectorAll('main h1').length`), 1);
+      if (index < admissionsTopics.length - 1) {
+        await evaluate(`document.querySelector('#admissions-${topic} .button').focus()`);
+        await key('Enter', 13);
+      }
+    }
+    await evaluate(`document.querySelector('#admissions-next .actions a').click()`);
+    await waitFor(`document.querySelector('#admissions-documents')`);
+  }
   const learningTopics = ['understand', 'process', 'role', 'forms', 'offer'];
   for (const topic of learningTopics) {
     await responsive('/financial-aid?view=learn&topic=' + topic, 'aid-learn-' + topic);
@@ -260,10 +278,16 @@ try {
   assert.ok(await evaluate(`document.activeElement.matches('.primary-nav a[href="/planning"]') && getComputedStyle(document.activeElement).outlineStyle !== 'none'`), 'Planning has a visible keyboard focus indicator');
   await key('Enter', 13);
   await waitFor(`document.querySelector('.primary-nav a[href="/planning"][aria-current="page"]')`);
+  await cdp('Emulation.setDeviceMetricsOverride', { width: 375, height: 900, deviceScaleFactor: 1, mobile: false });
   await navigate('/guide');
-  await evaluate(`document.querySelector('#parent-involvement').parentElement.querySelector('summary').focus()`);
+  await evaluate(`document.querySelector('.workspace-mobile > summary').focus()`);
   await key('Enter', 13);
-  await waitFor(`document.querySelector('#parent-involvement').parentElement.open`);
+  await waitFor(`document.querySelector('.workspace-mobile').open`);
+  await evaluate(`document.querySelector('.workspace-mobile a[href$="topic=parent"]').focus()`);
+  await key('Enter', 13);
+  await waitFor(`document.querySelector('#admissions-parent')`);
+  await evaluate(`location.href = '/guide?legacy=1#planning'`);
+  await waitFor(`location.pathname === '/deadlines' && document.readyState === 'complete'`);
 
   const pages = ['/dashboard', '/application-progress', '/planning', '/account', '/guide', '/financial-aid', '/checklist', '/reminders', '/questions', '/resources', '/deadlines', '/help', '/reminders/new'];
   for (const page of pages) await responsive(page);
@@ -309,7 +333,7 @@ try {
   await navigate('/student/preparation');
   assert.equal(await evaluate(`document.querySelectorAll('#student-visibility input:checked').length`), 0);
   await responsive('/student/preparation');
-  console.log(`PASS: browser registration, invitations, aid learning journey, Useful Tools, demo document sharing, keyboard and offline flows; ${pages.length + 18} page states × 2 themes × 10 widths. Screenshots: ${out}`);
+  console.log(`PASS: browser registration, invitations, Admissions and aid learning journeys, Useful Tools, demo document sharing, keyboard and offline flows; ${pages.length + 24} page states × 2 themes × 10 widths. Screenshots: ${out}`);
 } finally {
   socket?.close();
   chrome?.kill();

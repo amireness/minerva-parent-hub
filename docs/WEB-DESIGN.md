@@ -28,6 +28,11 @@ resources, and deadlines remain readable without an account. Private
 checklists, reminders, and questions require login. Create and edit forms
 have their own URLs. Search and topic filters use GET query parameters.
 
+Admissions and Financial Aid share the desktop Topics sidebar and native
+mobile selector. Admissions gives each question a public URL, with Back
+and Next between topics. It distinguishes applicant, school, and parent
+roles, and links to public Minerva sources on each topic.
+
 ## Appearance and content
 
 Updated at the owner's request, 2026-11-11: Flask uses a restrained navy,
