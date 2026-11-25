@@ -4,13 +4,13 @@
 <div class="deadline-events">
   {% for deadline in events %}{% include 'deadline_feature.html' %}{% endfor %}
 </div>
-{% else %}
-{% set deadline = none %}
-{% include 'deadline_feature.html' %}
 {% endif %}
 <section id="published-rounds" class="published-rounds" aria-labelledby="published-heading">
   <h2 id="published-heading" class="section-header">Published dates by round</h2>
   <p>Official tables omit calendar years. Confirm your intake and cutoff time with Minerva.</p>
+  {% if not events %}
+  <p class="caption">No upcoming deadline with a verified cutoff. <a href="{{ admissions_url }}" target="_blank" rel="noopener noreferrer">Minerva source</a></p>
+  {% endif %}
   <div class="published-list">
     {% for deadline in deadlines %}
     <article class="published-round">

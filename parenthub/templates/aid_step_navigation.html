@@ -1,0 +1,31 @@
+{% from 'icons.html' import icon %}
+{% set active_key = guidance.steps[step_index][0] if view == 'step' else return_step %}
+{% macro steps() %}
+<nav aria-label="Preparation checklist">
+  <ol class="workspace-steps">
+    {% for key, heading, role, detail, href, label in guidance.steps %}
+    {% set item = step_records.get(step_prefix ~ key) %}
+    <li>
+      <a href="{{ aid_link('step', step=key) }}"{% if key == active_key %} aria-current="step"{% endif %}{% if item and item[1] %} data-prepared{% endif %}>
+        <span class="step-index" aria-hidden="true">{{ icon('check') if item and item[1] else loop.index }}</span>
+        <span>{{ heading }}
+          {% if key == active_key or step_records %}
+          <small class="caption">{{ 'Current · Prepared' if key == active_key and item and item[1] else 'Current' if key == active_key else 'Prepared' if item and item[1] else 'Remaining' }}</small>
+          {% endif %}
+        </span>
+      </a>
+    </li>
+    {% endfor %}
+  </ol>
+</nav>
+{% endmacro %}
+{% set progress_label = (completed_count ~ ' of ' ~ guidance.steps|length ~ ' prepared') if step_records else (guidance.steps|length ~ ' preparation steps') %}
+<aside class="workspace-sidebar panel" aria-label="Preparation progress">
+  <h2 class="section-header">Preparation checklist</h2>
+  <p class="caption">{{ progress_label }}</p>
+  {{ steps() }}
+</aside>
+<details class="workspace-mobile panel">
+  <summary>Steps <span class="caption">{{ progress_label }}</span></summary>
+  {{ steps() }}
+</details>

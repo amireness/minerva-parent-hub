@@ -1,10 +1,13 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="landing-grid">
+<div class="form-layout">
 <section class="panel" aria-label="Accept an invitation">
-  <p>Enter an invitation code issued for {{ current_user.email }} to view a synthetic applicant.</p>
+  <p>Enter the code issued to <strong>{{ current_user.email }}</strong> to link your demo applicant.</p>
   {% include 'invitation_form.html' %}
+  <p class="form-companion"><a href="{{ url_for('main.help_center') }}">Get help</a></p>
 </section>
-{% include 'deadline_feature.html' %}
+{% if deadline %}{% include 'deadline_feature.html' %}{% else %}
+<a href="{{ url_for('main.deadlines', _anchor='published-rounds') }}">Review dates by round</a>
+{% endif %}
 </div>
 {% endblock %}

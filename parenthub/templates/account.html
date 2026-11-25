@@ -2,7 +2,7 @@
 {% block content %}
 <section class="panel account-panel" aria-labelledby="account-invitations">
   <h2 id="account-invitations" class="section-header">Applicant invitations</h2>
-  <p>Enter a code issued for {{ current_user.email }} to link an applicant.</p>
+  <p>Signed in as <strong>{{ current_user.email }}</strong>. Use the code issued to this address to link a demo applicant.</p>
   {% include 'invitation_form.html' %}
 </section>
 {% endblock %}

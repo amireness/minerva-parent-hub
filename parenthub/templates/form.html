@@ -1,18 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="form-layout">
-  <aside class="form-aside">
-    {% if title == 'Log in' %}
-    <p class="form-aside-link">New here? <a href="{{ url_for('auth.register') }}">Create an account</a>
-    </p>
-    {% elif title == 'Register' %}
-    <p>Use your own email to create a Parent Hub account.</p>
-    <p class="form-aside-link">Already registered? <a href="{{ url_for('auth.login') }}">Log in</a>
-    </p>
-    {% else %}
-    <p>Private to your account. Do not enter confidential applicant or financial information. Nothing is sent to Minerva.</p>
-    {% endif %}
-  </aside>
   <section class="panel form-panel" aria-label="{{ title }} form">
     <form method="post">{{ form.hidden_tag() }}
       {% for field in form if field.type not in ('CSRFTokenField', 'HiddenField') %}
@@ -35,6 +23,14 @@
         {% endif %}
       </div>
     </form>
+    {% if title == 'Log in' %}
+    <p class="form-companion">New here? <a href="{{ url_for('auth.register') }}">Create an account</a></p>
+    {% elif title == 'Register' %}
+    <p class="form-companion">Already registered? <a href="{{ url_for('auth.login') }}">Log in</a></p>
+    {% endif %}
   </section>
+  {% if title not in ('Log in', 'Register') %}
+  <p class="caption">Private to your account. Keep confidential applicant and financial information in the official services.</p>
+  {% endif %}
 </div>
 {% endblock %}

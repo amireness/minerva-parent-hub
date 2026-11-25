@@ -1,14 +1,17 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="guided-content">
-  {% for category in shared %}
-  <section class="guided-section">
-    <h2 class="section-header">{{ categories[category].title }}</h2>
-    <p>Example document added</p>
+  <section class="panel" aria-label="Shared with you">
+    {% if shared %}
+    <ul class="support-links shared-list" role="list">
+      {% for category in shared %}
+      <li><strong>{{ categories[category].title }}</strong><span class="caption">Example document added</span></li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <p>Your parent has yet to share any documents.</p>
+    {% endif %}
   </section>
-  {% else %}
-  <p>Your parent has yet to share any documents.</p>
-  {% endfor %}
   <details id="student-visibility" class="guide-section">
     <summary>Preview parent visibility</summary>
     <p>Visual mockup for a fictional invitation. Changes are temporary and do not affect who can see your account or any shared documents.</p>

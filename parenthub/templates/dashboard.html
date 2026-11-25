@@ -10,15 +10,6 @@
 {% endblock %}
 {% block content %}
 <div class="dashboard-grid">
-  <section class="panel progress-panel" aria-labelledby="progress-heading">
-    <h2 id="progress-heading" class="section-header">Your checklist</h2>
-    <p class="progress-number">{{ completed }} <span>of {{ total }}</span>
-    </p>
-    <label class="caption" for="checklist-progress">{{ completed }} of {{ total }} planning items marked complete.</label>
-    <progress id="checklist-progress" value="{{ completed }}" max="{{ total or 1 }}">{{ completed }} of {{ total }}</progress>
-    <a class="button button-secondary" href="{{ url_for('tracking.checklist') }}">Update checklist</a>
-    <p class="caption">Personal planning only. This does not update or reflect a Minerva application.</p>
-  </section>
   <section class="panel next-panel" aria-labelledby="suggestion-heading">
     <h2 id="suggestion-heading" class="section-header">Suggested next action</h2>
     {% if not current_user.age_group %}
@@ -34,6 +25,15 @@
     <a href="{{ url_for('tracking.questions') }}" class="text-link">Review your questions <span aria-hidden="true">→</span>
     </a>
     {% endif %}
+  </section>
+  <section class="panel progress-panel" aria-labelledby="progress-heading">
+    <h2 id="progress-heading" class="section-header">Your checklist</h2>
+    <p class="progress-number">{{ completed }} <span>of {{ total }}</span>
+    </p>
+    <label class="caption" for="checklist-progress">{{ completed }} of {{ total }} planning items marked complete.</label>
+    <progress id="checklist-progress" value="{{ completed }}" max="{{ total or 1 }}">{{ completed }} of {{ total }}</progress>
+    <a class="button button-secondary" href="{{ url_for('tracking.checklist') }}">Update checklist</a>
+    <p class="caption">Personal planning only. This does not update or reflect a Minerva application.</p>
   </section>
   <section class="panel reminders-panel" aria-labelledby="next-heading">
     <div class="section-heading">

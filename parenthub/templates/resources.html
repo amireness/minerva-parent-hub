@@ -21,9 +21,9 @@
 </section>
 <p class="caption results-heading" role="status">{{ resources|length }} {{ 'resource' if resources|length == 1 else 'resources' }}{% if query %} matching “{{ query }}”{% endif %}{% if topic %} · {{ topic }}{% endif %}
 </p>
-<div class="card-grid">
+<div class="resource-list">
   {% for resource in resources %}
-  <article class="panel resource-card">
+  <article class="resource-card">
     <span class="topic-label">{{ resource.topic }}</span>
     <h2 class="section-header">
       <a href="{{ resource.url }}" target="_blank" rel="noopener noreferrer">{{ resource.title }}</a>

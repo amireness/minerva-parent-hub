@@ -186,13 +186,6 @@ the entry retire when circumstances change).
 <!-- Append-only. Format: state found → work done → state left.
      Keep entries short: one paragraph per session. -->
 
-**2026-11-25: Render database startup.** Found: a fresh SQLite file
-reproduced Financial Aid 200 and Deadlines 503. Done: made Render startup
-create missing tables and refresh public data in a SQLite transaction.
-Added fresh-start, concurrency, preservation, and failed-seed tests.
-Left: local verification only. Render disk settings remain unconfirmed.
-Default Render SQLite storage is ephemeral.
-
 **2026-11-25: Financial Aid UX.** Found: Chromium showed the document
 manager and three equal navigation choices at entry, with the first
 checklist action below the initial mobile view. Done: placed one
@@ -200,3 +193,11 @@ Start or Continue action on Financial Aid Home, added URL-based steps
 and review, and made each existing tool open and return independently.
 Left: 94 pytest cases passed and Chromium completed all seven steps.
 Parent and applicant usability observation remains open.
+
+**2026-11-25: Product UX redesign.** Found: repeated destinations,
+long admissions panels, and a Financial Aid step detached from progress.
+Done: moved Planning into primary navigation, aligned public and parent
+entry points with next actions, regrouped guidance and forms, and added
+a desktop checklist and native mobile selector to the aid workspace.
+Kept the existing routes and saved state. Left: see PRODUCT-UX-AUDIT.md
+for evidence and the parent and applicant research questions.

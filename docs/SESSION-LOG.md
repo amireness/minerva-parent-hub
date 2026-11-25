@@ -177,3 +177,11 @@ checklist steps, and a browser-only student visibility preview. Left:
 91 pytest cases passed and Chromium exercised the new tools at phone and
 desktop widths. Run seed-content to save the new steps on existing
 databases. Minerva translation and parent submission rules remain open.
+
+
+**2026-11-25: Render database startup.** Found: a fresh SQLite file
+reproduced Financial Aid 200 and Deadlines 503. Done: made Render startup
+create missing tables and refresh public data in a SQLite transaction.
+Added fresh-start, concurrency, preservation, and failed-seed tests.
+Left: local verification only. Render disk settings remain unconfirmed.
+Default Render SQLite storage is ephemeral.

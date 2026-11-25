@@ -1,26 +1,29 @@
 {% extends 'base.html' %}
 {% block page_heading %}{% endblock %}
 {% block content %}
-<div class="landing-grid parent-landing">
+<div class="product-home parent-landing">
   <section class="landing-intro">
     <h1 class="view-heading">Welcome to Parent Hub</h1>
-    {% if journeys|length == 1 and journeys[0][1] %}
-    <p class="caption landing-stage">Demo stage: {{ journeys[0][1].title }}</p>
-    {% endif %}
     <h2 id="next-action" class="section-header">What you can do now</h2>
     <a class="button" href="{{ action_url }}">{{ action }}</a>
   </section>
-  {% include 'deadline_feature.html' %}
-</div>
-{% set destinations = [('main.application_progress', 'Application', 'application'), ('main.financial_aid', 'Financial Aid', 'aid'), ('main.guide', 'Guides', 'guide'), ('main.help_center', 'Help', 'help')] %}
-{% include 'destination_tiles.html' %}
-<div class="home-journeys">
-  <section aria-labelledby="current-stage">
+  <section class="panel home-journeys" aria-labelledby="current-stage">
     <h2 id="current-stage" class="section-header">Where your child is now</h2>
     <p class="caption">Demo application data</p>
     {% set compact_journey = true %}
     {% include 'application_journeys.html' %}
+    <a href="{{ url_for('main.application_progress') }}">View application progress</a>
   </section>
-  <a href="{{ url_for('main.planning') }}">Your planning tools</a>
+  <div class="home-secondary">
+  {% if deadline %}{% include 'deadline_feature.html' %}{% else %}
+  <div class="home-dates">
+    <strong>Deadlines</strong>
+    <p>No upcoming deadline with a verified cutoff.</p>
+    <a href="{{ url_for('main.deadlines', _anchor='published-rounds') }}">Dates by round</a>
+    <a href="{{ admissions_url }}" target="_blank" rel="noopener noreferrer">Minerva source</a>
+  </div>
+  {% endif %}
+    <a href="{{ url_for('main.guide') }}">Admissions guidance</a>
+  </div>
 </div>
 {% endblock %}

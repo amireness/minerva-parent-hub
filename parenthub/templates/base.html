@@ -18,8 +18,7 @@
         <a class="brand" href="{{ url_for('main.home') }}" aria-label="Minerva Parent Hub home">
           <span class="brand-mark" aria-hidden="true">P<span>H</span>
           </span>
-          <span>Parent Hub<small>THE MINERVA JOURNEY</small>
-          </span>
+          <span>Parent Hub</span>
         </a>
         <nav class="primary-nav" aria-label="Main navigation">
           {% set planning_section = request.endpoint == 'main.planning' or (request.blueprint == 'tracking') %}
@@ -27,25 +26,14 @@
           {% if student_view %}
           {% set links = [('main.student_preparation', 'Shared documents'), ('main.financial_aid', 'Financial aid')] %}
           {% elif current_user.is_authenticated %}
-          {% set links = [('main.dashboard', 'Home'), ('main.application_progress', 'Application'), ('main.financial_aid', 'Financial Aid')] %}
+          {% set links = [('main.dashboard', 'Home'), ('main.application_progress', 'Application'), ('main.financial_aid', 'Financial Aid'), ('main.planning', 'Planning')] %}
           {% else %}
           {% set links = [('main.guide', 'Admissions'), ('main.financial_aid', 'Financial Aid'), ('main.deadlines', 'Deadlines')] %}
           {% endif %}
           {% for endpoint, label in links %}
-          <a href="{{ url_for(endpoint) }}" {% if request.endpoint == endpoint or (endpoint == 'main.financial_aid' and request.endpoint in ['main.manage_document', 'main.open_document']) %}aria-current="page"{% endif %}>{{ label }}</a>
+          <a href="{{ url_for(endpoint) }}" {% if request.endpoint == endpoint %}aria-current="page"{% elif (endpoint == 'main.financial_aid' and request.endpoint in ['main.manage_document', 'main.open_document']) or (endpoint == 'main.planning' and planning_section) %}aria-current="true"{% endif %}>{{ label }}</a>
           {% endfor %}
           <a class="help-nav" href="{{ url_for('main.help_center') }}" {% if request.endpoint == 'main.help_center' %}aria-current="page"{% endif %}>{{ icon('help') }} Help</a>
-          {% if current_user.is_authenticated and not student_view %}
-          <details class="nav-disclosure">
-            <summary {% if planning_section or request.endpoint in ['main.guide', 'main.resources', 'main.deadlines'] %}class="current"{% endif %}>More</summary>
-            <div class="nav-dropdown">
-              <a href="{{ url_for('main.guide') }}">Parent guidance</a>
-              <a href="{{ url_for('main.resources') }}">Official resources</a>
-              <a href="{{ url_for('main.deadlines') }}">Deadlines</a>
-              <a href="{{ url_for('main.planning') }}">Planning tools</a>
-            </div>
-          </details>
-          {% endif %}
         </nav>
         <div class="account-actions">
           {% if current_user.is_authenticated %}

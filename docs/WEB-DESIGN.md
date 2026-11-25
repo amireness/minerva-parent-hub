@@ -13,9 +13,11 @@ and a parent preparation action. Give each linked applicant a separate
 timeline. Keep planning completion on the planning screens.
 Otherwise Home shows the invitation form. Personal planning has its own
 signed-in page and remains available independently of invitations.
-Use matching destination tiles on public and parent Home. Show verified
-upcoming deadlines beside the public login or the parent's application
-summary. Show Help in the shared header and keep official contacts apart
+Use one shared navigation bar with role-appropriate destinations.
+Public Home leads to Admissions, and parent Home leads with a next action
+and the demo application summary. Show verified upcoming deadlines on
+Home and keep incomplete cutoff information with published round dates.
+Show Help in the shared header and keep official contacts apart
 from saved questions. Use native disclosures for application stages and
 guidance. Guide the parent from the current stage to one financial aid action. Group
 checklist, reminders, and questions under the secondary Planning workspace.
@@ -58,10 +60,12 @@ Sharing a document's presence is an explicit Parent Hub action. Replacing
 or removing a file clears the share. Category examples come from
 returning-student guidance. First-year details await the specialist interview.
 
-Financial Aid starts with one link to begin or resume preparation. Show
-one checklist step at a time with a separate review, direct document and
-tool links, and a return link from contextual help. Use URLs for these
-views so browser history also works. Reuse the existing private checklist.
+Financial Aid starts with one link to begin or resume preparation. Keep
+the active step and its checklist in one workspace. The checklist is a
+desktop sidebar and a native mobile disclosure. Contextual tools keep
+the parent step selected. Keep the direct review, document, and tool
+links. Use URLs for these views so browser history also works. Reuse the
+existing private checklist.
 Distinguish public requirements from fictional learning examples. Currency
 inputs and student visibility previews stay in the browser.
 

@@ -103,10 +103,15 @@ try {
         await cdp('Emulation.setDeviceMetricsOverride', { width, height: 900, deviceScaleFactor: 1, mobile: false });
         const overflow = await evaluate(`({width:innerWidth, document:document.documentElement.scrollWidth, main:document.querySelector('main').scrollWidth, client:document.querySelector('main').clientWidth})`);
         assert.ok(overflow.document <= width && overflow.main <= overflow.client, `${page} ${scheme} ${width}: ${JSON.stringify(overflow)}`);
-        const menuFits = await evaluate(`(() => { const menu = document.querySelector('.nav-disclosure'); if (!menu) return true; menu.open = true; const rect = menu.querySelector('.nav-dropdown').getBoundingClientRect(); const fits = rect.left >= 0 && rect.right <= innerWidth; menu.open = false; return fits; })()`);
-        assert.ok(menuFits, `${page} ${scheme} ${width}: expanded Explore menu leaves viewport`);
         assert.ok(await evaluate(`document.querySelector('.help-nav')?.textContent.trim() === 'Help'`), 'Help remains visible and labeled');
-        if (page === '/') assert.equal(await evaluate(`document.querySelectorAll('.destination-tile').length`), 4);
+        if (page === '/') assert.equal(await evaluate(`document.querySelector('.landing-intro .button').getAttribute('href')`), '/guide');
+        if (name === 'aid-step') {
+          const active = width >= 850 ? '.workspace-sidebar' : '.workspace-mobile';
+          assert.ok(await evaluate(`document.querySelector('${active}').getBoundingClientRect().width > 0`));
+        }
+        if (name === 'aid-step' && width === 375) {
+          assert.ok(await evaluate(`new Set([...document.querySelectorAll('.primary-nav > a')].map(link => link.offsetTop)).size === 1`), 'Parent navigation stays on one row at 375px');
+        }
         if (page === '/dashboard' && width === 375 && name !== 'invitation-required') {
           assert.ok(await evaluate(`document.querySelector('#next-action + a').getBoundingClientRect().bottom <= innerHeight`), 'Home action is visible at 375px');
         }
@@ -168,6 +173,17 @@ try {
   await submit({}, '/financial-aid', '#step-forms form');
   await submit({}, '/financial-aid', '#step-dates form');
   await waitFor(`document.querySelector('#step-records')`);
+  assert.ok(await evaluate(`document.querySelector('.workspace-mobile').getBoundingClientRect().width > 0`));
+  await evaluate(`document.querySelector('.workspace-mobile summary').focus()`);
+  await key('Enter', 13);
+  await waitFor(`document.querySelector('.workspace-mobile').open`);
+  assert.ok(await evaluate(`document.querySelector('.workspace-mobile [aria-current="step"]').textContent.includes('Find household income')`));
+  assert.ok(await evaluate(`document.querySelector('.workspace-mobile').innerText.includes('3 of 7 prepared')`));
+  await evaluate(`document.querySelector('.workspace-mobile a[href*="step=dates"]').click()`);
+  await waitFor(`document.readyState === 'complete' && document.querySelector('#step-dates')`);
+  await evaluate(`document.querySelector('#step-dates a.button').click()`);
+  await waitFor(`document.readyState === 'complete' && document.querySelector('#step-records')`);
+  await responsive('/financial-aid?view=step&step=records', 'aid-step');
   await evaluate(`document.querySelector('.aid-step-help summary').focus()`);
   await key('Enter', 13);
   await waitFor(`document.querySelector('.aid-step-help').open`);
@@ -214,6 +230,8 @@ try {
   await submit({ email: 'browser@example.com', password }, '/dashboard');
   await waitFor(`document.body.innerText.includes('Application started')`);
   assert.ok(await evaluate(`document.body.innerText.includes('Review linked documents')`));
+  await navigate('/financial-aid?view=review');
+  assert.ok(await evaluate(`document.querySelector('#prep-progress').value === 7`));
   await navigate('/planning');
   await waitFor(`document.body.innerText.includes('Edited browser reminder') && document.body.innerText.includes('1 of 5')`);
 
@@ -233,22 +251,21 @@ try {
   await navigate('/dashboard');
   for (let i = 0; i < 15; i++) {
     await key('Tab', 9);
-    if (await evaluate(`document.activeElement.tagName === 'SUMMARY'`)) break;
+    if (await evaluate(`document.activeElement.matches('.primary-nav a[href="/planning"]')`)) break;
   }
-  assert.ok(await evaluate(`document.activeElement.tagName === 'SUMMARY' && getComputedStyle(document.activeElement).outlineStyle !== 'none'`), 'Explore has keyboard focus indicator');
+  assert.ok(await evaluate(`document.activeElement.matches('.primary-nav a[href="/planning"]') && getComputedStyle(document.activeElement).outlineStyle !== 'none'`), 'Planning has a visible keyboard focus indicator');
   await key('Enter', 13);
-  await waitFor(`document.querySelector('.nav-disclosure').open`);
-  await key('Tab', 9);
-  assert.equal(await evaluate(`document.activeElement.textContent`), 'Parent guidance');
-  await key('Tab', 9, 8);
+  await waitFor(`document.querySelector('.primary-nav a[href="/planning"][aria-current="page"]')`);
+  await navigate('/guide');
+  await evaluate(`document.querySelector('#parent-involvement').parentElement.querySelector('summary').focus()`);
   await key('Enter', 13);
-  await waitFor(`!document.querySelector('.nav-disclosure').open`);
+  await waitFor(`document.querySelector('#parent-involvement').parentElement.open`);
 
   const pages = ['/dashboard', '/application-progress', '/planning', '/account', '/guide', '/financial-aid', '/checklist', '/reminders', '/questions', '/resources', '/deadlines', '/help', '/reminders/new'];
   for (const page of pages) await responsive(page);
   await responsive('/financial-aid?category=earnings', 'add-document');
   for (const [name, query] of [
-    ['aid-step', 'view=step&step=records'], ['aid-checklist', 'view=review'],
+    ['aid-step-complete', 'view=step&step=records'], ['aid-checklist', 'view=review'],
     ['aid-glossary', 'view=glossary&term=income'], ['aid-translations', 'view=translations'],
     ['aid-currency', 'view=currency'], ['aid-documents', 'view=documents'],
   ]) await responsive('/financial-aid?' + query, name);
@@ -288,7 +305,7 @@ try {
   await navigate('/student/preparation');
   assert.equal(await evaluate(`document.querySelectorAll('#student-visibility input:checked').length`), 0);
   await responsive('/student/preparation');
-  console.log(`PASS: browser register/login, invitations, application progress, demo documents, student sharing, guided checklist, glossary, translations, currency calculator, visibility preview, keyboard and offline flows; ${pages.length + 13} page states × 2 themes × 10 widths. Screenshots: ${out}`);
+  console.log(`PASS: browser register/login, invitations, application progress, demo documents, student sharing, guided checklist, glossary, translations, currency calculator, visibility preview, keyboard and offline flows; ${pages.length + 14} page states × 2 themes × 10 widths. Screenshots: ${out}`);
 } finally {
   socket?.close();
   chrome?.kill();

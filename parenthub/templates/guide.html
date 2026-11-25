@@ -1,16 +1,19 @@
 {% extends 'base.html' %}
 {% block content %}
-<nav class="section-nav" aria-label="Guidance sections">
+<div class="guide-layout">
+<nav class="guide-index panel" aria-label="Guidance sections">
   <a href="#application">Application process</a>
   <a href="#parent-involvement">Parent involvement</a>
   <a href="#aid-preparation">Financial aid</a>
   <a href="#planning">Deadlines &amp; planning</a>
   <a href="#support">Official support</a>
 </nav>
-<div class="guidance-grid">
-  <section id="application" class="guide-section" aria-labelledby="application-heading">
+<div class="guide-topics">
+  <details class="guide-topic panel" open>
+    <summary class="section-header">Application steps</summary>
+    <div class="guide-topic-body" id="application">
     <p class="role-label">Applicant responsibilities</p>
-    <h2 id="application-heading" class="section-header">Application steps</h2>
+
     <ol class="guide-list">
       <li>Provide background and academic information.</li>
       <li>Complete Minerva's online challenges.</li>
@@ -21,10 +24,13 @@
     <div class="actions">
       <a href="{{ url_for('tracking.checklist') }}">Open your planning checklist</a>
     </div>
-  </section>
-  <section id="parent-involvement" class="guide-section" aria-labelledby="parent-heading">
+    </div>
+  </details>
+  <details class="guide-topic panel">
+    <summary class="section-header">Parent involvement</summary>
+    <div class="guide-topic-body" id="parent-involvement">
     <p class="role-label">Parent planning</p>
-    <h2 id="parent-heading" class="section-header">Parent involvement</h2>
+
     <h3 class="body-strong">Under 18 · Published requirement</h3>
     <p>Minerva requires applicants under 18 to provide a parent or guardian's contact details in Part 1.</p>
     <p>For applicants 18 or older, confirm the parent's role and any applicant permission with Admissions.</p>
@@ -37,9 +43,13 @@
     <div class="actions">
       <a href="{{ url_for('tracking.edit_question') }}">Save a question for Admissions</a>
     </div>
-  </section>
-  <section id="aid-preparation" class="guide-section" aria-labelledby="aid-heading">
-    <h2 id="aid-heading" class="section-header">Financial aid preparation</h2>
+    </div>
+  </details>
+  <details class="guide-topic panel">
+    <summary class="section-header">Financial aid preparation</summary>
+    <div class="guide-topic-body" id="aid-preparation">
+
+
     <p>Minerva's published process includes the CSS Profile, its Financial Aid Questionnaire, and supporting documents through its own process.</p>
     <p>Confirm who submits parent information and who can view it. Separate confidential parent submission has not been verified.</p>
     <a href="https://www.minerva.edu/undergraduate/financial-aid/" target="_blank" rel="noopener noreferrer">Source: Minerva financial aid <span aria-hidden="true">↗</span>
@@ -47,9 +57,13 @@
     <div class="actions">
       <a href="{{ url_for('main.financial_aid') }}">Explore financial aid guidance</a>
     </div>
-  </section>
-  <section id="planning" class="guide-section" aria-labelledby="planning-heading">
-    <h2 id="planning-heading" class="section-header">Deadlines and planning</h2>
+    </div>
+  </details>
+  <details class="guide-topic panel">
+    <summary class="section-header">Deadlines and planning</summary>
+    <div class="guide-topic-body" id="planning">
+
+
     <p>The official admissions table publishes dates without calendar years. Confirm the intake, year, and cutoff time before planning around them.</p>
     <a href="https://www.minerva.edu/undergraduate/admissions/" target="_blank" rel="noopener noreferrer">Source: Minerva application rounds <span aria-hidden="true">↗</span>
     </a>
@@ -57,9 +71,13 @@
       <a href="{{ url_for('main.deadlines') }}">Review published deadlines</a>
       <a href="{{ url_for('tracking.edit_reminder') }}">Create a personal reminder</a>
     </div>
-  </section>
-  <section id="support" class="guide-section" aria-labelledby="support-heading">
-    <h2 id="support-heading" class="section-header">Official support and resources</h2>
+    </div>
+  </details>
+  <details class="guide-topic panel">
+    <summary class="section-header">Official support and resources</summary>
+    <div class="guide-topic-body" id="support">
+
+
     <p>Minerva's Parents &amp; Families page connects families with admissions, financial aid, and student support information.</p>
     <a href="https://www.minerva.edu/parents-families/" target="_blank" rel="noopener noreferrer">Source: Minerva Parents &amp; Families <span aria-hidden="true">↗</span>
     </a>
@@ -67,7 +85,9 @@
       <a href="{{ url_for('main.resources') }}">Browse the resource library</a>
       <a href="{{ url_for('main.help_center') }}">Find contact information</a>
     </div>
-  </section>
+    </div>
+  </details>
+</div>
 </div>
 <p class="caption content-verified">Public sources checked November 11, 2026. These summaries complement the official pages; Minerva confirms requirements and permissions.</p>
 {% endblock %}

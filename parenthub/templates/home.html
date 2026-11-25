@@ -1,17 +1,23 @@
 {% extends 'base.html' %}
 {% block page_heading %}{% endblock %}
 {% block content %}
-<div class="landing-grid">
+<div class="product-home">
   <section class="landing-intro">
     <h1 class="view-heading">Support your Minerva applicant</h1>
     <p>Find application steps, financial aid guidance, and deadlines.</p>
     <div class="actions">
-      <a class="button" href="{{ url_for('auth.login') }}">Invited parent? Log in</a>
+      <a class="button" href="{{ url_for('main.guide') }}">Explore Admissions</a>
+      <a href="{{ url_for('auth.login') }}">Invited parent? Log in</a>
       <a href="{{ url_for('auth.register') }}">Create an account</a>
     </div>
   </section>
-  {% include 'deadline_feature.html' %}
+  {% if deadline %}{% include 'deadline_feature.html' %}{% else %}
+  <div class="home-dates">
+    <strong>Deadlines</strong>
+    <p>No upcoming deadline with a verified cutoff.</p>
+    <a href="{{ url_for('main.deadlines', _anchor='published-rounds') }}">Dates by round</a>
+    <a href="{{ admissions_url }}" target="_blank" rel="noopener noreferrer">Minerva source</a>
+  </div>
+  {% endif %}
 </div>
-{% set destinations = [('main.guide', 'Admissions', 'application'), ('main.financial_aid', 'Financial Aid', 'aid'), ('main.deadlines', 'Deadlines', 'calendar'), ('main.help_center', 'Help', 'help')] %}
-{% include 'destination_tiles.html' %}
 {% endblock %}

@@ -21,13 +21,21 @@
     <div class="aid-file-actions" role="group" aria-label="Actions for {{ module.title }}">
       {% if row %}
       <a href="{{ url_for('main.open_document', applicant_id=applicant.id, category=module.key, return_step=return_step) }}">Open</a>
-      <a href="{{ aid_link('documents', category=module.key, return_step=return_step, _anchor='document-chooser') }}">Replace</a>
-      {% for action, label in [('unshare', 'Stop sharing') if row.shared else ('share', 'Share'), ('remove', 'Remove')] %}
+      {% set action, label = ('unshare', 'Stop sharing') if row.shared else ('share', 'Share') %}
       <form method="post" action="{{ url_for('main.manage_document', applicant_id=applicant.id, category=module.key, action=action, return_step=return_step) }}">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         <button type="submit" class="button-quiet">{{ label }}</button>
       </form>
-      {% endfor %}
+      <details class="file-options">
+        <summary>File options</summary>
+        <div class="actions">
+          <a href="{{ aid_link('documents', category=module.key, return_step=return_step, _anchor='document-chooser') }}">Replace</a>
+          <form method="post" action="{{ url_for('main.manage_document', applicant_id=applicant.id, category=module.key, action='remove', return_step=return_step) }}">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <button type="submit" class="button-quiet">Remove</button>
+          </form>
+        </div>
+      </details>
       {% else %}
       <a class="button button-secondary aid-add" href="{{ aid_link('documents', category=module.key, return_step=return_step, _anchor='document-chooser') }}" aria-label="Add document for {{ module.title }}">Add document</a>
       {% endif %}
