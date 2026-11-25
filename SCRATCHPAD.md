@@ -186,17 +186,17 @@ the entry retire when circumstances change).
 <!-- Append-only. Format: state found → work done → state left.
      Keep entries short: one paragraph per session. -->
 
-**2026-11-25: First-time international aid.** Found: public aid guidance,
-private checklist records, and fictional document linking. Done: added
-a glossary, translation samples, illustrative currency conversion, guided
-checklist steps, and a browser-only student visibility preview. Left:
-91 pytest cases passed and Chromium exercised the new tools at phone and
-desktop widths. Run seed-content to save the new steps on existing
-databases. Minerva translation and parent submission rules remain open.
-
 **2026-11-25: Render database startup.** Found: a fresh SQLite file
 reproduced Financial Aid 200 and Deadlines 503. Done: made Render startup
 create missing tables and refresh public data in a SQLite transaction.
 Added fresh-start, concurrency, preservation, and failed-seed tests.
 Left: local verification only. Render disk settings remain unconfirmed.
 Default Render SQLite storage is ephemeral.
+
+**2026-11-25: Financial Aid UX.** Found: Chromium showed the document
+manager and three equal navigation choices at entry, with the first
+checklist action below the initial mobile view. Done: placed one
+Start or Continue action on Financial Aid Home, added URL-based steps
+and review, and made each existing tool open and return independently.
+Left: 94 pytest cases passed and Chromium completed all seven steps.
+Parent and applicant usability observation remains open.

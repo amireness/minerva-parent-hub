@@ -1,55 +1,80 @@
 {% extends 'base.html' %}
+{% set titles = {'overview': 'Financial Aid', 'step': 'Prepare for financial aid',
+  'review': 'Preparation checklist', 'documents': 'Demo documents', 'process': 'Where each application goes',
+  'glossary': 'Financial aid glossary', 'translations': 'Translation examples', 'currency': 'Practice currency conversion'} %}
+{% set title = titles[view] %}
+{% block page_heading %}
+<div class="page-heading aid-page-heading">
+  {% if view != 'overview' %}
+  <a class="aid-back" href="{{ aid_link('step', step=return_step) if return_step else aid_link('overview') }}">{{ 'Back to preparation step' if return_step else 'Financial Aid home' }}</a>
+  {% endif %}
+  <h1 class="view-heading">{{ title }}</h1>
+</div>
+{% endblock %}
 {% block content %}
-<nav class="section-nav aid-sections" aria-label="Financial aid sections">
-  <a href="#aid-checklist">Preparation checklist</a>
-  <a href="#aid-tools">International preparation tools</a>
-  <a href="#document-examples">Demo documents</a>
-</nav>
-<div class="aid-workspace">
-  <section class="aid-documents" aria-labelledby="document-examples">
-    <div class="aid-list-heading">
-      <div>
-        <h2 id="document-examples" class="section-header">Your documents</h2>
-        <p class="caption">Demo categories from returning-student guidance. Confirm first-year requirements with Minerva.</p>
-        {% if applicant %}<p class="caption">Sharing shows document presence in Parent Hub. Google Drive permissions stay the same.</p>{% endif %}
-      </div>
-      {% if applicant %}
-      <div class="aid-progress">
-        <label for="aid-progress">{{ saved|length }} of {{ examples.documents|length }} documents added</label>
-        <progress id="aid-progress" value="{{ saved|length }}" max="{{ examples.documents|length }}"></progress>
-      </div>
-      {% endif %}
-    </div>
-    {% if applicants|length > 1 %}
-    <nav class="section-nav" aria-label="Choose applicant">
-      {% for item in applicants %}
-      <a href="{{ url_for('main.financial_aid', applicant=item.id, _anchor='document-examples') }}" {% if item == applicant %}aria-current="true"{% endif %}>Applicant {{ loop.index }}</a>
-      {% endfor %}
-    </nav>
-    {% endif %}
-    {% if not current_user.is_authenticated %}
-    <p class="aid-access"><a href="{{ url_for('auth.login') }}">Log in to add demo documents</a></p>
-    {% elif not applicant and not current_user.student %}
-    <p class="aid-access"><a href="{{ url_for('main.dashboard') }}">Accept an invitation to add demo documents</a></p>
-    {% endif %}
-    {% include 'aid_preparation.html' %}
+{% if view == 'documents' %}
+  {% include 'aid_documents.html' %}
+{% else %}
+<div class="aid-flow">
+  {% if view == 'overview' %}
+  <section class="panel aid-focus" aria-labelledby="aid-start" data-aid-overview>
+    <h2 class="section-header" id="aid-start">Prepare your first financial aid application</h2>
+    <p>See what to do, one step at a time.</p>
+    {% if completed_count and next_step %}<p class="caption">Next: {{ next_step[1] }}</p>{% endif %}
+    <a class="button" href="{{ aid_link('step') if next_step else aid_link('review') }}">{{ 'Review preparation' if not next_step else ('Continue preparation' if completed_count else 'Start preparation') }}</a>
   </section>
-  <aside class="guide-section aid-guidance" aria-labelledby="aid-heading">
-    <h2 id="aid-heading" class="section-header">Financial aid guidance</h2>
-    <p>Your student submits through Minerva. You can help gather household documents.</p>
+  <nav class="aid-secondary" aria-label="Financial aid shortcuts">
+    <a href="{{ aid_link('review') }}">Checklist</a>
+    <a href="{{ aid_link('documents') }}">Demo documents</a>
+  </nav>
+  {% elif view == 'step' %}
+    {% include 'aid_step.html' %}
+  {% elif view == 'review' %}
+  <section class="panel aid-focus" id="aid-checklist" aria-label="Preparation progress">
+    {% if step_records %}
+    <label for="prep-progress">{{ completed_count }} of {{ guidance.steps|length }} prepared</label>
+    <progress id="prep-progress" value="{{ completed_count }}" max="{{ guidance.steps|length }}"></progress>
+    <p class="caption">Checkmarks are private planning notes.</p>
+    {% elif not current_user.is_authenticated %}
+    <p><a href="{{ url_for('auth.login') }}">Log in to save your checklist</a></p>
+    {% elif not current_user.student %}
+    <p>Checklist saving is currently unavailable. You can still read all steps.</p>
+    {% endif %}
+    {% if next_step %}<a class="button" href="{{ aid_link('step', step=next_step[0]) }}">{{ 'Continue preparation' if completed_count else 'Start preparation' }}</a>{% else %}
+    <p>All preparation steps checked off. Review any outstanding requests in Minerva's process.</p>
+    {% endif %}
+    <ol class="aid-review-list">
+      {% for key, heading, role, detail, href, label in guidance.steps %}
+      <li><a href="{{ aid_link('step', step=key) }}">{{ heading }}</a>
+        {% if step_records %}<span class="caption">{{ 'Prepared' if step_records.get(step_prefix ~ key, (none, false))[1] else 'Remaining' }}</span>{% endif %}
+      </li>
+      {% endfor %}
+    </ol>
+  </section>
+  {% else %}
+  <section class="guide-section aid-focus" aria-label="{{ title }}">
+    {% include 'aid_guidance.html' %}
+    {% if view == 'process' %}
     <p><a href="https://www.minerva.edu/undergraduate/financial-aid/" target="_blank" rel="noopener noreferrer">Minerva's official steps and deadlines</a></p>
-    <details>
-      <summary>How to help</summary>
-      <p>Minerva lists the CSS Profile, its Financial Aid Questionnaire, and supporting documents. Ask Financial Aid who should submit household records and who can see them.</p>
+    <details><summary>How to help</summary>
+      <p>Your student submits through Minerva. You can help gather household documents. Minerva lists the CSS Profile, its Financial Aid Questionnaire, and supporting documents. Ask Financial Aid who should submit household records and who can see them.</p>
       <p><a href="mailto:newstudentaid@minerva.edu">Email Minerva Financial Aid</a></p>
     </details>
-    {% if not current_user.is_authenticated or not current_user.student %}
-    <div class="actions">
-      <a href="{{ url_for('tracking.edit_reminder') }}">Create a reminder</a>
-      <a href="{{ url_for('tracking.edit_question') }}">Save a question</a>
-    </div>
     {% endif %}
-  </aside>
+  </section>
+  {% endif %}
+  {% if view in ('overview', 'review') %}
+  <details class="aid-tools" id="aid-tools" {% if view == 'review' %}open{% endif %}>
+    <summary>Preparation tools</summary>
+    <nav class="aid-secondary" aria-label="Preparation tools">
+      <a href="{{ aid_link('process') }}">Financial aid process</a>
+      <a href="{{ aid_link('glossary') }}">Glossary</a>
+      <a href="{{ aid_link('translations') }}">Translation examples</a>
+      <a href="{{ aid_link('currency') }}">Currency calculator</a>
+    </nav>
+  </details>
+  {% endif %}
 </div>
-{% include 'aid_guidance.html' %}
+{% endif %}
+<script src="{{ url_for('static', filename='aid-guidance.js') }}" defer></script>
 {% endblock %}

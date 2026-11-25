@@ -1,48 +1,14 @@
-<script src="{{ url_for('static', filename='aid-guidance.js') }}" defer></script>
-<div class="aid-learning">
-  <section class="guide-section" aria-labelledby="aid-checklist">
-    <h2 id="aid-checklist" class="section-header">First-time financial aid checklist</h2>
-    <p>Use these steps to prepare. Checkmarks are private planning notes.</p>
-    {% if step_records and next_step %}
-    <p><a href="#step-{{ next_step[0] }}">Next in your plan</a> &middot; {{ next_step[1] }}</p>
-    {% elif step_records %}
-    <p>All preparation steps checked off. Review any outstanding requests in Minerva's process.</p>
-    {% elif not current_user.is_authenticated %}
-    <p><a href="{{ url_for('auth.login') }}">Log in to save your checklist</a></p>
-    {% elif not current_user.student %}
-    <p>Checklist saving is currently unavailable. You can still read all steps.</p>
-    {% endif %}
-    <details id="official-aid" class="module" open>
-      <summary>Where each application goes</summary>
+{% if view == 'process' %}
+<div id="official-aid">
       <ul class="plain-list">
         <li><a href="https://www.minerva.edu/undergraduate/admissions/" target="_blank" rel="noopener noreferrer">Undergraduate admissions</a> covers the separate admissions application.</li>
         <li><a href="https://cssprofile.collegeboard.org/" target="_blank" rel="noopener noreferrer">College Board CSS Profile</a> is the first step in Minerva's published need-based aid process.</li>
         <li><a href="https://www.minerva.edu/undergraduate/financial-aid/" target="_blank" rel="noopener noreferrer">Minerva Financial Aid</a> lists its own questionnaire and supporting income and bank documents. Minerva says to apply for aid during your admissions cycle, before your decision.</li>
       </ul>
-    </details>
-    <ol class="aid-steps">
-      {% for key, title, role, detail, href, link in guidance.steps %}
-      {% set item = step_records.get(step_prefix ~ key) %}
-      <li id="step-{{ key }}">
-        <h3 class="section-header">{{ title }}</h3>
-        <p class="caption">{{ 'Parent helps prepare' if role == 'parent' else 'Applicant leads' }}</p>
-        <p>{{ detail }}</p>
-        <a href="{{ href }}">{{ link }}</a>
-        {% if item %}
-        <form method="post" action="{{ url_for('tracking.update_progress', item_id=item[0]) }}" class="actions aid-step-control">
-          {{ progress_form.csrf_token(id='csrf-' ~ key) }}
-          <label class="checkbox-label" for="completed-{{ key }}"><input type="checkbox" id="completed-{{ key }}" name="completed" {% if item[1] %}checked{% endif %}> Mark prepared</label>
-          <button class="button-quiet" type="submit">Save</button>
-        </form>
-        {% endif %}
-      </li>
-      {% endfor %}
-    </ol>
-  </section>
-  <section class="guide-section" aria-labelledby="aid-tools">
-    <h2 id="aid-tools" class="section-header">International preparation tools</h2>
-    <details id="glossary" class="module">
-      <summary>Financial aid glossary</summary>
+</div>
+{% else %}
+{% if view == 'glossary' %}
+    <div id="glossary">
       <div id="term-search-controls" hidden>
         <label for="term-search">Search financial terms</label>
         <input id="term-search" type="search" aria-controls="aid-terms" autocomplete="off" maxlength="80">
@@ -50,8 +16,8 @@
       </div>
       <div id="aid-terms">
       {% for key, term, definition, example, relevance, aliases in guidance.terms %}
-      <article id="term-{{ key }}" class="aid-term" data-aliases="{{ aliases }}">
-        <h3 class="section-header">{{ term }}</h3>
+      <details id="term-{{ key }}" class="aid-term" data-aliases="{{ aliases }}"{% if request.args.get('term') == key %} open{% endif %}>
+        <summary>{{ term }}</summary>
         <p>{{ definition }}</p>
         <p><strong>Example</strong> &middot; {{ example }}</p>
         <p><strong>Why it matters</strong> &middot; {{ relevance }}</p>
@@ -60,19 +26,13 @@
         {% elif key == 'accounts' %}
         <p class="caption">In the UK, an everyday banking account is commonly called a current account. <a href="https://www.moneyhelper.org.uk/en/everyday-money/banking/current-account.html" target="_blank" rel="noopener noreferrer">MoneyHelper's current account guide</a></p>
         {% endif %}
-      </article>
+      </details>
       {% endfor %}
       </div>
       <p class="caption"><a href="https://www.consumerfinance.gov/consumer-tools/educator-tools/youth-financial-education/glossary/" target="_blank" rel="noopener noreferrer">CFPB financial glossary</a> &middot; Ask Minerva how to report a specific product or payment.</p>
-    </details>
-    <details id="translations" class="module">
-      <summary>Translate or explain a document</summary>
-      <ol class="guide-list">
-        <li>Keep the original intact. Work from a copy kept with your own records.</li>
-        <li>Write the original title, issuing organization, dates, and currency on a separate translation sheet.</li>
-        <li>Match line labels to the original page. Copy amounts as printed. Keep unfamiliar terms in the original language alongside a short explanation.</li>
-        <li>Ask Minerva whether you need the full document, a certified translator, or a different format.</li>
-      </ol>
+    </div>
+{% elif view == 'translations' %}
+    <div id="translations">
       <div class="split-layout translation-sample">
         <section class="panel"><h3 class="section-header">Fictional original excerpt</h3>
           <p lang="fr">Relevé de salaire &middot; avril 2026 &middot; EUR</p>
@@ -83,6 +43,15 @@
           <p>Gross pay 2,000 &middot; Income tax withheld 200 &middot; Retirement contribution 150</p>
         </section>
       </div>
+      <details>
+        <summary>How to prepare a translation</summary>
+      <ol class="guide-list">
+        <li>Keep the original intact. Work from a copy kept with your own records.</li>
+        <li>Write the original title, issuing organization, dates, and currency on a separate translation sheet.</li>
+        <li>Match line labels to the original page. Copy amounts as printed. Keep unfamiliar terms in the original language alongside a short explanation.</li>
+        <li>Ask Minerva whether you need the full document, a certified translator, or a different format.</li>
+      </ol>
+      </details>
       <p><strong>Sample format</strong> &middot; Original title and issuer · reporting period and currency · page or line · original label · English explanation · amount as printed.</p>
       <p>For example, keep <span lang="fr">cotisation retraite</span> beside “retirement contribution.” Ask how the plan should be described before assigning it a US category.</p>
       <details>
@@ -91,9 +60,9 @@
         <p>Account statement &middot; April 2026 &middot; EUR &middot; Closing balance 900</p>
       </details>
       <p class="caption">This sample illustrates organization. Confirm whether Minerva accepts self-translations and which documents or pages it needs.</p>
-    </details>
-    <details id="currency" class="module">
-      <summary>Practice currency conversion</summary>
+    </div>
+{% elif view == 'currency' %}
+    <div id="currency">
       <p id="demo-rate-note">Illustrative rates authored for the Parent Hub demo on November 25, 2026. Use fictional amounts. Entries stay on this page.</p>
       <noscript><p>Enable JavaScript to try the calculator. The example below remains available.</p></noscript>
       <div id="demo-converter" hidden>
@@ -107,6 +76,6 @@
       </div>
       <p>Currency conversion changes units. Eligibility and award amounts follow Minerva's process. The <a href="https://cssprofile.collegeboard.org/help-center/do-i-complete-css-profile-my-home-countrys-currency" target="_blank" rel="noopener noreferrer">College Board says to report your home currency in the CSS Profile</a>. Ask Minerva about its separate forms.</p>
       <p><strong>Example payslip</strong> &middot; 2,000 EUR gross − 200 EUR tax − 150 EUR retirement contribution = 1,650 EUR net, assuming these are the only deductions. The original example lists the three lines separately.</p>
-    </details>
-  </section>
-</div>
+    </div>
+{% endif %}
+{% endif %}

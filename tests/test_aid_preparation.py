@@ -37,22 +37,22 @@ def student_login(app, number, email):
 
 def test_document_lifecycle_drives_progress_and_persists(app, parent):
     invite(app, parent, 'parent@example.com')
-    assert '0 of 4 documents added' in parent.get('/financial-aid').text
+    assert '0 of 4 documents added' in parent.get('/financial-aid?view=documents').text
     chooser = parent.get('/financial-aid?category=income-tax').text
     assert 'Google Drive example' in chooser and 'https://drive.example.com/income-tax/1' in chooser
     assert document_action(parent).status_code == 302
     assert 'Review linked documents' in parent.get('/dashboard').text
     assert post(parent, '/auth/logout', source='/financial-aid').status_code == 302
     assert login(parent).status_code == 302
-    page = parent.get('/financial-aid').text
+    page = parent.get('/financial-aid?view=documents').text
     assert '1 of 4 documents added' in page and 'Tax-record-example-1.pdf' in page
     assert 'Shared with student' not in page and 'type="file"' not in page
     assert 'Fictional file preview' in parent.get('/financial-aid/1/income-tax/open').text
     assert document_action(parent, sample='2').status_code == 302
-    page = parent.get('/financial-aid').text
+    page = parent.get('/financial-aid?view=documents').text
     assert '1 of 4 documents added' in page and 'Tax-record-example-2.pdf' in page
     assert document_action(parent, action='remove').status_code == 302
-    assert '0 of 4 documents added' in parent.get('/financial-aid').text
+    assert '0 of 4 documents added' in parent.get('/financial-aid?view=documents').text
     assert parent.get('/financial-aid/1/income-tax/open').status_code == 404
     assert parent.get('/application-progress').text.count('aria-current="step"') == 1
 
@@ -67,7 +67,7 @@ def test_writes_and_previews_require_ownership_and_fixed_sample(app, parent):
     assert document_action(other).status_code == 404
     assert other.get('/financial-aid/1/income-tax/open').status_code == 404
     assert other.get('/financial-aid?applicant=1').status_code == 404
-    assert '0 of 4 documents added' in other.get('/financial-aid').text
+    assert '0 of 4 documents added' in other.get('/financial-aid?view=documents').text
     rejected = document_action(parent, sample='https://drive.google.com/file/d/example')
     assert rejected.status_code == 422 and 'drive.google.com' not in rejected.text
     assert document_action(parent, sample='99').status_code == 422
@@ -89,7 +89,7 @@ def test_student_only_sees_shared_presence_for_their_applicant(app, parent):
     assert document_action(parent, action='share').status_code == 404
     assert document_action(parent).status_code == 302
     assert document_action(parent, action='share').status_code == 302
-    assert 'Shared with student' in parent.get('/financial-aid').text
+    assert 'Shared with student' in parent.get('/financial-aid?view=documents').text
     assert document_action(parent, category='bank').status_code == 302
     assert document_action(other_parent, applicant=2, category='assets').status_code == 302
     assert document_action(other_parent, applicant=2, category='assets', action='share').status_code == 302
@@ -142,7 +142,7 @@ def test_init_db_preserves_old_rows_without_turning_them_into_linked_files(app, 
         AidDocument.__table__.drop(db.engine)
     assert app.test_cli_runner().invoke(args=['init-db']).exit_code == 0
     assert number in parent.get('/dashboard').text
-    assert '0 of 4 documents added' in parent.get('/financial-aid').text
+    assert '0 of 4 documents added' in parent.get('/financial-aid?view=documents').text
     assert document_action(parent).status_code == 302
     with app.app_context():
         assert db.session.get(AidPreparation, (1, 1, 'income-tax')).shared

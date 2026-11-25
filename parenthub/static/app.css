@@ -81,13 +81,23 @@ p, li, dd, .record-title { overflow-wrap: anywhere; }
 .aid-file-list > .aid-file { padding-inline: var(--space-4); }
 .aid-file-list > .aid-file:first-child { border-top: 0; }
 .aid-add:hover { background: var(--color-surface-alt); }
-.aid-sections { margin-bottom: var(--space-6); }
-.aid-learning { display: grid; gap: var(--space-6); margin-top: var(--space-8); align-items: start; }
-.aid-steps { padding-inline-start: var(--space-6); }
-.aid-steps > li, .aid-term { border-top: 1px solid var(--color-border); padding-block: var(--space-3); }
-.aid-steps > li > * + *, .aid-term > * + * { margin-top: var(--space-2); }
-.aid-step-control .checkbox-label { align-items: center; margin-bottom: 0; }
-.aid-step-control .checkbox-label input { margin: 0; }
+.aid-page-heading { margin-bottom: var(--space-4); }
+.aid-page-heading:has(+ .aid-flow), .aid-flow { max-width: 44rem; margin-inline: auto; }
+.aid-flow > * + * { margin-top: var(--space-4); }
+.aid-focus { border-top: 3px solid var(--color-gold); }
+.aid-focus .actions { align-items: center; }
+.aid-secondary { display: flex; flex-wrap: wrap; gap: 0 var(--space-4); }
+.aid-secondary a, .aid-back, .aid-step-help a { display: inline-flex; align-items: center; min-height: 44px; }
+.aid-tools, .aid-step-help { border-top: 1px solid var(--color-border); }
+.aid-tools summary, .aid-step-help summary, .aid-term summary { font-weight: 600; }
+.aid-step-help a + a { margin-inline-start: var(--space-3); }
+.aid-review-list { padding-inline-start: var(--space-6); }
+.aid-review-list li { padding-block: var(--space-2); border-top: 1px solid var(--color-border); }
+.aid-review-list a { display: inline-flex; align-items: center; min-height: 44px; }
+.aid-review-list span { display: block; }
+.aid-term { border-top: 1px solid var(--color-border); }
+.aid-term > p { margin-block: var(--space-2); }
+#glossary > * + *, #translations > * + *, #currency > * + * { margin-top: var(--space-4); }
 .translation-sample, .converter-fields { margin-block: var(--space-4); }
 .converter-fields { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-3); }
 .converter-fields :is(input, select) { margin: 0; }
@@ -246,9 +256,7 @@ dd { margin-bottom: var(--space-4); }
   .footer-note { grid-column: 1/-1; }
 }
 @media (min-width: 1000px) {
-  .aid-learning { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .published-list { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  .aid-workspace { grid-template-columns: minmax(0, 3fr) minmax(0, 1fr); }
   .aid-file-row { grid-template-columns: auto minmax(0, 1fr) auto; }
   .aid-file-actions { grid-column: 3; }
   .header-inner { grid-template-columns: minmax(200px,1fr) auto minmax(150px,1fr); padding-block: var(--space-4); gap: var(--space-6); }

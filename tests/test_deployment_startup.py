@@ -23,7 +23,8 @@ def test_render_startup_serves_seeded_pages_without_cli(render_database):
         assert deadlines.status_code == 200
         assert 'January 5' in deadlines.text
         assert 'Official application process and deadlines' in client.get('/resources').text
-        assert 'First-time financial aid checklist' in client.get('/financial-aid').text
+        assert 'Start preparation' in client.get('/financial-aid').text
+        assert 'Decide whether to apply for aid' in client.get('/financial-aid?view=review').text
     with app.app_context():
         assert db.session.scalar(db.select(db.func.count()).select_from(ChecklistItem)) == 12
         assert inspect(db.engine).has_table('aid_document')

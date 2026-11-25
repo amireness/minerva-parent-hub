@@ -168,3 +168,12 @@ export. Minerva published month/day round dates without exact cutoffs
 in the sources reviewed, so the exact catalog remains empty. Left:
 89 pytest cases passed and Chromium checked 19 page states across ten
 widths and both themes. Run init-db to add the optional round table.
+
+
+**2026-11-25: First-time international aid.** Found: public aid guidance,
+private checklist records, and fictional document linking. Done: added
+a glossary, translation samples, illustrative currency conversion, guided
+checklist steps, and a browser-only student visibility preview. Left:
+91 pytest cases passed and Chromium exercised the new tools at phone and
+desktop widths. Run seed-content to save the new steps on existing
+databases. Minerva translation and parent submission rules remain open.

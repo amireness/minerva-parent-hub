@@ -58,8 +58,10 @@ Sharing a document's presence is an explicit Parent Hub action. Replacing
 or removing a file clears the share. Category examples come from
 returning-student guidance. First-year details await the specialist interview.
 
-Financial Aid links to one first-time preparation area with collapsible
-learning tools and a guided slice of the existing private checklist.
+Financial Aid starts with one link to begin or resume preparation. Show
+one checklist step at a time with a separate review, direct document and
+tool links, and a return link from contextual help. Use URLs for these
+views so browser history also works. Reuse the existing private checklist.
 Distinguish public requirements from fictional learning examples. Currency
 inputs and student visibility previews stay in the browser.
 

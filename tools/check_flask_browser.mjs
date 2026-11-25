@@ -148,7 +148,7 @@ try {
   await waitFor(`document.querySelector('.journey-steps li:nth-child(2) details').open`);
   await navigate('/help');
   assert.ok(await evaluate(`document.querySelector('a[href="mailto:admissions@minerva.edu"]') && document.querySelector('.help-nav[aria-current="page"]')`));
-  await navigate('/financial-aid');
+  await navigate('/financial-aid?view=documents');
   await evaluate(`document.querySelector('#income-tax summary').focus()`);
   await key('Enter', 13);
   await waitFor(`document.body.innerText.includes('past two years')`);
@@ -159,30 +159,40 @@ try {
   await waitFor(`document.body.innerText.includes('1 of 4 documents added') && document.body.innerText.includes('Tax-record-example-1.pdf')`);
   await submit({}, '/financial-aid', '#income-tax form[action$="/share"]');
   await waitFor(`document.querySelector('#income-tax').innerText.includes('Shared with student')`);
-  await submit({ completed: true }, '/financial-aid', '#step-start form');
-  await waitFor(`document.querySelector('#completed-start').checked && document.querySelector('a[href="#step-forms"]')`);
-  await evaluate(`document.querySelector('#step-records a').click()`);
-  await waitFor(`document.querySelector('#glossary').open`);
+  await responsive('/financial-aid', 'aid-start');
+  assert.ok(await evaluate(`document.querySelector('.aid-focus .button').innerText === 'Start preparation' && !document.querySelector('#demo-amount')`));
+  await evaluate(`document.querySelector('.aid-focus .button').click()`);
+  await waitFor(`document.readyState === 'complete' && document.querySelector('#step-start')`);
+  await submit({}, '/financial-aid', '#step-start form');
+  await waitFor(`document.querySelector('#step-forms')`);
+  await submit({}, '/financial-aid', '#step-forms form');
+  await submit({}, '/financial-aid', '#step-dates form');
+  await waitFor(`document.querySelector('#step-records')`);
+  await evaluate(`document.querySelector('.aid-step-help summary').focus()`);
+  await key('Enter', 13);
+  await waitFor(`document.querySelector('.aid-step-help').open`);
+  await evaluate(`document.querySelector('.aid-step-help a').click()`);
+  await waitFor(`document.readyState === 'complete' && document.querySelector('#term-income').open`);
+  assert.ok(await evaluate(`document.body.innerText.includes('Back to preparation step')`));
   await evaluate(`(() => { const input = document.querySelector('#term-search'); input.value = 'current account'; input.dispatchEvent(new Event('input')); })()`);
   assert.equal(await evaluate(`document.querySelectorAll('.aid-term:not([hidden])').length`), 1);
-  await evaluate(`document.querySelector('#translations summary').click()`);
+  await evaluate(`document.querySelector('.aid-back').click()`);
+  await waitFor(`document.readyState === 'complete' && document.querySelector('#step-records')`);
+  await evaluate(`document.querySelector('nav[aria-label="Preparation steps"] a').click()`);
+  await waitFor(`document.readyState === 'complete' && document.querySelector('#step-dates')`);
+  await evaluate(`document.querySelector('#step-dates a.button').click()`);
+  await waitFor(`document.readyState === 'complete' && document.querySelector('#step-records')`);
+  for (const step of ['records', 'translations', 'review', 'submission']) {
+    await submit({}, '/financial-aid', `#step-${step} form`);
+  }
+  await waitFor(`document.body.innerText.includes('7 of 7 prepared')`);
+  await navigate('/financial-aid?view=translations');
   assert.ok(await evaluate(`document.querySelector('#translations').innerText.includes('Illustrative English translation')`));
-  await evaluate(`document.querySelector('#currency summary').click()`);
+  await navigate('/financial-aid?view=currency');
   await evaluate(`document.querySelector('#demo-amount').value = '90'; document.querySelector('#demo-convert').click()`);
   assert.ok(await evaluate(`document.querySelector('#demo-result').textContent.includes('100.00 USD')`));
   await evaluate(`document.querySelector('#demo-amount').value = '-1'; document.querySelector('#demo-convert').click()`);
   assert.equal(await evaluate(`document.querySelector('#demo-amount').getAttribute('aria-invalid')`), 'true');
-  await evaluate(`document.querySelector('#demo-amount').value = '90'; document.querySelector('#demo-convert').click()`);
-  for (const [width, scheme] of [[375, 'light'], [1280, 'dark']]) {
-    await cdp('Emulation.setDeviceMetricsOverride', { width, height: 900, deviceScaleFactor: 1, mobile: false });
-    await cdp('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-color-scheme', value: scheme }] });
-    for (const section of ['aid-checklist', 'glossary', 'translations', 'currency']) {
-      await evaluate(`document.getElementById(${JSON.stringify(section)}).scrollIntoView()`);
-      assert.ok(await evaluate(`document.querySelector('main').scrollWidth <= document.querySelector('main').clientWidth`));
-      const png = await cdp('Page.captureScreenshot', { format: 'png' });
-      fs.writeFileSync(path.join(out, `${section}-${scheme}-${width}.png`), Buffer.from(png.data, 'base64'));
-    }
-  }
   await navigate('/account');
   assert.ok(await evaluate(`document.querySelector('input[name="code"]') !== null`));
   await navigate('/planning');
@@ -237,6 +247,11 @@ try {
   const pages = ['/dashboard', '/application-progress', '/planning', '/account', '/guide', '/financial-aid', '/checklist', '/reminders', '/questions', '/resources', '/deadlines', '/help', '/reminders/new'];
   for (const page of pages) await responsive(page);
   await responsive('/financial-aid?category=earnings', 'add-document');
+  for (const [name, query] of [
+    ['aid-step', 'view=step&step=records'], ['aid-checklist', 'view=review'],
+    ['aid-glossary', 'view=glossary&term=income'], ['aid-translations', 'view=translations'],
+    ['aid-currency', 'view=currency'], ['aid-documents', 'view=documents'],
+  ]) await responsive('/financial-aid?' + query, name);
   await navigate('/dashboard');
   await cdp('Network.enable');
   await cdp('Network.emulateNetworkConditions', { offline: true, latency: 0, downloadThroughput: 0, uploadThroughput: 0 });
@@ -250,7 +265,7 @@ try {
   await submit({ completed: false }, '/checklist');
   await navigate('/planning');
   assert.ok(await evaluate(`document.body.innerText.includes('0 of 5')`));
-  await navigate('/financial-aid');
+  await navigate('/financial-aid?view=documents');
   await evaluate(`document.querySelector('#bank summary').click()`);
   assert.ok(await evaluate(`document.body.innerText.includes('most recent twelve months')`));
   await cdp('Emulation.setScriptExecutionDisabled', { value: false });
@@ -273,7 +288,7 @@ try {
   await navigate('/student/preparation');
   assert.equal(await evaluate(`document.querySelectorAll('#student-visibility input:checked').length`), 0);
   await responsive('/student/preparation');
-  console.log(`PASS: browser register/login, invitations, application progress, demo documents, student sharing, guided checklist, glossary, translations, currency calculator, visibility preview, keyboard and offline flows; ${pages.length + 6} page states × 2 themes × 10 widths. Screenshots: ${out}`);
+  console.log(`PASS: browser register/login, invitations, application progress, demo documents, student sharing, guided checklist, glossary, translations, currency calculator, visibility preview, keyboard and offline flows; ${pages.length + 13} page states × 2 themes × 10 widths. Screenshots: ${out}`);
 } finally {
   socket?.close();
   chrome?.kill();

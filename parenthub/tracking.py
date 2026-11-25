@@ -2,11 +2,11 @@
 
 from datetime import date
 
-from flask import Blueprint, abort, flash, redirect, render_template, url_for
+from flask import Blueprint, abort, flash, redirect, render_template, request, url_for
 from flask_login import current_user, login_required
 from flask_wtf import FlaskForm
 
-from .aid_guidance import STEP_PREFIX
+from .aid_guidance import GUIDANCE, STEP_PREFIX
 from .extensions import db
 from .forms import ProgressForm, QuestionForm, ReminderForm
 from .models import ChecklistItem, ParentQuestion, Reminder, UserChecklistProgress
@@ -51,7 +51,13 @@ def update_progress(item_id):
     db.session.commit()
     flash('Checklist updated.')
     if aid_step:
-        return redirect(url_for('main.financial_aid', _anchor='step-' + item.slug.removeprefix(STEP_PREFIX)))
+        key = item.slug.removeprefix(STEP_PREFIX)
+        keys = [step[0] for step in GUIDANCE['steps']]
+        if form.completed.data and request.form.get('advance') == '1' and key in keys:
+            remaining = keys[keys.index(key) + 1:]
+            key = remaining[0] if remaining else None
+        return redirect(url_for('main.financial_aid', view='step' if key else 'review', step=key,
+                                applicant=request.args.get('applicant', type=int)))
     return redirect(url_for('tracking.checklist'))
 
 

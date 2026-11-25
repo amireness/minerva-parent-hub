@@ -1,0 +1,46 @@
+<div class="aid-workspace">
+  <section class="aid-documents" aria-labelledby="document-examples">
+    <div class="aid-list-heading">
+      <div>
+        <h2 id="document-examples" class="section-header">Your documents</h2>
+        <p class="caption">Demo categories from returning-student guidance. Confirm first-year requirements with Minerva.</p>
+        {% if applicant %}<p class="caption">Sharing shows document presence in Parent Hub. Google Drive permissions stay the same.</p>{% endif %}
+      </div>
+      {% if applicant %}
+      <div class="aid-progress">
+        <label for="aid-progress">{{ saved|length }} of {{ examples.documents|length }} documents added</label>
+        <progress id="aid-progress" value="{{ saved|length }}" max="{{ examples.documents|length }}"></progress>
+      </div>
+      {% endif %}
+    </div>
+    {% if applicants|length > 1 %}
+    <nav class="section-nav" aria-label="Choose applicant">
+      {% for item in applicants %}
+      <a href="{{ url_for('main.financial_aid', view='documents', applicant=item.id, return_step=return_step, _anchor='document-examples') }}" {% if item == applicant %}aria-current="true"{% endif %}>Applicant {{ loop.index }}</a>
+      {% endfor %}
+    </nav>
+    {% endif %}
+    {% if not current_user.is_authenticated %}
+    <p class="aid-access"><a href="{{ url_for('auth.login') }}">Log in to add demo documents</a></p>
+    {% elif not applicant and not current_user.student %}
+    <p class="aid-access"><a href="{{ url_for('main.dashboard') }}">Accept an invitation to add demo documents</a></p>
+    {% endif %}
+    {% include 'aid_preparation.html' %}
+  </section>
+  <details class="guide-section aid-guidance">
+    <summary>Financial aid guidance</summary>
+    <p>Your student submits through Minerva. You can help gather household documents.</p>
+    <p><a href="https://www.minerva.edu/undergraduate/financial-aid/" target="_blank" rel="noopener noreferrer">Minerva's official steps and deadlines</a></p>
+    <details>
+      <summary>How to help</summary>
+      <p>Minerva lists the CSS Profile, its Financial Aid Questionnaire, and supporting documents. Ask Financial Aid who should submit household records and who can see them.</p>
+      <p><a href="mailto:newstudentaid@minerva.edu">Email Minerva Financial Aid</a></p>
+    </details>
+    {% if not current_user.is_authenticated or not current_user.student %}
+    <div class="actions">
+      <a href="{{ url_for('tracking.edit_reminder') }}">Create a reminder</a>
+      <a href="{{ url_for('tracking.edit_question') }}">Save a question</a>
+    </div>
+    {% endif %}
+  </details>
+</div>
