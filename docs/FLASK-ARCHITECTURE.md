@@ -193,6 +193,12 @@ document upload is collected.
   dropping data. It is not a migration system and cannot alter existing
   columns. Future schema changes require explicit migrations; never delete
   a database containing real data to make a schema change work.
+- **Runtime bootstrap on Render:** the factory prepares the configured
+  database before serving requests. `prepare-db` and `seed-content`
+  use the same operation. SQLite takes a write lock before inspecting the
+  schema and refreshes public rows by slug in the same transaction.
+  An initialization error fails startup. This operation rebuilds public
+  content on a fresh filesystem. Durable SQLite requires a persistent mount.
 - **No private offline cache:** Flask pages do not load the prototype's
   compatibility scripts, manifest, or service worker. Optional JavaScript
   shows disconnection and disables POST buttons; core forms work without

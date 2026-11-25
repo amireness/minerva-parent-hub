@@ -30,6 +30,7 @@ def create_app(test_config=None):
         SECRET_KEY=os.environ.get('SECRET_KEY'),
         SQLALCHEMY_DATABASE_URI=os.environ.get('DATABASE_URL', 'sqlite:///parenthub.sqlite'),
         SQLALCHEMY_TRACK_MODIFICATIONS=False,
+        PREPARE_DATABASE_ON_STARTUP=os.environ.get('RENDER') == 'true',
         SESSION_COOKIE_HTTPONLY=True,
         SESSION_COOKIE_SAMESITE='Lax',
         SESSION_COOKIE_SECURE=os.environ.get('SESSION_COOKIE_SECURE') == '1',
@@ -59,11 +60,18 @@ def create_app(test_config=None):
     from .auth import bp as auth_bp
     from .main import bp as main_bp
     from .tracking import bp as tracking_bp
-    from .commands import register_commands
+    from .commands import prepare_database, register_commands
     app.register_blueprint(auth_bp)
     app.register_blueprint(main_bp)
     app.register_blueprint(tracking_bp)
     register_commands(app)
+
+    if app.config['PREPARE_DATABASE_ON_STARTUP']:
+        with app.app_context():
+            prepare_database()
+            # Gunicorn may preload and fork. Do not pass pooled connections to its workers.
+            if db.engine.url.database not in (None, '', ':memory:'):
+                db.engine.dispose()
 
     @app.after_request
     def security_headers(response):

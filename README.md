@@ -39,6 +39,25 @@ a local ignored `.env` is supported by python-dotenv, but exporting secrets
 avoids writing them to disk. Never use the Flask development server as a
 public production service.
 
+## Render startup and storage
+
+On Render, the Flask factory uses Render's `RENDER=true` flag to create
+missing tables and seed reviewed public content before serving requests.
+The existing Gunicorn start command can continue to load
+`parenthub:create_app()`. Initialization runs against the runtime
+`DATABASE_URL` and preserves existing accounts and private records.
+To run the same preparation explicitly, use
+`python -m flask --app parenthub prepare-db`.
+
+Render's default filesystem is ephemeral. When SQLite is on that
+filesystem, each fresh instance can recreate public content, but private
+records can be lost on restart or redeploy. For durable SQLite on a
+single service instance, mount a Render persistent disk and point
+`DATABASE_URL` to a file under its mount, such as
+`sqlite:////var/data/parenthub.sqlite` for a disk mounted at `/var/data`.
+Back up and migrate any existing database before changing its path.
+See [Render persistent disk behavior](https://render.com/docs/disks).
+
 Run `init-db` again on an existing local database after upgrading. The
 optional applicant-round table is additive. Public and signed-in Home link
 to the official round dates. Countdown and calendar downloads require a

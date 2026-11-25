@@ -158,3 +158,13 @@ explicit sharing of category presence. Kept the old rows in SQLite.
 Left: 85 pytest cases passed. Chromium checked 18 page states, ten widths,
 and two themes. Reviewed Financial Aid at 375px and 1280px. Run init-db on
 existing local databases to create the new document table.
+
+
+**2026-11-18: Public and parent UI redesign.** Found: separate public
+marketing content and a working parent journey and document workflow.
+Done: shared destination tiles, deadline sources, native stage
+disclosures, and global Help. Added exact deadline filtering and calendar
+export. Minerva published month/day round dates without exact cutoffs
+in the sources reviewed, so the exact catalog remains empty. Left:
+89 pytest cases passed and Chromium checked 19 page states across ten
+widths and both themes. Run init-db to add the optional round table.

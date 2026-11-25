@@ -8,6 +8,7 @@ from pathlib import Path
 import click
 from email_validator import EmailNotValidError, validate_email
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy.orm import Session
 
 from .aid_guidance import GUIDANCE, STEP_PREFIX
 from .extensions import db
@@ -24,43 +25,59 @@ def demo_email(email):
         raise click.ClickException(str(error)) from error
 
 
-def seed_content():
-    """Upsert reviewed definitions without changing IDs or private records."""
+def write_public_content(session):
     content = json.loads(Path(__file__).with_name('content.json').read_text(encoding='utf-8'))
     resources = {}
     for values in content['resources']:
         values = dict(values)
-        row = db.session.scalar(db.select(Resource).where(Resource.slug == values['slug']))
+        row = session.scalar(db.select(Resource).where(Resource.slug == values['slug']))
         if row is None:
             row = Resource(slug=values['slug'])
-            db.session.add(row)
+            session.add(row)
         for key, value in values.items():
             setattr(row, key, value)
         row.last_verified = date.fromisoformat(content['last_verified'])
         resources[row.slug] = row
-    db.session.flush()
+    session.flush()
     aid_items = [
         dict(slug=STEP_PREFIX + key, title=title, responsibility=role, resource='aid')
         for key, title, role, *_ in GUIDANCE['steps']
     ]
     for position, values in enumerate([*content['checklist'], *aid_items]):
-        row = db.session.scalar(db.select(ChecklistItem).where(ChecklistItem.slug == values['slug']))
+        row = session.scalar(db.select(ChecklistItem).where(ChecklistItem.slug == values['slug']))
         if row is None:
             row = ChecklistItem(slug=values['slug'])
-            db.session.add(row)
+            session.add(row)
         row.title = values['title']
         row.responsibility = values['responsibility']
         row.position = position
         row.resource = resources[values['resource']]
     for values in content['deadlines']:
-        row = db.session.scalar(db.select(OfficialDeadline).where(OfficialDeadline.slug == values['slug']))
+        row = session.scalar(db.select(OfficialDeadline).where(OfficialDeadline.slug == values['slug']))
         if row is None:
             row = OfficialDeadline(slug=values['slug'])
-            db.session.add(row)
+            session.add(row)
         for key in ('round_name', 'admissions', 'financial_aid'):
             setattr(row, key, values[key])
         row.resource = resources[values['resource']]
-    db.session.commit()
+
+
+def seed_content():
+    """Refresh reviewed definitions, creating missing tables when needed."""
+    prepare_database()
+
+
+def prepare_database():
+    """Create missing tables and seed public content in one startup transaction."""
+    engine = db.engine
+    with engine.begin() as connection:
+        if connection.dialect.name == 'sqlite':
+            # Take the write lock before checking which tables and seed rows exist.
+            connection.exec_driver_sql('BEGIN IMMEDIATE')
+        db.metadata.create_all(connection)
+        with Session(bind=connection) as session:
+            write_public_content(session)
+            session.flush()
 
 
 def register_commands(app):
@@ -69,6 +86,12 @@ def register_commands(app):
         """Create missing tables; never drop existing tables or user records."""
         db.create_all()
         click.echo('Database tables initialized.')
+
+    @app.cli.command('prepare-db')
+    def prepare_command():
+        """Create missing tables and refresh public content without resetting data."""
+        prepare_database()
+        click.echo('Database prepared. Private data preserved.')
 
     @app.cli.command('seed-content')
     def content_command():
